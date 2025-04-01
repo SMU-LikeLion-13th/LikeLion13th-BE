@@ -1,5 +1,5 @@
 package com.project.likelion13thbe.domain.member.entity;
 
-@Entity
+//@Entity
 public class Member {
 }

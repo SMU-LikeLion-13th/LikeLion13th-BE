@@ -1,5 +1,5 @@
 package com.project.likelion13thbe.domain.review.entity;
 
-@Entity
+//@Entity
 public class Review {
 }

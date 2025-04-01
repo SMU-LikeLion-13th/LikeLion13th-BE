@@ -1,5 +1,5 @@
 package com.project.likelion13thbe.domain.order.entity;
 
-@Entity
+//@Entity
 public class Order {
 }
