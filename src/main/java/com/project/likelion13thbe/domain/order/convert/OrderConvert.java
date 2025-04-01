@@ -1,8 +1,8 @@
-package com.project.likelion13thbe.domain.member.convert;
+package com.project.likelion13thbe.domain.order.convert;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MemberConvert {
+public class OrderConvert {
 }
