@@ -66,4 +66,16 @@ public class ReviewController {
     public ResponseEntity<?> editReview(@PathVariable Long reviewId, @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
         return null;
     }
+
+    @Operation(summary = "리뷰 삭제")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "No Content",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "NotFound",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @DeleteMapping("/api/v1/reviews/{reviewId}")
+    public ResponseEntity<?> deleteReview(@PathVariable Long reviewId) {
+        return null;
+    }
 }
