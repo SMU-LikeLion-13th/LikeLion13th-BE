@@ -20,4 +20,10 @@ public class CommentResponseDTO {
             List<CommentDetailResponseDTO> commentList
     ) {
     }
+
+    @Builder
+    public record CommentCreateResponseDTO(
+            Long commentId
+    ) {
+    }
 }
