@@ -28,4 +28,16 @@ public class ProductController {
     public ResponseEntity<ProductResponseDTO.ProductDetailResponseDTO> getProductDetail(@PathVariable Long productId) {
         return null;
     }
+
+    @Operation(summary = "상품 목록 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponseDTO.ProductListResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "NotFound",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @GetMapping("/api/v1/products")
+    public ResponseEntity<ProductResponseDTO.ProductListResponseDTO> getProductList() {
+        return null;
+    }
 }

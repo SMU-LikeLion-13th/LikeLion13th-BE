@@ -3,6 +3,8 @@ package com.project.likelion13thbe.domain.product.dto.response;
 import com.project.likelion13thbe.domain.product.entity.ProductType;
 import lombok.Builder;
 
+import java.util.List;
+
 public class ProductResponseDTO {
 
     @Builder
@@ -13,6 +15,12 @@ public class ProductResponseDTO {
             String image,
             ProductType productType,
             Double ratingAvg
+    ) {
+    }
+
+    @Builder
+    public record ProductListResponseDTO(
+            List<ProductDetailResponseDTO> productList
     ) {
     }
 
