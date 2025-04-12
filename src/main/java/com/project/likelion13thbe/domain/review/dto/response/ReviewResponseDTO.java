@@ -9,6 +9,7 @@ public class ReviewResponseDTO {
 
     @Builder
     public record ReviewDetailResponseDTO(
+            Long reviewId,
             String content,
             String image,
             Integer rating,

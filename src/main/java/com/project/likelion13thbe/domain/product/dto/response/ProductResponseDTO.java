@@ -9,6 +9,7 @@ public class ProductResponseDTO {
 
     @Builder
     public record ProductDetailResponseDTO(
+            Long productId,
             String name,
             String description,
             Integer price,
