@@ -45,4 +45,18 @@ public class CommentController {
     ) {
         return null;
     }
+
+    @Operation(summary = "댓글 수정")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "BadRequest",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "NotFound",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @PatchMapping("/api/v1/comments/{commentId}")
+    public ResponseEntity<?> editComment(@PathVariable String commentId) {
+        return null;
+    }
 }
