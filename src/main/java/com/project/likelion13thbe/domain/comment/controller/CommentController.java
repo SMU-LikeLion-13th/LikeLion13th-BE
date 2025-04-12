@@ -2,7 +2,6 @@ package com.project.likelion13thbe.domain.comment.controller;
 
 import com.project.likelion13thbe.domain.comment.dto.request.CommentRequestDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResponseDTO;
-import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,10 +22,8 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @GetMapping("/api/v1/products/{productId}/reviews/{reviewId}/comments")
-    public ResponseEntity<CommentResponseDTO.CommentListResponseDTO> getCommentList(
-            @PathVariable Long productId, @PathVariable Long reviewId
-    ) {
+    @GetMapping("/api/v1/reviews/{reviewId}/comments")
+    public ResponseEntity<CommentResponseDTO.CommentListResponseDTO> getCommentList(@PathVariable Long reviewId) {
         return null;
     }
 
@@ -39,9 +36,9 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("/api/v1/products/{productId}/reviews/{reviewId}/comments")
-    public ResponseEntity<CommentResponseDTO.CommentCreateResponseDTO> createComment(
-            @PathVariable Long productId, @PathVariable Long reviewId, @RequestBody CommentRequestDTO.CommentCreateRequestDTO commentCreateRequestDTO
+    @PostMapping("/api/v1/reviews/{reviewId}/comments")
+    public ResponseEntity<CommentResponseDTO.CommentCreateResponseDTO> createComment(@PathVariable Long reviewId,
+                                                                                     @RequestBody CommentRequestDTO.CommentCreateRequestDTO commentCreateRequestDTO
     ) {
         return null;
     }
