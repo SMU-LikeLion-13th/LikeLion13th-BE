@@ -40,4 +40,18 @@ public class ReviewController {
     public ResponseEntity<ReviewResponseDTO.ReviewCreateResponseDTO> createReview(@PathVariable Long productId, @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
         return null;
     }
+
+    @Operation(summary = "리뷰 수정")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "BadRequest",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "NotFound",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @PatchMapping("/api/v1/reviews/{reviewId}")
+    public ResponseEntity<?> editReview(@PathVariable Long reviewId, @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
+        return null;
+    }
 }
