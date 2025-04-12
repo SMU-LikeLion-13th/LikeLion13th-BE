@@ -2,6 +2,7 @@ package com.project.likelion13thbe.domain.comment.dto.response;
 
 import lombok.Builder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class CommentResponseDTO {
@@ -11,7 +12,9 @@ public class CommentResponseDTO {
             Long commentId,
             String content,
             String nickname,
-            Integer likeCount
+            Integer likeCount,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
     ) {
     }
 

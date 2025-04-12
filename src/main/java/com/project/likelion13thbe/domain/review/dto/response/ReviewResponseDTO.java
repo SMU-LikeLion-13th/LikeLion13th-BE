@@ -14,6 +14,7 @@ public class ReviewResponseDTO {
             String image,
             Integer rating,
             LocalDateTime createdAt,
+            LocalDateTime updatedAt,
             String nickname,
             String profileImage
     ) {
