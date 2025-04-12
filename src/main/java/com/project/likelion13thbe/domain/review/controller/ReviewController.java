@@ -17,4 +17,10 @@ public class ReviewController {
     public ResponseEntity<ReviewResponseDTO.ReviewDetailResponseDTO> getReview(@PathVariable Long reviewId) {
         return null;
     }
+
+    @Operation(summary = "리뷰 목록 조회")
+    @GetMapping("/api/v1/products/{productId}/reviews")
+    public ResponseEntity<ReviewResponseDTO.ReviewListResponseDTO> getReviewList(@PathVariable Long productId) {
+        return null;
+    }
 }
