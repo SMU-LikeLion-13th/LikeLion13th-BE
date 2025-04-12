@@ -25,5 +25,10 @@ public class ProductResponseDTO {
     ) {
     }
 
+    @Builder
+    public record ProductCreateResponseDTO(
+            Long productId
+    ) {
+    }
 
 }
