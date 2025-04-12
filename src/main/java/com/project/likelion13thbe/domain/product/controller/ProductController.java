@@ -52,4 +52,16 @@ public class ProductController {
     public ResponseEntity<ProductResponseDTO.ProductCreateResponseDTO> createProduct(@RequestBody ProductRequestDTO.ProductCreateRequestDTO productCreateRequestDTO) {
         return null;
     }
+
+    @Operation(summary = "상품 삭제")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "No Content",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "NotFound",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @DeleteMapping("/api/v1/products/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
+        return null;
+    }
 }
