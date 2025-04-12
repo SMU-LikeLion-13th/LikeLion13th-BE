@@ -23,4 +23,10 @@ public class ReviewResponseDTO {
             List<ReviewDetailResponseDTO> reviewList
     ) {
     }
+
+    @Builder
+    public record ReviewCreateResponseDTO(
+            Long reviewId
+    ) {
+    }
 }
