@@ -42,4 +42,18 @@ public class MemberController {
     public ResponseEntity<?> resetPassword(@RequestBody MemberRequestDTO.ResetPasswordRequestDTO resetPasswordRequestDTO) {
         return null;
     }
+
+    @Operation(summary = "회원가입")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Created",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "BadRequest",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "409", description = "Conflict, 중복된 이메일",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @PostMapping("/api/v1/signup")
+    public ResponseEntity<?> localSignUp(@RequestBody MemberRequestDTO.SignUpRequestDTO signUpRequestDTO) {
+        return null;
+    }
 }
