@@ -6,7 +6,7 @@ import lombok.Builder;
 public class MemberRequestDTO {
 
     @Builder
-    public record loginRequestDTO(
+    public record LoginRequestDTO(
             String email,
             String password) {
     }

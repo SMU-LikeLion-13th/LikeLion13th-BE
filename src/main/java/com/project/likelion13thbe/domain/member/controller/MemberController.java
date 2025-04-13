@@ -25,7 +25,7 @@ public class MemberController {
                     content = @Content(mediaType = "application/json"))
     })
     @PostMapping("/api/v1/login")
-    public ResponseEntity<?> localLogin(@RequestBody MemberRequestDTO.loginRequestDTO loginRequestDTO) {
+    public ResponseEntity<?> localLogin(@RequestBody MemberRequestDTO.LoginRequestDTO loginRequestDTO) {
         return null;
     }
 
