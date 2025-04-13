@@ -9,4 +9,10 @@ public class MemberRequestDTO {
             String email,
             String password) {
     }
+
+    @Builder
+    public record ResetPasswordRequestDTO(
+            String password
+    ) {
+    }
 }

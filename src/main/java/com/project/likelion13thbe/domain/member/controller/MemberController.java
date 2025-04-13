@@ -28,4 +28,18 @@ public class MemberController {
     public ResponseEntity<?> localLogin(@RequestBody MemberRequestDTO.loginRequestDTO loginRequestDTO) {
         return null;
     }
+
+    @Operation(summary = "비밀번호 수정")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "BadRequest",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "401", description = "Unauthorized\t\n 1. jwt 유효하지 않음 \t\n 2. 비밀번호 유형 맞지 않음",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @PostMapping("/api/v1/password-reset")
+    public ResponseEntity<?> resetPassword(@RequestBody MemberRequestDTO.ResetPasswordRequestDTO resetPasswordRequestDTO) {
+        return null;
+    }
 }
