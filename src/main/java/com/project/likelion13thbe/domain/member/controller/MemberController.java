@@ -1,12 +1,15 @@
 package com.project.likelion13thbe.domain.member.controller;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
+import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,6 +57,16 @@ public class MemberController {
     })
     @PostMapping("/api/v1/signup")
     public ResponseEntity<?> localSignUp(@RequestBody MemberRequestDTO.SignUpRequestDTO signUpRequestDTO) {
+        return null;
+    }
+
+    @Operation(summary = "내 리뷰 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ReviewResponseDTO.ReviewListResponseDTO.class))),})
+            @GetMapping("/api/v1/my/reviews")
+    public ResponseEntity<ReviewResponseDTO.ReviewListResponseDTO> getMyReviews() {
         return null;
     }
 }
