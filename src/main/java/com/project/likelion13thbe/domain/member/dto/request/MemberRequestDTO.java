@@ -25,4 +25,9 @@ public class MemberRequestDTO {
             SocialType socialType
     ) {
     }
+
+    public record kakaoLoginRequestDTO(
+            String authorizationCode
+    ) {
+    }
 }
