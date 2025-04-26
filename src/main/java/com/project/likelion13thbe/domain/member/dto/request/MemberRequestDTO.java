@@ -26,6 +26,7 @@ public class MemberRequestDTO {
     ) {
     }
 
+    @Builder
     public record kakaoLoginRequestDTO(
             String authorizationCode
     ) {
