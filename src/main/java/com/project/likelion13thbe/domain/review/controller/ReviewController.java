@@ -28,4 +28,20 @@ public class ReviewController {
     public ResponseEntity<ReviewResDTO.ReviewDTO> getReview(@PathVariable Long reviewId) {
         return ResponseEntity.ok(null);
     }
+
+    @Operation(description = "리뷰 목록 조회")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "COMMON200", description = "Ok, 성공",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ReviewResDTO.ReviewListDTO.class)
+                    )
+            )
+    })
+    @Parameter(name = "productId", description = "product PK", example = "1")
+    @GetMapping("/api/v1/products/{productId}/reviews")
+    public ResponseEntity<ReviewResDTO.ReviewListDTO> getReviews(@PathVariable Long productId) {
+        return ResponseEntity.ok(null);
+    }
+
 }
