@@ -54,4 +54,13 @@ public class ReviewController {
     ) {
         return ResponseEntity.ok(null);
     }
+    @Operation(description = "리뷰 수정")
+    @Parameter(name = "reviewId", description = "review PK", example = "2")
+    @PatchMapping("/api/v1/reviews/{reviewId}")
+    public ResponseEntity<ReviewResDTO.UpdateReviewDTO> updateReview(
+            @PathVariable Long reviewId,
+            @RequestBody ReviewReqDTO.UpdateReviewDTO dto
+    ) {
+        return ResponseEntity.ok(null);
+    }
 }

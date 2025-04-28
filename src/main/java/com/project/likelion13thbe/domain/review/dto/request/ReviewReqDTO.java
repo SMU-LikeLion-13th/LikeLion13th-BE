@@ -10,5 +10,10 @@ public class ReviewReqDTO {
             int rate
     ) {
     }
+    @Builder
+    public record UpdateReviewDTO (
+            String content,
+            int rate){
+    }
 }
 
