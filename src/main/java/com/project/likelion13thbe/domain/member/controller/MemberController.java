@@ -31,4 +31,18 @@ public class MemberController {
         return null;
     }
 
+    @Operation(summary = "회원 가입")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "409", description = "Conflict",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @PostMapping("api/v1/sign-up")
+    public ResponseEntity<?> signUp(@RequestBody MemberReqDTO.SignUpResDTO signUpResDTO) {
+        return null;
+    }
+
 }

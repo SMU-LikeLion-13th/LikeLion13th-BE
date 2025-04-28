@@ -12,4 +12,13 @@ public class MemberReqDTO {
     ) {
     }
 
+    @Builder
+    public record SignUpResDTO(
+            String nickname,
+            String email,
+            String password,
+            SocialType socialType
+    ) {
+    }
+
 }
