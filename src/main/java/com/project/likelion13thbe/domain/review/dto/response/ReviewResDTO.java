@@ -22,13 +22,4 @@ public class ReviewResDTO {
             List<ReviewDTO> reviews
     ){
     }
-    @Builder
-    public record UpdateReviewDTO (
-            Long id,
-            String username,
-            String profileImg,
-            String content,
-            int rate,
-            LocalDateTime updateAt){
-    }
 }

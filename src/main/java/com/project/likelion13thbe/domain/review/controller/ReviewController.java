@@ -57,7 +57,7 @@ public class ReviewController {
     @Operation(description = "리뷰 수정")
     @Parameter(name = "reviewId", description = "review PK", example = "2")
     @PatchMapping("/api/v1/reviews/{reviewId}")
-    public ResponseEntity<ReviewResDTO.UpdateReviewDTO> updateReview(
+    public ResponseEntity<ReviewResDTO.ReviewDTO> updateReview(
             @PathVariable Long reviewId,
             @RequestBody ReviewReqDTO.UpdateReviewDTO dto
     ) {
