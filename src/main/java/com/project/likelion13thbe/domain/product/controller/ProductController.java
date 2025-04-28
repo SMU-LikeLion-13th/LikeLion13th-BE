@@ -30,4 +30,9 @@ public class ProductController {
     public ResponseEntity<ProductResDTO.ProductDTO> getProduct(@PathVariable Long productId) {
         return ResponseEntity.ok(null);
     }
+
+    @GetMapping("/api/v1/products")
+    public ResponseEntity<ProductResDTO.ProductListDTO> getProducts(){
+        return ResponseEntity.ok(null);
+    }
 }
