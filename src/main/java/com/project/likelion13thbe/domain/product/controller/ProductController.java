@@ -2,8 +2,6 @@ package com.project.likelion13thbe.domain.product.controller;
 
 import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
-import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
-import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
