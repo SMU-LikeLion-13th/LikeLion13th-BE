@@ -45,4 +45,17 @@ public class MemberController {
         return null;
     }
 
+    @Operation(summary = "로그인")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = MemberResDTO.LoginJwtTokenResDTo.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @PostMapping("/api/v1/login")
+    public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> login(@RequestBody MemberReqDTO.LoginResDTO LoginResDTO) {
+        return null;
+    }
+
 }

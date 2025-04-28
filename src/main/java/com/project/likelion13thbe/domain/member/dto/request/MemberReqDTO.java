@@ -21,4 +21,11 @@ public class MemberReqDTO {
     ) {
     }
 
+    @Builder
+    public record LoginResDTO(
+            String email,
+            String password
+    ) {
+    }
+
 }
