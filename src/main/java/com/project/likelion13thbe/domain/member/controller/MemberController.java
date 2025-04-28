@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name="Member", description = "Member 관련 API")
 public class MemberController {
     @Operation(description = "회원가입")
-    @PatchMapping("/api/v1/signup")
+    @PostMapping("/api/v1/signup")
     public ResponseEntity<MemberResDTO.SignupResDTO> signup(
             @RequestBody MemberReqDTO.SignupReqDTO dto
     ) {
@@ -29,7 +30,7 @@ public class MemberController {
     }
 
     @Operation(description = "로그인")
-    @PatchMapping("/api/v1/login")
+    @PostMapping("/api/v1/login")
     public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> login(
             @RequestBody MemberReqDTO.LoginReqDTO dto
     ) {
@@ -37,7 +38,7 @@ public class MemberController {
     }
 
     @Operation(description = "카카오 로그인")
-    @PatchMapping("/api/v1/login/kakao")
+    @PostMapping("/api/v1/login/kakao")
     public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> kakaoLogin(
             @RequestBody MemberReqDTO.KakaoLoginRequestDTO dto
     ) {

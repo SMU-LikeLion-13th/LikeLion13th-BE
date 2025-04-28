@@ -24,7 +24,7 @@ public class CommitController {
     @Operation(description = "댓글 작성")
     @Parameter(name = "productId", description = "product PK", example = "1")
     @Parameter(name = "reviewId", description = "review PK", example = "1")
-    @GetMapping("/api/v1/products/{productId}/reviews/{reviewId}/commits")
+    @PostMapping("/api/v1/products/{productId}/reviews/{reviewId}/commits")
     public ResponseEntity<CommitResDTO.CommentResDTO> createCommit(
             @PathVariable Long productId,
             @PathVariable Long reviewId,
