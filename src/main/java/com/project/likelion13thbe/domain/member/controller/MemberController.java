@@ -23,4 +23,12 @@ public class MemberController {
     ) {
         return ResponseEntity.ok(null);
     }
+
+    @Operation(description = "로그인")
+    @PatchMapping("/api/v1/login")
+    public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> login(
+            @RequestBody MemberReqDTO.LoginReqDTO dto
+    ) {
+        return ResponseEntity.ok(null);
+    }
 }

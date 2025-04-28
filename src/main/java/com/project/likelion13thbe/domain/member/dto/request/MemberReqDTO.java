@@ -8,4 +8,10 @@ public class MemberReqDTO {
             String newPassword
     ){
     }
+    @Builder
+    public record LoginReqDTO(
+            String email,
+            String password
+    ){
+    }
 }
