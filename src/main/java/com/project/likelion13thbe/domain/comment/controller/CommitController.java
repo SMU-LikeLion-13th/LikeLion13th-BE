@@ -46,7 +46,7 @@ public class CommitController {
     @Operation(description = "댓글 삭제")
     @Parameter(name = "commitId", description = "commit PK", example = "1")
     @DeleteMapping("/api/v1/commits/{commitId}")
-    public ResponseEntity<Void> deleteReview() {
+    public ResponseEntity<Void> deleteCommit() {
         return ResponseEntity.ok(null);
     }
 }
