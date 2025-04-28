@@ -8,4 +8,10 @@ public class CommitReqDTO {
             String content
     ) {
     }
+
+    @Builder
+    public record UpdateCommitDTO(
+            String content
+    ){
+    }
 }

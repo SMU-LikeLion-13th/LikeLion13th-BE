@@ -32,4 +32,14 @@ public class CommitController {
     ) {
         return ResponseEntity.ok(null);
     }
+
+    @Operation(description = "댓글 수정")
+    @Parameter(name = "commitId", description = "commit PK", example = "1")
+    @PatchMapping("/api/v1/commits/{commitId}")
+    public ResponseEntity<CommitResDTO.CommentResDTO> updateCommit(
+            @PathVariable Long commitId,
+            @RequestBody CommitReqDTO.UpdateCommitDTO UpdateCommitDTO
+    ) {
+        return ResponseEntity.ok(null);
+    }
 }
