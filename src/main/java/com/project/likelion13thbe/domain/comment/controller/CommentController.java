@@ -29,4 +29,18 @@ public class CommentController {
         return null;
     }
 
+    @Operation(summary = "댓글 작성")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Created",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @PostMapping("api/v1/reviews/{reviewId}/comments")
+    public ResponseEntity<?> createComment(@PathVariable Long reviewId, @RequestBody CommentReqDTO.createCommentReqDTO createCommentReqDTO) {
+        return null;
+    }
+
 }
