@@ -69,4 +69,9 @@ public class ReviewController {
     public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
         return ResponseEntity.ok(null);
     }
+    @Parameter(name = "reviewId", description = "review PK", example = "1")
+    @GetMapping("/api/v1/reviews/my")
+    public ResponseEntity<ReviewResDTO.ReviewDTO> getMyReview(@PathVariable Long reviewId) {
+        return ResponseEntity.ok(null);
+    }
 }
