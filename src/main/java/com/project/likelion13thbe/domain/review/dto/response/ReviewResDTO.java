@@ -10,8 +10,11 @@ public class ReviewResDTO {
     @Builder
     public record ReviewDTO (
             Long id,
+            String username,
+            String profileImg,
             String content,
-            Integer rate
+            int rate,
+            LocalDateTime createAt
     ){
     }
     @Builder
@@ -22,7 +25,7 @@ public class ReviewResDTO {
     @Builder
     public record UpdateReviewDTO (
             Long id,
-            String name,
+            String username,
             String profileImg,
             String content,
             int rate,
