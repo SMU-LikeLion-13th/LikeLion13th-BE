@@ -28,4 +28,15 @@ public class ProductController {
         return null;
     }
 
+    @Operation(summary = "상품 목록 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProductResDTO.ProductListResDTO.class)))
+    })
+    @GetMapping("/api/v1/products")
+    public ResponseEntity<ProductResDTO.ProductListResDTO> getProducts() {
+        return null;
+    }
+
 }

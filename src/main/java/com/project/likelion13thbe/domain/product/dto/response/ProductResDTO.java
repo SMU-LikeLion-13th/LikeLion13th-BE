@@ -20,4 +20,10 @@ public class ProductResDTO {
     ) {
     }
 
+    @Builder
+    public record ProductListResDTO(
+            List<ProductDetailResDTO> products
+    ) {
+    }
+
 }
