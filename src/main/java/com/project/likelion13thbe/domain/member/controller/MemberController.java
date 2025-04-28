@@ -31,4 +31,12 @@ public class MemberController {
     ) {
         return ResponseEntity.ok(null);
     }
+
+    @Operation(description = "카카오 로그인")
+    @PatchMapping("/api/v1/login/kakao")
+    public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> kakaoLogin(
+            @RequestBody MemberReqDTO.KakaoLoginRequestDTO dto
+    ) {
+        return ResponseEntity.ok(null);
+    }
 }

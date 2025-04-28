@@ -14,4 +14,9 @@ public class MemberReqDTO {
             String password
     ){
     }
+
+    @Builder
+    public record KakaoLoginRequestDTO (
+            String accessToken
+    ){}
 }
