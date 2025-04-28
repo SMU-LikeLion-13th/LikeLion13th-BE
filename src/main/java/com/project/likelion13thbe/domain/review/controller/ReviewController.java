@@ -56,4 +56,18 @@ public class ReviewController {
         return null;
     }
 
+    @Operation(summary = "리뷰 수정")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @PatchMapping("/api/v1/reviews/{reviewId}")
+    public ResponseEntity<?> patchReview(@PathVariable Long reviewId, @RequestBody ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
+        return null;
+    }
+
 }

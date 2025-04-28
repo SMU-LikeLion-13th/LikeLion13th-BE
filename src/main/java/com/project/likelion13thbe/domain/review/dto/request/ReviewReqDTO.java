@@ -11,4 +11,10 @@ public class ReviewReqDTO {
     ) {
     }
 
+    @Builder
+    public record ReviewUpdateReqDTO(
+            Integer rating,
+            String content
+    ) {
+    }
 }
