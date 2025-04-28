@@ -43,4 +43,18 @@ public class CommentController {
         return null;
     }
 
+    @Operation(summary = "댓글 수정")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @PatchMapping("/api/v1/comment/{commentId}")
+    public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentReqDTO.updateCommentReqDTO updateCommentReqDTO) {
+        return null;
+    }
+
 }

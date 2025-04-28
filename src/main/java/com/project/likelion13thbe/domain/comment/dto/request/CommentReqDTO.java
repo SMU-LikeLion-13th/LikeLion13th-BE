@@ -10,4 +10,9 @@ public class CommentReqDTO {
     ) {
     }
 
+    @Builder
+    public record updateCommentReqDTO(
+            String content
+    ) {
+    }
 }
