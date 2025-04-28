@@ -28,4 +28,9 @@ public class MemberReqDTO {
     ) {
     }
 
+    @Builder
+    public record KakaoLoginResDTO(
+            String authorizationCode
+    ) {
+    }
 }
