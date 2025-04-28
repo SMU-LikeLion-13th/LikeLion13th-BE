@@ -39,4 +39,16 @@ public class ProductController {
         return null;
     }
 
+    @Operation(summary = "상품 추가")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Created",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @PostMapping("api/v1/products")
+    public ResponseEntity<?> addProduct(@RequestBody ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
+        return null;
+    }
+
 }
