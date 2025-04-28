@@ -49,12 +49,12 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = MemberResDTO.LoginJwtTokenResDTo.class))),
+                            schema = @Schema(implementation = MemberResDTO.LoginJwtTokenResDTO.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "application/json"))
     })
     @PostMapping("/api/v1/login")
-    public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> login(@RequestBody MemberReqDTO.LoginResDTO LoginResDTO) {
+    public ResponseEntity<MemberResDTO.LoginJwtTokenResDTO> login(@RequestBody MemberReqDTO.LoginResDTO LoginResDTO) {
         return null;
     }
 
@@ -62,12 +62,12 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = MemberResDTO.LoginJwtTokenResDTo.class))),
+                            schema = @Schema(implementation = MemberResDTO.LoginJwtTokenResDTO.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "application/json"))
     })
     @PostMapping("api/v1/login/kakao")
-    public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> kakaoLogin(@RequestBody MemberReqDTO.KakaoLoginResDTO KakaoLoginResDTO) {
+    public ResponseEntity<MemberResDTO.LoginJwtTokenResDTO> kakaoLogin(@RequestBody MemberReqDTO.KakaoLoginResDTO KakaoLoginResDTO) {
         // 프론트가 카카오에게 받은 인가코드를 Req에 넣어서 백엔드에 전달하면
         // 백엔드가 카카오에서 토큰을 받아오고
         // 자체적인 서비스 전용 jwt를 만들어서 Res로 보내주는 방식이긴 합니다만, 아직까지도 아리송합니다

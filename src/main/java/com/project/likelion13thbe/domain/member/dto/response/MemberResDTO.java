@@ -5,7 +5,7 @@ import lombok.Builder;
 public class MemberResDTO {
 
     @Builder
-    public record LoginJwtTokenResDTo(
+    public record LoginJwtTokenResDTO(
             String tokenType,
             String accessToken,
             String expiresIn,
