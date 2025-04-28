@@ -29,4 +29,17 @@ public class ReviewController {
         return null;
     }
 
+    @Operation(summary = "리뷰 목록 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ReviewResDTO.ReviewListResDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @GetMapping("/api/v1/products/{productId}/reviews")
+    public ResponseEntity<ReviewResDTO.ReviewListResDTO> getReviews(@PathVariable Long productId) {
+        return null;
+    }
+
 }
