@@ -2,8 +2,6 @@ package com.project.likelion13thbe.domain.comment.controller;
 
 import com.project.likelion13thbe.domain.comment.dto.request.CommitReqDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommitResDTO;
-import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
-import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
