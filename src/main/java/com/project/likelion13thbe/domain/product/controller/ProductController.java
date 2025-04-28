@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.domain.product.controller;
 
+import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
@@ -31,8 +32,17 @@ public class ProductController {
         return ResponseEntity.ok(null);
     }
 
+    @Operation(description = "상품 목록 조회")
     @GetMapping("/api/v1/products")
     public ResponseEntity<ProductResDTO.ProductListDTO> getProducts(){
+        return ResponseEntity.ok(null);
+    }
+
+    @Operation(description = "상품 생성")
+    @PostMapping("/api/v1/products")
+    public ResponseEntity<ProductResDTO.ProductDTO> createProduct(
+            @RequestBody ProductReqDTO.CreateProductDTO dto
+    ) {
         return ResponseEntity.ok(null);
     }
 }
