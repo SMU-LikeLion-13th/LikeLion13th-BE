@@ -4,6 +4,14 @@ import lombok.Builder;
 
 public class MemberReqDTO {
     @Builder
+    public record SignupReqDTO(
+            String username,
+            String email,
+            String password
+    ){
+    }
+
+    @Builder
     public record ResetPasswordReqDTO(
             String newPassword
     ){

@@ -10,6 +10,13 @@ public class MemberResDTO {
     ) {
     }
     @Builder
+    public record SignupResDTO(
+            Long userId,
+            String username,
+            String email
+    ){
+    }
+    @Builder
     public record LoginJwtTokenResDTo(
             String tokenType,
             String accessToken,
