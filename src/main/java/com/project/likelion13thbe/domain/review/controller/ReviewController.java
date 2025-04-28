@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.domain.review.controller;
 
+import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -44,4 +45,13 @@ public class ReviewController {
         return ResponseEntity.ok(null);
     }
 
+    @Operation(description = "리뷰 생성")
+    @Parameter(name = "productId", description = "product PK", example = "1")
+    @PostMapping("/api/v1/products/{productId}/reviews")
+    public ResponseEntity<ReviewResDTO.ReviewDTO> createReview(
+            @PathVariable Long productId,
+            @RequestBody ReviewReqDTO.CreateReviewDTO dto
+    ) {
+        return ResponseEntity.ok(null);
+    }
 }
