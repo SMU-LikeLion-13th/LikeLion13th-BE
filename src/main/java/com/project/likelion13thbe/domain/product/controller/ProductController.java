@@ -45,4 +45,11 @@ public class ProductController {
     ) {
         return ResponseEntity.ok(null);
     }
+
+    @Operation(description = "상품 삭제")
+    @Parameter(name = "productId", description = "product PK", example = "1")
+    @DeleteMapping("/api/v1/products/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+        return ResponseEntity.ok(null);
+    }
 }
