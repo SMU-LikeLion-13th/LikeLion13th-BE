@@ -2,10 +2,7 @@ package com.project.likelion13thbe.domain.member.controller;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
-import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
-import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
