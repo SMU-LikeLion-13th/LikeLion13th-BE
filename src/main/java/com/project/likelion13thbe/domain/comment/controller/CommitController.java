@@ -42,4 +42,12 @@ public class CommitController {
     ) {
         return ResponseEntity.ok(null);
     }
+
+    @Operation(description = "댓글 삭제")
+    @Parameter(name = "commitId", description = "commit PK", example = "1")
+    @DeleteMapping("/api/v1/commits/{commitId}")
+    public ResponseEntity<Void> deleteReview() {
+        return ResponseEntity.ok(null);
+    }
 }
+
