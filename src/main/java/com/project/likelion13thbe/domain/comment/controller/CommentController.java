@@ -57,4 +57,15 @@ public class CommentController {
         return null;
     }
 
+    @Operation(summary = "댓글 삭제")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "No Content",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = @Content(mediaType = "application/json"))
+    })
+    @DeleteMapping("api/v1/comment/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
+        return null;
+    }
 }
