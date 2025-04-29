@@ -1,20 +1,37 @@
 package com.project.likelion13thbe.domain.review.dto.response;
 
+
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Getter
 public class ReviewResDTO {
-    public record Test1DTO(
-            Long id,
-            String content
-    ){
+
+    @Builder
+    public record ReviewDetailResDTO(
+            Long reviewId,
+            String description,
+            String image,
+            Integer rating,
+            String name,
+            String profileImage,
+            LocalDateTime createdAt
+    ) {}
+
+    @Builder
+    public record ReviewListResDTO(
+            List<ReviewDetailResDTO> reviewList
+    ) {
     }
 
-    @Getter
-    @Setter
-    public class Test2DTO{
-        private Long id;
-        private String content;
+    @Builder
+    public record ReviewCreateResDTO(
+            Long reviewId
+    ) {
     }
+
 
 }
