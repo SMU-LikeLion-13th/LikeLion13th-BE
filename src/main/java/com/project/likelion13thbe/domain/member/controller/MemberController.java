@@ -29,10 +29,7 @@ public class MemberController {
     public MemberResDTO.MemberResponseDTO login() { return null; } //request는 구현하지 않았음.
     //비밀번호 수정
     @Operation(summary = "비밀번호 수정 API", description = "비밀번호 수정 API입니다.")
-    @PatchMapping("/api/v1/users/{userId}")
-    @Parameters({
-            @Parameter(name = "userId")
-    })
+    @PatchMapping("/api/v1/users")
     public MemberResDTO.MemberResponseDTO patchMember(@PathVariable long userId) { return null; }
     //회원가입
     @Operation(summary = "회원가입 API", description = "회원가입 API입니다.")

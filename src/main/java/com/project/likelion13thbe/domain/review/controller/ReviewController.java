@@ -21,9 +21,10 @@ public class ReviewController {
             @ApiResponse(responseCode = "COMMON200", description = "OK, 성공")
     })
     @GetMapping("/api/v1/reviews/{reviewId}")
-    public ReviewResDTO.ReviewResponseDTO getReview(@PathVariable long reviewId) {
-        return null;
-    }
+    @Parameters({
+            @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
+    })
+    public ReviewResDTO.ReviewResponseDTO getReview(@PathVariable long reviewId) {return null;}
 
     //리뷰 목록 조회
     @Operation(summary = "리뷰 목록 조회 API", description = "리뷰 목록 조회 API입니다.")
@@ -31,6 +32,9 @@ public class ReviewController {
             @ApiResponse(responseCode = "COMMON200", description = "OK, 성공")
     })
     @GetMapping("/api/vi/reviews/products/{productId}")
+    @Parameters({
+            @Parameter(name = "productId", description = "상품 아이디", example = "1")
+    })
     public ReviewResDTO.ReviewResponseDTO getReviewList(@PathVariable long productId) {
         return null;
     }
@@ -44,6 +48,9 @@ public class ReviewController {
             )
     })
     @PatchMapping("/api/v1/reviews/{reviewId}")
+    @Parameters({
+            @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
+    })
     public ReviewResDTO.ReviewResponseDTO patchReview(@PathVariable long reviewId)  {
         return null;
     }
@@ -64,15 +71,17 @@ public class ReviewController {
             @ApiResponse(responseCode = "COMMON200", description = "OK, 성공")
     })
     @DeleteMapping("/api/v1/reviews/{reviewId}")
+    @Parameters({
+            @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
+    })
     public ReviewResDTO.ReviewResponseDTO deleteReview(@PathVariable long reviewId) {
         return null;
     }
 
     //리뷰 상세 조회
     @Operation(summary = "리뷰 상세 조회 API", description = "리뷰 상세 조회 API입니다.")
-    @GetMapping("/api/v1/users/{userId}/reviews/{reviewId}")
+    @GetMapping("/api/v1/users/reviews/{reviewId}")
     @Parameters({
-            @Parameter(name = "userId", description = "유저 아이디", example = "1"),
             @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
     })
     public ReviewResDTO.ReviewResponseDTO getDetailReview(@PathVariable long reviewId, long userId) {return null;}

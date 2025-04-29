@@ -15,7 +15,7 @@ public class ProductController {
 
     //상품 목록 조회
     @Operation(summary = "상품 목록 조회 API", description = "상품 목록 조회 API입니다.")
-    @GetMapping("/api/v1/users/{userId}/products")
+    @GetMapping("/api/v1/users/products/{productId}")
     @Parameters({
             @Parameter(name = "productId", description = "상품 아이디", example = "1")
     })
