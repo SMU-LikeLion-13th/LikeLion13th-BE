@@ -1,4 +1,4 @@
 package com.project.likelion13thbe.domain.product.entity;
-@Entity
+/*@Entity*/
 public class Product {
 }

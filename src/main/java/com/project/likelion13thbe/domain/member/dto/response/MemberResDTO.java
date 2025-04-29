@@ -1,20 +1,31 @@
 package com.project.likelion13thbe.domain.member.dto.response;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
 
 public class MemberResDTO {
-
-    public record Test1DTO(
-            Long id,
-            String content
+    @Builder
+    public record ResetPasswordReqDTO(
+            String currentPassword,
+            String newPassword
     ) {
     }
-
-    @Getter
-    @Setter
-    public class Test2DTO {
-        private Long id;
-        private String content;
+    @Builder
+    public record SignupResDTO(
+            Long userId,
+            String username,
+            String email
+    ){
+    }
+    @Builder
+    public record LoginJwtTokenResDTo(
+            String tokenType,
+            String accessToken,
+            String expiresIn,
+            String refreshToken,
+            String refreshTokenExpiresIn,
+            String scope,
+            Long userId,
+            String username
+    ) {
     }
 }
