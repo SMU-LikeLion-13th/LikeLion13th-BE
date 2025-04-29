@@ -25,13 +25,13 @@ public class ReviewController {
 
     @Operation(summary = "내 리뷰 조회")
     @GetMapping("/users/{userId}/reviews")
-    public ReviewResDTO.ReviewListResponseDTO getMyReviewsList(@PathVariable Long userId) {
+    public ReviewResDTO.ReviewListResponseDTO getReviewsMyList(@PathVariable Long userId) {
         return null;
     }
 
     @Operation(summary = "리뷰 작성")
     @PostMapping("/product/{productId}/reviews/{reviewId}")
-    public ReviewResDTO.ReviewCreateDTO PostReview(@PathVariable Long productId ) {
+    public ReviewResDTO.ReviewCreateDTO postReview(@PathVariable Long productId ) {
         return null;
     }
 
@@ -43,7 +43,7 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 수정")
     @PatchMapping("/reviews/{reviewId}")
-    public ReviewResDTO.ReviewUpdateDTO PatchReviewUpdate(@PathVariable Long reviewId) {
+    public ReviewResDTO.ReviewUpdateDTO patchReviewUpdate(@PathVariable Long reviewId) {
         return null;
     }
 
