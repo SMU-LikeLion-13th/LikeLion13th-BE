@@ -30,8 +30,9 @@ public class ReviewController {
     }
 
     @Operation(summary = "리뷰 작성")
-    @PostMapping("/product/{productId}/reviews/{reviewId}")
+    @PostMapping("/product/{productId}/reviews")
     public ReviewResDTO.ReviewCreateDTO postReview(@PathVariable Long productId ) {
+
         return null;
     }
 

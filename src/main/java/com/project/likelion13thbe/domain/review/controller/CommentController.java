@@ -25,7 +25,7 @@ public class CommentController {
 
 
     @Operation(summary = "댓글 작성")
-    @PostMapping("/users/{userId}/comments/")
+    @PostMapping("/users/{userId}/comments")
     public CommentResDTO.CommentResponseDTO postComment(@PathVariable long userId ,@RequestBody CommentReqDTO CommentReqDTO) {
         return null;
     }
