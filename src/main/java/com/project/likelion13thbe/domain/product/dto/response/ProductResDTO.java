@@ -1,7 +1,7 @@
 package com.project.likelion13thbe.domain.product.dto.response;
 
-import lombok.Getter;
-import lombok.Setter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 public class ProductResDTO {
     public record Test1DTO(
@@ -12,8 +12,13 @@ public class ProductResDTO {
 
     @Getter
     @Setter
-    public class Test2DTO {
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public class ProductResponseDTO {
         private Long id;
         private String content;
+
+        @Schema(description = "Product의 PK", example = "1")
+        private Long productId;
     }
 }
