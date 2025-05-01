@@ -6,14 +6,15 @@ public class ReviewReqDTO {
 
     @Builder
     public record ReviewCreateReqDTO(
-            Integer rating,
+            Long memberId,
+            Double rating,
             String content
     ) {
     }
 
     @Builder
     public record ReviewUpdateReqDTO(
-            Integer rating,
+            Double rating,
             String content
     ) {
     }

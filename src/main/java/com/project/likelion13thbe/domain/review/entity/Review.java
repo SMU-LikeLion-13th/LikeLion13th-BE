@@ -1,5 +1,33 @@
 package com.project.likelion13thbe.domain.review.entity;
 
-//@Entity
-public class Review {
+import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.product.entity.Product;
+import com.project.likelion13thbe.global.entity.BaseEntity;
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "review")
+public class Review extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long reviewId;
+
+    @Column(name = "rating", nullable = false)
+    private Double rating;
+
+    @Column(name = "content", nullable = false)
+    private String content;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
 }
