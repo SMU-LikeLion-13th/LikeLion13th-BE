@@ -7,4 +7,5 @@ public interface MemberQueryService {
 
     public MemberResDTO.MemberOffsetResDTO getMemberOffset(Integer offset, Integer size);
 
+    public MemberResDTO.MemberCursorResDTO getMemberCursor(Long cursor, Integer size);
 }

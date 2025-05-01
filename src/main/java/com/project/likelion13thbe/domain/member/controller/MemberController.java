@@ -47,6 +47,14 @@ public class MemberController {
         return ResponseEntity.ok(memberQueryService.getMemberOffset(offset, size));
     }
 
+    @Operation(summary = "getCursor")
+    @GetMapping("/cursor")
+    public ResponseEntity<MemberResDTO.MemberCursorResDTO> getMemberCursor(
+            @RequestParam Long cursor,
+            @RequestParam Integer size
+    ) {
+        return ResponseEntity.ok(memberQueryService.getMemberCursor(cursor, size));
+    }
 
     @Operation(summary = "비밀번호 수정")
     @ApiResponses({

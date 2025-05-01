@@ -49,4 +49,21 @@ public class MemberConverter {
                 .build();
     }
 
+    public static MemberResDTO.MemberCursorResDTO toMemberCursorResDTO(Slice<Member> members) {
+        List<MemberResDTO.MemberPreviewResDTO> memberList = members.stream()
+                .map(MemberConverter::toMemberPreviewResDTO)
+                .toList();
+
+        // 다음 cursor 지정
+        Long nextCursor = null;
+        if (!members.isEmpty() && members.hasNext()) {
+            nextCursor = members.getContent().get(members.getNumberOfElements() - 1).getId();
+        }
+
+        return MemberResDTO.MemberCursorResDTO.builder()
+                .members(memberList)
+                .hasNext(members.hasNext())
+                .nextCursor(nextCursor)
+                .build();
+    }
 }

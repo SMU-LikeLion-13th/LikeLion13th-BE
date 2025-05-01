@@ -41,6 +41,11 @@ public class MemberResDTO {
     ) {
     }
 
+    @Builder
+    public record MemberCursorResDTO(
+            List<MemberPreviewResDTO> members,
+            Long nextCursor,
+            Boolean hasNext
     ) {
     }
 }
