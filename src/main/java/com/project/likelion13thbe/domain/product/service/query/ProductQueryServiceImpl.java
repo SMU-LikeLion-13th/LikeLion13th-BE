@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -18,6 +20,18 @@ public class ProductQueryServiceImpl implements ProductQueryService{
     public ProductResDTO.ProductDetailResDTO getProduct(Long productId) {
         Product product = productRepository.findById(productId).get();
         return ProductConverter.toProductDetailResDTO(product);
+    }
+
+    @Override
+    public ProductResDTO.ProductListResDTO getProductList() {
+        List<Product> products = productRepository.findAll();
+
+        List<ProductResDTO.ProductDetailResDTO> productDetailResDTOList =
+                products.stream()
+                        .map(ProductConverter::toProductDetailResDTO)
+                        .toList();
+
+        return ProductConverter.toProductListResDTO(productDetailResDTOList);
     }
 
 }

@@ -37,14 +37,14 @@ public class ProductController {
     }
 
     @Operation(summary = "상품 목록 조회")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ProductResDTO.ProductListResDTO.class)))
-    })
-    @GetMapping("/api/v1/products")
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "OK",
+//                    content = @Content(mediaType = "application/json",
+//                            schema = @Schema(implementation = ProductResDTO.ProductListResDTO.class)))
+//    })
+    @GetMapping("products")
     public ResponseEntity<ProductResDTO.ProductListResDTO> getProducts() {
-        return null;
+        return ResponseEntity.ok(productQueryService.getProductList());
     }
 
     @Operation(summary = "상품 추가")

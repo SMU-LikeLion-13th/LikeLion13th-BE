@@ -6,6 +6,8 @@ import com.project.likelion13thbe.domain.product.entity.Product;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProductConverter {
     public static Product toProduct(ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
@@ -37,6 +39,12 @@ public class ProductConverter {
                 .productType(product.getProductType())
 //                .ratingAvg()
 //                .reviewCount()
+                .build();
+    }
+
+    public static ProductResDTO.ProductListResDTO toProductListResDTO(List<ProductResDTO.ProductDetailResDTO> productList) {
+        return ProductResDTO.ProductListResDTO.builder()
+                .products(productList)
                 .build();
     }
 }
