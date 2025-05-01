@@ -10,5 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Page<Member> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
-    Slice<Member> findAllByIdLessThanOrderByIdDesc(Long id, Pageable pageable);
+    Slice<Member> findAllByMemberIdLessThanOrderByMemberIdDesc(Long memberId, Pageable pageable);
 }

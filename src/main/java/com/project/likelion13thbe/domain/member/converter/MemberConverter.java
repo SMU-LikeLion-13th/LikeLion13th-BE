@@ -23,14 +23,14 @@ public class MemberConverter {
 
     public static MemberResDTO.MemberCreateResDTO toMemberResponseDTO(Member member) {
         return MemberResDTO.MemberCreateResDTO.builder()
-                .id(member.getId())
+                .id(member.getMemberId())
                 .createdAt(member.getCreatedAt())
                 .build();
     }
 
     public static MemberResDTO.MemberPreviewResDTO toMemberPreviewResDTO(Member member) {
         return MemberResDTO.MemberPreviewResDTO.builder()
-                .id(member.getId())
+                .id(member.getMemberId())
                 .email(member.getEmail())
                 .age(member.getAge())
                 .build();
@@ -57,7 +57,7 @@ public class MemberConverter {
         // 다음 cursor 지정
         Long nextCursor = null;
         if (!members.isEmpty() && members.hasNext()) {
-            nextCursor = members.getContent().get(members.getNumberOfElements() - 1).getId();
+            nextCursor = members.getContent().get(members.getNumberOfElements() - 1).getMemberId();
         }
 
         return MemberResDTO.MemberCursorResDTO.builder()

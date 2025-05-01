@@ -44,7 +44,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
             cursor = Long.MAX_VALUE;
         }
 
-        Slice<Member> members = memberRepository.findAllByIdLessThanOrderByIdDesc(cursor, pageable);
+        Slice<Member> members = memberRepository.findAllByMemberIdLessThanOrderByMemberIdDesc(cursor, pageable);
 
         return MemberConverter.toMemberCursorResDTO(members);
     }
