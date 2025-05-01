@@ -33,6 +33,14 @@ public class MemberResDTO {
     ) {
     }
 
+    @Builder
+    public record MemberOffsetResDTO(
+            List<MemberPreviewResDTO> members,
+            Long totalElements,
+            Integer totalPages
+    ) {
+    }
+
     ) {
     }
 }

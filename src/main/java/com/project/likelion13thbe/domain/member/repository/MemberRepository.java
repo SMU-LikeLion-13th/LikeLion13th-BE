@@ -8,4 +8,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
+    Page<Member> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
 }

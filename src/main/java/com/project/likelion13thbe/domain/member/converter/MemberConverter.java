@@ -36,4 +36,17 @@ public class MemberConverter {
                 .build();
     }
 
+    public static MemberResDTO.MemberOffsetResDTO toMemberOffsetResDTO(Page<Member> page) {
+        List<MemberResDTO.MemberPreviewResDTO> members =
+                page.getContent().stream()
+                        .map(MemberConverter::toMemberPreviewResDTO)
+                        .toList();
+
+        return MemberResDTO.MemberOffsetResDTO.builder()
+                .members(members)
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .build();
+    }
+
 }

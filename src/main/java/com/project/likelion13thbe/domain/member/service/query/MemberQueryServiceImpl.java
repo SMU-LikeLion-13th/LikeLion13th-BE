@@ -27,4 +27,12 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         return MemberConverter.toMemberPreviewResDTO(member);
     }
 
+    @Override
+    public MemberResDTO.MemberOffsetResDTO getMemberOffset(Integer offset, Integer size) {
+        Pageable pageable = PageRequest.of(offset - 1, size);
+        Page<Member> members = memberRepository.findAllByOrderByCreatedAtDesc(pageable);
+
+        return MemberConverter.toMemberOffsetResDTO(members);
+    }
+
 }

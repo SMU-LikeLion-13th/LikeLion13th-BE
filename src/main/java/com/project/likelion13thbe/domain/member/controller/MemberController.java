@@ -38,6 +38,15 @@ public class MemberController {
         return ResponseEntity.ok(memberQueryService.getMember());
     }
 
+    @Operation(summary = "getOffset")
+    @GetMapping("/offset")
+    public ResponseEntity<MemberResDTO.MemberOffsetResDTO> getMemberOffset(
+            @RequestParam Integer offset,
+            @RequestParam Integer size
+    ) {
+        return ResponseEntity.ok(memberQueryService.getMemberOffset(offset, size));
+    }
+
 
     @Operation(summary = "비밀번호 수정")
     @ApiResponses({
