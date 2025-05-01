@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.product.controller;
 import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.domain.product.service.command.ProductCommandService;
+import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,18 +21,19 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Product", description = "상품 관련 API")
 public class ProductController {
     private final ProductCommandService productCommandService;
+    private final ProductQueryService productQueryService;
 
     @Operation(summary = "상품 상세 조회")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ProductResDTO.ProductDetailResDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = @Content(mediaType = "application/json"))
-    })
-    @GetMapping("/api/v1/product/{productId}")
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "OK",
+//                    content = @Content(mediaType = "application/json",
+//                            schema = @Schema(implementation = ProductResDTO.ProductDetailResDTO.class))),
+//            @ApiResponse(responseCode = "404", description = "Not Found",
+//                    content = @Content(mediaType = "application/json"))
+//    })
+    @GetMapping("/{productId}")
     public ResponseEntity<ProductResDTO.ProductDetailResDTO> getProduct(@PathVariable Long productId) {
-        return null;
+        return ResponseEntity.ok(productQueryService.getProduct(productId));
     }
 
     @Operation(summary = "상품 목록 조회")

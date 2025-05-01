@@ -16,6 +16,7 @@ public class ProductResDTO {
             String image,
             Double price,
             ProductType productType,
+            Integer ProductQuantity,
             Double ratingAvg,
             Integer reviewCount
     ) {

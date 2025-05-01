@@ -26,4 +26,17 @@ public class ProductConverter {
                 .createdAt(product.getCreatedAt())
                 .build();
     }
+
+    public static ProductResDTO.ProductDetailResDTO toProductDetailResDTO(Product product) {
+        return ProductResDTO.ProductDetailResDTO.builder()
+                .productId(product.getProductId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .image(product.getImage())
+                .price(product.getPrice())
+                .productType(product.getProductType())
+//                .ratingAvg()
+//                .reviewCount()
+                .build();
+    }
 }
