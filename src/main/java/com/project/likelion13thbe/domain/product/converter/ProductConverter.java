@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.domain.product.converter;
 
+import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.domain.product.entity.Product;
@@ -10,15 +11,15 @@ import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProductConverter {
-    public static Product toProduct(ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
+    public static Product toProduct(ProductReqDTO.ProductCreateReqDTO productCreateReqDTO, Member member) {
         return Product.builder()
-                .productId(productCreateReqDTO.productId())
                 .name(productCreateReqDTO.name())
                 .description(productCreateReqDTO.description())
                 .image(productCreateReqDTO.image())
                 .price(productCreateReqDTO.price())
                 .productType(productCreateReqDTO.productType())
                 .productQuantity(productCreateReqDTO.productQuantity())
+                .member(member)
                 .build();
     }
 

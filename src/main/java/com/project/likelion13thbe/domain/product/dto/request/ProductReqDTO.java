@@ -7,7 +7,7 @@ public class ProductReqDTO {
 
     @Builder
     public record ProductCreateReqDTO(
-            Long productId,
+            Long memberId,
             String name,
             String description,
             String image,
