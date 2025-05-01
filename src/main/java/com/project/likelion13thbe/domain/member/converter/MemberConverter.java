@@ -28,4 +28,12 @@ public class MemberConverter {
                 .build();
     }
 
+    public static MemberResDTO.MemberPreviewResDTO toMemberPreviewResDTO(Member member) {
+        return MemberResDTO.MemberPreviewResDTO.builder()
+                .id(member.getId())
+                .email(member.getEmail())
+                .age(member.getAge())
+                .build();
+    }
+
 }

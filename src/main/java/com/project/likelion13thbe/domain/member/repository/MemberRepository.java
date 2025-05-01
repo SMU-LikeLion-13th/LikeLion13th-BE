@@ -7,7 +7,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface MemberRepository {
 public interface MemberRepository extends JpaRepository<Member, Long> {
 }

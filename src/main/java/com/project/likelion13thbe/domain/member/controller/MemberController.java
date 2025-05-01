@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Member", description = "멤버 관련 API")
 public class MemberController {
     private final MemberCommandService memberCommandService;
+    private final MemberQueryService memberQueryService;
 
     @Operation(summary = "createMember")
     @PostMapping
@@ -29,6 +30,12 @@ public class MemberController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(memberCommandService.createMember(memberCreateReqDTO));
+    }
+
+    @Operation(summary = "getMember")
+    @GetMapping
+    public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
+        return ResponseEntity.ok(memberQueryService.getMember());
     }
 
 

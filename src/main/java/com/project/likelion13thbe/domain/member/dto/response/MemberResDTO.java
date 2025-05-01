@@ -25,6 +25,14 @@ public class MemberResDTO {
     ) {
     }
 
+    @Builder
+    public record MemberPreviewResDTO(
+            Long id,
+            String email,
+            Integer age
+    ) {
+    }
+
     ) {
     }
 }
