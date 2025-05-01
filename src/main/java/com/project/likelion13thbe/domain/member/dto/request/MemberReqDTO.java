@@ -33,4 +33,12 @@ public class MemberReqDTO {
             String authorizationCode
     ) {
     }
+
+    @Builder
+    public record MemberCreateReqDTO(
+            String email,
+            String password,
+            Integer age
+    ) {
+    }
 }
