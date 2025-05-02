@@ -88,4 +88,20 @@ public class MemberController {
     public ResponseEntity<MemberResponseDTO.MemberPreviewResDTO> getMember(){
         return ResponseEntity.ok(memberCommandService.getMember());
     }
+
+    @Operation(summary = "4주차 실습", description = "사용자 정보 페이지네이션 조회_offset 기반")
+    @ApiResponse(   responseCode = "200",
+            description = "사용자 정보 조회 성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = MemberResponseDTO.MemberCreateResponseDTO.class)
+            )
+    )
+    @GetMapping("/offset")
+    public ResponseEntity<MemberResponseDTO.MemberOffsetResDTO> getMemberOffset(
+            @RequestParam Integer offset,
+            @RequestParam Integer size
+    ){
+        return ResponseEntity.ok(memberCommandService.getMemberOffset(offset, size));
+    }
 }

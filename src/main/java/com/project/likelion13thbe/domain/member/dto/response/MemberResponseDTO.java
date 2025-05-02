@@ -60,4 +60,15 @@ public class MemberResponseDTO {
         private String email;
         private Integer age;
     }
+
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class MemberOffsetResDTO {
+        // 사용자 정보 페이지네이션 Offset
+        private List<MemberPreviewResDTO> members;
+        private Long totalElements;
+        private Integer totalPages;
+    }
 }

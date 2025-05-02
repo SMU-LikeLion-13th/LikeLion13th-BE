@@ -5,6 +5,8 @@ import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberConverter {
@@ -33,6 +35,18 @@ public class MemberConverter {
                 .id(member.getId())
                 .email(member.getEmail())
                 .age(member.getAge())
+                .build();
+    }
+
+    public static MemberResponseDTO.MemberOffsetResDTO toMemberOffsetResponseDTO(Page<Member> page) {
+        List<MemberResponseDTO.MemberPreviewResDTO> members = page.getContent().stream()
+                .map(MemberConverter::toMemberPreviewResponseDTO)
+                .toList();
+
+        return MemberResponseDTO.MemberOffsetResDTO.builder()
+                .members(members)
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
                 .build();
     }
 }
