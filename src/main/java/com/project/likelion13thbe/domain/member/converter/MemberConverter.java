@@ -15,8 +15,11 @@ public class MemberConverter {
 
     public static Member toMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
         return Member.builder()
+                .nickname(memberCreateReqDTO.nickname())
                 .email(memberCreateReqDTO.email())
                 .password(memberCreateReqDTO.password())
+                .socialType(memberCreateReqDTO.socialType())
+                .profileImage(memberCreateReqDTO.profileImage())
                 .age(memberCreateReqDTO.age())
                 .build();
     }

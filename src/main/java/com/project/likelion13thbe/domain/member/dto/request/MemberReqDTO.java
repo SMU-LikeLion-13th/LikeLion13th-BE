@@ -36,8 +36,11 @@ public class MemberReqDTO {
 
     @Builder
     public record MemberCreateReqDTO(
+            String nickname,
             String email,
             String password,
+            SocialType socialType,
+            String profileImage,
             Integer age
     ) {
     }

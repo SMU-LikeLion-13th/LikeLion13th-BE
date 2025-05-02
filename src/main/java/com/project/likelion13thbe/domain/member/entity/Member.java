@@ -15,11 +15,20 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
+    @Column(name = "nickname", nullable = false)
+    private String nickname;
+
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "social_type", nullable = false)
+    private SocialType socialType;
+
+    @Column(name = "profile_image")
+    private String profileImage;
 
     @Column(name = "age")
     private Integer age;
