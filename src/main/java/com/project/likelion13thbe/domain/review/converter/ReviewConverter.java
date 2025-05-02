@@ -29,6 +29,7 @@ public class ReviewConverter {
 
     public static ReviewResDTO.ReviewDetailResDTO toReviewDetailResDTO(Review review) {
         return ReviewResDTO.ReviewDetailResDTO.builder()
+                .productId(review.getProduct().getProductId())
                 .reviewId(review.getReviewId())
                 .rating(review.getRating())
                 .content(review.getContent())
