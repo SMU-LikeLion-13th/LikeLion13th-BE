@@ -71,4 +71,14 @@ public class MemberResponseDTO {
         private Long totalElements;
         private Integer totalPages;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class MemberCursorResDTO{
+        // 사용자 정보 페이지네이션 Cursor
+        private List<MemberPreviewResDTO> members;
+        private Long nextCursor;
+        private Boolean hasNext;
+    }
 }

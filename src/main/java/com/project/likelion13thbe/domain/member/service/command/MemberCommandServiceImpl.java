@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -43,5 +44,19 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         Page<Member> members = memberRepository.findAllByOrderByCreatedAtDesc(pageable);
 
         return MemberConverter.toMemberOffsetResponseDTO(members);
+    }
+
+    public MemberResponseDTO.MemberCursorResDTO getMemberCursor(Long cursor,Integer size)
+    {
+        Pageable pageable = PageRequest.of(0,size);
+
+        // cursor가 0일 경우(첫 페이지)
+        if (cursor  == 0){
+            cursor = Long.MAX_VALUE;
+        }
+
+        Slice<Member> members = memberRepository.findAllByIdLessThanOrderByIdDesc(cursor,pageable);
+
+        return MemberConverter.toMemberCursorResDTO(members);
     }
 }
