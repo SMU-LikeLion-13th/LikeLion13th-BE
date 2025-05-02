@@ -95,15 +95,15 @@ public class ReviewController {
     }
 
     @Operation(summary = "내 리뷰 조회")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ReviewResDTO.ReviewListResDTO.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = @Content(mediaType = "application/json"))
-    })
-    @GetMapping("/api/v1/reviews/my")
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "OK",
+//                    content = @Content(mediaType = "application/json",
+//                            schema = @Schema(implementation = ReviewResDTO.ReviewListResDTO.class))),
+//            @ApiResponse(responseCode = "401", description = "Unauthorized",
+//                    content = @Content(mediaType = "application/json"))
+//    })
+    @GetMapping("/reviews/my")
     public ResponseEntity<ReviewResDTO.ReviewListResDTO> getMyReviews() {
-        return null;
+        return ResponseEntity.ok(reviewQueryService.getMyReviewList());
     }
 }
