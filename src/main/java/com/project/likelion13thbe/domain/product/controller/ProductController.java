@@ -6,7 +6,6 @@ import com.project.likelion13thbe.domain.product.service.command.ProductCommandS
 import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,7 +42,7 @@ public class ProductController {
 //                            schema = @Schema(implementation = ProductResDTO.ProductListResDTO.class)))
 //    })
     @GetMapping("products")
-    public ResponseEntity<ProductResDTO.ProductListResDTO> getProducts() {
+    public ResponseEntity<ProductResDTO.ProductListResDTO> getProductList() {
         return ResponseEntity.ok(productQueryService.getProductList());
     }
 

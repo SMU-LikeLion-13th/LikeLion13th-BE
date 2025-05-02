@@ -23,7 +23,7 @@ public class ReviewResDTO {
 
     @Builder
     public record ReviewListResDTO(
-            List<ReviewDetailResDTO> reviews
+            List<ReviewDetailResDTO> reviewList
     ) {
     }
 

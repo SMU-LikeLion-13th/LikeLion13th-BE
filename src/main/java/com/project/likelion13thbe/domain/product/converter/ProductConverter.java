@@ -45,7 +45,7 @@ public class ProductConverter {
 
     public static ProductResDTO.ProductListResDTO toProductListResDTO(List<ProductResDTO.ProductDetailResDTO> productList) {
         return ProductResDTO.ProductListResDTO.builder()
-                .products(productList)
+                .productList(productList)
                 .build();
     }
 }

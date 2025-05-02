@@ -1,13 +1,11 @@
 package com.project.likelion13thbe.domain.review.controller;
 
-import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
 import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,7 +45,7 @@ public class ReviewController {
 //                    content = @Content(mediaType = "application/json"))
 //    })
     @GetMapping("products/{productId}/reviews")
-    public ResponseEntity<ReviewResDTO.ReviewListResDTO> getReviews(@PathVariable Long productId) {
+    public ResponseEntity<ReviewResDTO.ReviewListResDTO> getReviewList(@PathVariable Long productId) {
         return ResponseEntity.ok(reviewQueryService.getReviewList(productId));
     }
 

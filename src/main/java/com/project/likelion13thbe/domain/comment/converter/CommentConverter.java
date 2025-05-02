@@ -43,7 +43,7 @@ public class CommentConverter {
 
     public static CommentResDTO.CommentListResDTO toCommentListResDTO(List<CommentResDTO.CommentDetailResDTO> commentList) {
         return CommentResDTO.CommentListResDTO.builder()
-                .comments(commentList)
+                .commentList(commentList)
                 .build();
     }
 }

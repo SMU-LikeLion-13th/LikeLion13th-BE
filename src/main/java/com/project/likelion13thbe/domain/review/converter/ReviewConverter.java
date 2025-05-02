@@ -44,7 +44,7 @@ public class ReviewConverter {
 
     public static ReviewResDTO.ReviewListResDTO toReviewListResDTO(List<ReviewResDTO.ReviewDetailResDTO> reviewList) {
         return ReviewResDTO.ReviewListResDTO.builder()
-                .reviews(reviewList)
+                .reviewList(reviewList)
                 .build();
     }
 }

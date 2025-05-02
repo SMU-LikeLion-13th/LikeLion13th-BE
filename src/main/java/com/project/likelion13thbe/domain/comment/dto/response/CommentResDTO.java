@@ -9,7 +9,7 @@ public class CommentResDTO {
 
     @Builder
     public record CommentListResDTO(
-            List<CommentDetailResDTO> comments
+            List<CommentDetailResDTO> commentList
     ) {
     }
 

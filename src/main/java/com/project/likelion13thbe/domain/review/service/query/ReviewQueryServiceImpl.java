@@ -24,9 +24,9 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
     @Override
     public ReviewResDTO.ReviewListResDTO getReviewList(Long productId) {
-        List<Review> reviews = reviewRepository.findAll();
+        List<Review> reviewList = reviewRepository.findAll();
         List<ReviewResDTO.ReviewDetailResDTO> filteredReviewsDetailResDTOList =
-                reviews.stream()
+                reviewList.stream()
                         .filter(review ->
                                 review.getProduct().getProductId().equals(productId))
                         .map(ReviewConverter::toReviewDetailResDTO)
@@ -37,9 +37,9 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
     @Override
     public ReviewResDTO.ReviewListResDTO getMyReviewList() {
-        List<Review> reviews = reviewRepository.findAll();
+        List<Review> reviewList = reviewRepository.findAll();
         List<ReviewResDTO.ReviewDetailResDTO> filteredReviewsDetailResDTOList =
-                reviews.stream()
+                reviewList.stream()
                         .filter(review ->
                                 review.getMember().getMemberId().equals(1L))
                                 // 이게 상품별 리뷰 조회는 Path Variable로 받아왔는데,

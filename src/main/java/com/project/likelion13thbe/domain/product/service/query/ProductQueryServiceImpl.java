@@ -42,10 +42,10 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
     @Override
     public ProductResDTO.ProductListResDTO getProductList() {
-        List<Product> products = productRepository.findAll();
+        List<Product> productList = productRepository.findAll();
 
         List<ProductResDTO.ProductDetailResDTO> productDetailResDTOList =
-                products.stream()
+                productList.stream()
                         .map(Product::getProductId)
                         .map(this::getProduct)
                         .toList();
