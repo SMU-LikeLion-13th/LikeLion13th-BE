@@ -39,7 +39,7 @@ public class CommentController {
                     content = @Content(mediaType = "application/json"))
     })
     @PostMapping("api/v1/reviews/{reviewId}/comments")
-    public ResponseEntity<?> createComment(@PathVariable Long reviewId, @RequestBody CommentReqDTO.createCommentReqDTO createCommentReqDTO) {
+    public ResponseEntity<?> createComment(@PathVariable Long reviewId, @RequestBody CommentReqDTO.commentCreateReqDTO commentCreateReqDTO) {
         return null;
     }
 
@@ -53,7 +53,7 @@ public class CommentController {
                     content = @Content(mediaType = "application/json"))
     })
     @PatchMapping("/api/v1/comment/{commentId}")
-    public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentReqDTO.updateCommentReqDTO updateCommentReqDTO) {
+    public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentReqDTO.commentUpdateReqDTO commentUpdateReqDTO) {
         return null;
     }
 

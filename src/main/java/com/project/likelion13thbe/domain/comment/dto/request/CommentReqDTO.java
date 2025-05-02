@@ -5,13 +5,13 @@ import lombok.Builder;
 public class CommentReqDTO {
 
     @Builder
-    public record createCommentReqDTO(
+    public record commentCreateReqDTO(
             String content
     ) {
     }
 
     @Builder
-    public record updateCommentReqDTO(
+    public record commentUpdateReqDTO(
             String content
     ) {
     }
