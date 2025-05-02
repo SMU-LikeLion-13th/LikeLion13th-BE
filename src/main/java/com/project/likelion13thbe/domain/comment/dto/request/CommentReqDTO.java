@@ -6,12 +6,13 @@ public class CommentReqDTO {
 
     @Builder
     public record commentCreateReqDTO(
+    public record CommentCreateReqDTO(
             String content
     ) {
     }
 
     @Builder
-    public record commentUpdateReqDTO(
+    public record CommentUpdateReqDTO(
             String content
     ) {
     }
