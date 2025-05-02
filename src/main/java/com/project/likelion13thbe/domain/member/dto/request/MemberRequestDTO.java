@@ -1,9 +1,11 @@
 package com.project.likelion13thbe.domain.member.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class MemberRequestDTO {
@@ -14,16 +16,19 @@ public class MemberRequestDTO {
         private List<MemberRequestDTO.MemberReqDTO> members;
     }
 
-    @Builder
-    public record MemberCreateRequestDTO(
-            String name,
-            String email,
-            String password
-    ) {}
-
     @Getter
     public static class MemberReqDTO {
+
         @Schema(description = "회원 설명", example = "어떤 회원인지 설명")
         private String note;
+    }
+
+    // 사용자 회원가입
+    public record MemberCreateRequestDTO (
+            String email,
+            String name,
+            String password,
+            String image
+    ){
     }
 }

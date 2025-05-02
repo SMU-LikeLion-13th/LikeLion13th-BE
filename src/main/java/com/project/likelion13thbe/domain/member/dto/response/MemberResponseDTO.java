@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class MemberResponseDTO {
@@ -20,12 +22,18 @@ public class MemberResponseDTO {
     }
 
     @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class MemberCreateResponseDTO {
+    public record MemberCreateResponseDTO (
         @Schema(description = "생성된 회원 정보")
-        private MemberResDTO member;
+        MemberResDTO member
+    ){
+    }
+
+    // 사용자 회원가입
+    @Builder
+    public record MemberCreateResDTO (
+            Long id,
+            LocalDateTime createdAt
+    ){
     }
 
     @Builder
@@ -42,4 +50,6 @@ public class MemberResponseDTO {
         @Schema(description = "회원 이메일", example = "hong@example.com")
         private String email;
     }
+
+
 }
