@@ -30,7 +30,7 @@ public class ProductConverter {
                 .build();
     }
 
-    public static ProductResDTO.ProductDetailResDTO toProductDetailResDTO(Product product) {
+    public static ProductResDTO.ProductDetailResDTO toProductDetailResDTO(Product product, Double ratingAvg, Integer reviewCount) {
         return ProductResDTO.ProductDetailResDTO.builder()
                 .productId(product.getProductId())
                 .name(product.getName())
@@ -38,8 +38,8 @@ public class ProductConverter {
                 .image(product.getImage())
                 .price(product.getPrice())
                 .productType(product.getProductType())
-//                .ratingAvg()
-//                .reviewCount()
+                .ratingAvg(ratingAvg)
+                .reviewCount(reviewCount)
                 .build();
     }
 
