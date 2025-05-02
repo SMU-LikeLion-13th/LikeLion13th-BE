@@ -15,11 +15,12 @@ public class CommentResDTO {
 
     @Builder
     public record CommentDetailResDTO(
+            Long memberId,
+            Long reviewId,
             Long commentId,
             String content,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
-            String nickname,
             Integer likeCount
     ) {
     }

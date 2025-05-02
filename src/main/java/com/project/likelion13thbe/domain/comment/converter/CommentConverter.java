@@ -8,6 +8,8 @@ import com.project.likelion13thbe.domain.review.entity.Review;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommentConverter {
 
@@ -23,6 +25,25 @@ public class CommentConverter {
         return CommentResDTO.CommentCreateResDTO.builder()
                 .commentId(comment.getCommentId())
                 .createdAt(comment.getCreatedAt())
+                .build();
+    }
+
+    public static CommentResDTO.CommentDetailResDTO toCommentDetailResDTO(Comment comment) {
+        return CommentResDTO.CommentDetailResDTO.builder()
+                .memberId(comment.getMember().getMemberId())
+                .reviewId(comment.getReview().getReviewId())
+                .commentId(comment.getCommentId())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
+//                .likeCount()
+                .build();
+
+    }
+
+    public static CommentResDTO.CommentListResDTO toCommentListResDTO(List<CommentResDTO.CommentDetailResDTO> commentList) {
+        return CommentResDTO.CommentListResDTO.builder()
+                .comments(commentList)
                 .build();
     }
 }

@@ -3,10 +3,9 @@ package com.project.likelion13thbe.domain.comment.controller;
 import com.project.likelion13thbe.domain.comment.dto.request.CommentReqDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.comment.service.command.CommentCommandService;
-import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
+import com.project.likelion13thbe.domain.comment.service.query.CommentQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,18 +20,19 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Comment", description = "댓글 관련 API")
 public class CommentController {
     private final CommentCommandService commentCommandService;
+    private final CommentQueryService commentQueryService;
 
     @Operation(summary = "댓글 목록 조회")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CommentResDTO.CommentListResDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = @Content(mediaType = "application/json"))
-    })
-    @GetMapping("/api/v1/reviews/{reviewId}/comments")
-    public ResponseEntity<ReviewResDTO.ReviewListResDTO> getComment(@PathVariable Long reviewId) {
-        return null;
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "OK",
+//                    content = @Content(mediaType = "application/json",
+//                            schema = @Schema(implementation = CommentResDTO.CommentListResDTO.class))),
+//            @ApiResponse(responseCode = "404", description = "Not Found",
+//                    content = @Content(mediaType = "application/json"))
+//    })
+    @GetMapping("reviews/{reviewId}/comments")
+    public ResponseEntity<CommentResDTO.CommentListResDTO> getComment(@PathVariable Long reviewId) {
+        return ResponseEntity.ok(commentQueryService.getCommentList(reviewId));
     }
 
     @Operation(summary = "댓글 작성")
