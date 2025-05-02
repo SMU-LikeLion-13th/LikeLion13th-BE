@@ -5,8 +5,8 @@ import lombok.Builder;
 public class CommentReqDTO {
 
     @Builder
-    public record commentCreateReqDTO(
     public record CommentCreateReqDTO(
+            Long memberId,
             String content
     ) {
     }

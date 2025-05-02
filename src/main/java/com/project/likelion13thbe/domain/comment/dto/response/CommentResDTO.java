@@ -23,4 +23,11 @@ public class CommentResDTO {
             Integer likeCount
     ) {
     }
+
+    @Builder
+    public record CommentCreateResDTO(
+            Long commentId,
+            LocalDateTime createdAt
+    ) {
+    }
 }
