@@ -8,6 +8,8 @@ import com.project.likelion13thbe.domain.review.entity.Review;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReviewConverter {
 
@@ -37,6 +39,12 @@ public class ReviewConverter {
                 .updatedAt(review.getUpdatedAt())
                 .nickname(review.getMember().getNickname())
                 .profileImage(review.getMember().getProfileImage())
+                .build();
+    }
+
+    public static ReviewResDTO.ReviewListResDTO toReviewListResDTO(List<ReviewResDTO.ReviewDetailResDTO> reviewList) {
+        return ReviewResDTO.ReviewListResDTO.builder()
+                .reviews(reviewList)
                 .build();
     }
 }

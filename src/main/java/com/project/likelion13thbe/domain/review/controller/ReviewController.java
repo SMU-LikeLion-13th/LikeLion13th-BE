@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.domain.review.controller;
 
+import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
@@ -38,16 +39,16 @@ public class ReviewController {
     }
 
     @Operation(summary = "리뷰 목록 조회")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ReviewResDTO.ReviewListResDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = @Content(mediaType = "application/json"))
-    })
-    @GetMapping("/api/v1/products/{productId}/reviews")
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "OK",
+//                    content = @Content(mediaType = "application/json",
+//                            schema = @Schema(implementation = ReviewResDTO.ReviewListResDTO.class))),
+//            @ApiResponse(responseCode = "404", description = "Not Found",
+//                    content = @Content(mediaType = "application/json"))
+//    })
+    @GetMapping("products/{productId}/reviews")
     public ResponseEntity<ReviewResDTO.ReviewListResDTO> getReviews(@PathVariable Long productId) {
-        return null;
+        return ResponseEntity.ok(reviewQueryService.getReviewList(productId));
     }
 
     @Operation(summary = "리뷰 작성")
