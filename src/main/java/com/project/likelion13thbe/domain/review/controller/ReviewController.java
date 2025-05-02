@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.review.controller;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
+import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,18 +22,19 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Review", description = "리뷰 관련 API")
 public class ReviewController {
     private final ReviewCommandService reviewCommandService;
+    private final ReviewQueryService reviewQueryService;
 
     @Operation(summary = "리뷰 세부 조회")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ReviewResDTO.ReviewDetailResDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = @Content(mediaType = "application/json"))
-    })
-    @GetMapping("/api/v1/reviews/{reviewId}")
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "OK",
+//                    content = @Content(mediaType = "application/json",
+//                            schema = @Schema(implementation = ReviewResDTO.ReviewDetailResDTO.class))),
+//            @ApiResponse(responseCode = "404", description = "Not Found",
+//                    content = @Content(mediaType = "application/json"))
+//    })
+    @GetMapping("reviews/{reviewId}")
     public ResponseEntity<ReviewResDTO.ReviewDetailResDTO> getReview(@PathVariable Long reviewId) {
-        return null;
+        return ResponseEntity.ok(reviewQueryService.getReview(reviewId));
     }
 
     @Operation(summary = "리뷰 목록 조회")
