@@ -29,6 +29,9 @@ public class Member {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "age")
+    private Integer age;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }

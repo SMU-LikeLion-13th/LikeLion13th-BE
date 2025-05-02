@@ -51,5 +51,13 @@ public class MemberResponseDTO {
         private String email;
     }
 
-
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class MemberPreviewResDTO {
+        // 사용자 정보 조회
+        private Long id;
+        private String email;
+        private Integer age;
+    }
 }

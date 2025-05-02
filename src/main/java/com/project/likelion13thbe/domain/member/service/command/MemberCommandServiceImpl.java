@@ -25,4 +25,12 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         // 응답 DTO로 변환하고 return
         return MemberConverter.toMemberResponseDTO(member);
     }
+
+    public MemberResponseDTO.MemberPreviewResDTO getMember() {
+        // DB에서 pk가 1인 Member 조회
+        Member member = memberRepository.findById(1L).get();
+
+        // 응답 DTO로 변환 후 return
+        return MemberConverter.toMemberPreviewResponseDTO(member);
+    }
 }

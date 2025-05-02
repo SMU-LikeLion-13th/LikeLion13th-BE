@@ -26,4 +26,13 @@ public class MemberConverter {
                 .createdAt(member.getCreatedAt())
                 .build();
     }
+
+    // Member 엔티티 객체를 → API 응답용 DTO인 MemberPreviewResDTO로 변환
+    public static MemberResponseDTO.MemberPreviewResDTO toMemberPreviewResponseDTO(Member member) {
+        return MemberResponseDTO.MemberPreviewResDTO.builder()
+                .id(member.getId())
+                .email(member.getEmail())
+                .age(member.getAge())
+                .build();
+    }
 }

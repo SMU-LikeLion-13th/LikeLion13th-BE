@@ -75,4 +75,17 @@ public class MemberController {
                 .status(HttpStatus.CREATED)
                 .body(memberCommandService.createMember((memberCreateRequestDTO)));
     }
+
+    @Operation(summary = "4주차 실습", description = "사용자 정보 조회")
+    @ApiResponse(   responseCode = "200",
+            description = "사용자 정보 조회 성공",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = MemberResponseDTO.MemberCreateResponseDTO.class)
+            )
+    )
+    @GetMapping
+    public ResponseEntity<MemberResponseDTO.MemberPreviewResDTO> getMember(){
+        return ResponseEntity.ok(memberCommandService.getMember());
+    }
 }
