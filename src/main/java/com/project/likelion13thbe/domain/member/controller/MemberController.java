@@ -4,13 +4,12 @@ import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/members")
 @Tag(name="Member", description = "Member 관련 API")
 public class MemberController {
     @Operation(description = "회원가입")
@@ -19,10 +18,12 @@ public class MemberController {
             @RequestBody MemberReqDTO.SignupReqDTO dto
     ) {
         return ResponseEntity.ok(null);
+    @PostMapping
     }
+    @GetMapping
 
     @Operation(description = "비밀번호 수정")
-    @PatchMapping("/api/v1/users/reset-password")
+    @PatchMapping("/users/reset-password")
     public ResponseEntity<MemberResDTO.ResetPasswordReqDTO> updatePassword(
             @RequestBody MemberReqDTO.ResetPasswordReqDTO dto
     ) {
@@ -30,7 +31,7 @@ public class MemberController {
     }
 
     @Operation(description = "로그인")
-    @PostMapping("/api/v1/login")
+    @PostMapping("/login")
     public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> login(
             @RequestBody MemberReqDTO.LoginReqDTO dto
     ) {
@@ -38,7 +39,7 @@ public class MemberController {
     }
 
     @Operation(description = "카카오 로그인")
-    @PostMapping("/api/v1/login/kakao")
+    @PostMapping("/login/kakao")
     public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> kakaoLogin(
             @RequestBody MemberReqDTO.KakaoLoginRequestDTO dto
     ) {
