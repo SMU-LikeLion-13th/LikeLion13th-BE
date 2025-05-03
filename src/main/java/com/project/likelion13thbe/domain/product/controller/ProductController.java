@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/products")
 @Tag(name="Product", description = "상품 관련 API")
 public class ProductController {
     @Operation(description = "상품 상세 조회")
@@ -28,25 +29,28 @@ public class ProductController {
     @GetMapping("/api/v1/products/{productId}")
     public ResponseEntity<ProductResDTO.ProductDTO> getProduct(@PathVariable Long productId) {
         return ResponseEntity.ok(null);
+    @GetMapping("/{productId}")
     }
 
     @Operation(description = "상품 목록 조회")
     @GetMapping("/api/v1/products")
     public ResponseEntity<ProductResDTO.ProductListDTO> getProducts(){
         return ResponseEntity.ok(null);
+    @GetMapping
     }
 
     @Operation(description = "상품 생성")
     @PostMapping("/api/v1/products")
     public ResponseEntity<ProductResDTO.ProductDTO> createProduct(
             @RequestBody ProductReqDTO.CreateProductDTO dto
+    @PostMapping
     ) {
         return ResponseEntity.ok(null);
     }
 
     @Operation(description = "상품 삭제")
     @Parameter(name = "productId", description = "product PK", example = "1")
-    @DeleteMapping("/api/v1/products/{productId}")
+    @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
         return ResponseEntity.ok(null);
     }
