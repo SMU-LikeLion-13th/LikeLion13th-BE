@@ -13,6 +13,14 @@ public class MemberResDTO {
     }
 
     @Builder
+    public record MemberPreviewResDTO(
+            Long id,
+            String name,
+            String email
+    ){
+    }
+
+    @Builder
     public record ResetPasswordReqDTO(
             String currentPassword,
             String newPassword

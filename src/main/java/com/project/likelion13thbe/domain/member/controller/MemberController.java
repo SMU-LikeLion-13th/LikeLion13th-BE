@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.member.controller;
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
+import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,13 @@ public class MemberController {
                 .status(HttpStatus.CREATED)
                 .body(memberCommandService.createMember(memberCreateReqDTO));
     }
+
+    @Operation(description = "유저 조회")
     @GetMapping
+    public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
+        return ResponseEntity.ok(memberQueryService.getMember());
+    }
+
 
     @Operation(description = "비밀번호 수정")
     @PatchMapping("/users/reset-password")

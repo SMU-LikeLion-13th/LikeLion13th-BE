@@ -23,4 +23,11 @@ public class MemberConverter {
                 .build();
     }
 
+    public static MemberResDTO.MemberPreviewResDTO toMemberPreviewResponseDTO(Member member) {
+        return MemberResDTO.MemberPreviewResDTO.builder()
+                .id(member.getId())
+                .name(member.getName())
+                .email(member.getEmail())
+                .build();
+    }
 }
