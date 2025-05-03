@@ -2,6 +2,7 @@ package com.project.likelion13thbe.domain.product.controller;
 
 import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
+import com.project.likelion13thbe.domain.product.service.command.ProductCommandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,13 +10,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/products")
 @Tag(name="Product", description = "상품 관련 API")
 public class ProductController {
+
+
+    private final ProductCommandService productCommandService;
     @Operation(description = "상품 상세 조회")
     @ApiResponses({
             @ApiResponse(
@@ -40,12 +47,13 @@ public class ProductController {
     }
 
     @Operation(description = "상품 생성")
-    @PostMapping("/api/v1/products")
-    public ResponseEntity<ProductResDTO.ProductDTO> createProduct(
-            @RequestBody ProductReqDTO.CreateProductDTO dto
     @PostMapping
+    public ResponseEntity<ProductResDTO.ProductCreateResDTO> createProduct(
+            @RequestBody ProductReqDTO.ProductCreateReqDTO dto
     ) {
-        return ResponseEntity.ok(null);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(productCommandService.createProduct(dto));
     }
 
     @Operation(description = "상품 삭제")

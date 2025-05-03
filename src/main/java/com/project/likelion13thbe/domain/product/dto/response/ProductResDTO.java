@@ -1,9 +1,7 @@
 package com.project.likelion13thbe.domain.product.dto.response;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProductResDTO {
@@ -24,6 +22,11 @@ public class ProductResDTO {
     @Builder
     public record ProductListDTO(
             List<ProductDTO> productList
+    public record ProductCreateResDTO(
+            Long id,
+            LocalDateTime createdAt
+    ){}
+
     ){
     }
 }

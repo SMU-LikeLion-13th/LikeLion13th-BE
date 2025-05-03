@@ -5,12 +5,13 @@ import lombok.Builder;
 public class ProductReqDTO {
 
     @Builder
-    public record CreateProductDTO(
-            String name,
+    public record ProductCreateReqDTO(
+            String title,
             String content,
             Integer price,
             Integer quantity,
-            String Image
+            String Image,
+            Long memberId
     ){
     }
 }
