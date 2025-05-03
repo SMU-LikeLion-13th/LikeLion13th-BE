@@ -4,8 +4,8 @@ import lombok.Builder;
 
 public class MemberReqDTO {
     @Builder
-    public record SignupReqDTO(
-            String username,
+    public record MemberCreateReqDTO (
+            String name,
             String email,
             String password
     ){
