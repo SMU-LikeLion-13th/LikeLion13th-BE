@@ -2,6 +2,7 @@ package com.project.likelion13thbe.domain.review.controller;
 
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
+import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,12 +10,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @Tag(name="Review", description = "리뷰 관련 API")
 public class ReviewController {
+    private final ReviewCommandService reviewCommandService;
+
     @Operation(description = "리뷰 단건 조회")
     @ApiResponses({
             @ApiResponse(
@@ -48,11 +54,13 @@ public class ReviewController {
     @Operation(description = "리뷰 생성")
     @Parameter(name = "productId", description = "product PK", example = "1")
     @PostMapping("/api/v1/products/{productId}/reviews")
-    public ResponseEntity<ReviewResDTO.ReviewDTO> createReview(
+    public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> createReview(
             @PathVariable Long productId,
-            @RequestBody ReviewReqDTO.CreateReviewDTO dto
+            @RequestBody ReviewReqDTO.ReviewCreateReqDTO dto
     ) {
-        return ResponseEntity.ok(null);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(reviewCommandService.createReview(productId, dto));
     }
     @Operation(description = "리뷰 수정")
     @Parameter(name = "reviewId", description = "review PK", example = "2")

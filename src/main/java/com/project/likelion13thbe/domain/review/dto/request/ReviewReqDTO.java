@@ -5,9 +5,10 @@ import lombok.*;
 public class ReviewReqDTO {
 
     @Builder
-    public record CreateReviewDTO(
+    public record ReviewCreateReqDTO(
             String content,
-            int rate
+            double rate,
+            Long memberId
     ) {
     }
     @Builder

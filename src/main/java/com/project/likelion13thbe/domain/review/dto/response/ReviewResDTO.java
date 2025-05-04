@@ -9,6 +9,11 @@ public class ReviewResDTO {
 
     @Builder
     public record ReviewDTO (
+    public record ReviewCreateResDTO(
+            Long id,
+            LocalDateTime createdAt
+    ){
+    }
             Long id,
             String username,
             String profileImg,
