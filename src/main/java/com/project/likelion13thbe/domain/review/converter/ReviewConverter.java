@@ -8,6 +8,9 @@ import com.project.likelion13thbe.domain.review.entity.Review;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReviewConverter {
 
@@ -35,6 +38,13 @@ public class ReviewConverter {
                 .content(review.getContent())
                 .rate(review.getRate())
                 .createdAt(review.getCreatedAt())
+                .build();
+    }
+    public static ReviewResDTO.ReviewListDTO toReviewPreviewResponseDTOList(List<Review> reviews) {
+        return ReviewResDTO.ReviewListDTO.builder()
+                .reviews(reviews.stream()
+                        .map(ReviewConverter::toReviewPreviewResponseDTO)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

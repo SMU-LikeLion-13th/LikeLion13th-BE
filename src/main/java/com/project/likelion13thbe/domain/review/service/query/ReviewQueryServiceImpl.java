@@ -25,4 +25,11 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
         return ReviewConverter.toReviewPreviewResponseDTO(review);
     }
 
+    @Override
+    public ReviewResDTO.ReviewListDTO getReviewList(Long productId) {
+        List<Review> reviews = reviewRepository.findAllByProductId(productId);
+
+        return ReviewConverter.toReviewPreviewResponseDTOList(reviews);
+    }
+
 }

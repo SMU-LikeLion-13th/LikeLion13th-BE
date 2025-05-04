@@ -51,7 +51,7 @@ public class ReviewController {
     @Parameter(name = "productId", description = "product PK", example = "1")
     @GetMapping("/api/v1/products/{productId}/reviews")
     public ResponseEntity<ReviewResDTO.ReviewListDTO> getReviews(@PathVariable Long productId) {
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(reviewQueryService.getReviewList(productId));
     }
 
     @Operation(description = "리뷰 생성")
