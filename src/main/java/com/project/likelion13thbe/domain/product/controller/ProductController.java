@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.product.controller;
 import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.domain.product.service.command.ProductCommandService;
+import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,20 +24,23 @@ public class ProductController {
 
 
     private final ProductCommandService productCommandService;
+    private final ProductQueryService productQueryService;
+
     @Operation(description = "상품 상세 조회")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "COMMON200", description = "Ok, 성공",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ProductResDTO.ProductDTO.class)
+                            schema = @Schema(implementation = ProductResDTO.ProductCreateResDTO.class)
                     )
             )
     })
     @Parameter(name = "productId", description = "product PK", example = "1")
-    @GetMapping("/api/v1/products/{productId}")
-    public ResponseEntity<ProductResDTO.ProductDTO> getProduct(@PathVariable Long productId) {
-        return ResponseEntity.ok(null);
     @GetMapping("/{productId}")
+    public ResponseEntity<ProductResDTO.ProductPreviewResDTO> getProduct(
+            @PathVariable Long productId
+    ) {
+        return ResponseEntity.ok(productQueryService.getProduct(productId));
     }
 
     @Operation(description = "상품 목록 조회")

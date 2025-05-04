@@ -28,4 +28,20 @@ public class ProductConverter {
 
     }
 
+    public static ProductResDTO.ProductPreviewResDTO toProductPreviewResDTO(Product product, Double ratingAvg, Integer reviewCount) {
+
+        return ProductResDTO.ProductPreviewResDTO.builder()
+                .id(product.getId())
+                .title(product.getTitle())
+                .content(product.getContent())
+                .image(product.getImage())
+                .price(product.getPrice())
+                .quantity(product.getQuantity())
+                .ratingAvg(ratingAvg)
+                .reviewCount(reviewCount)
+                .createdAt(product.getCreatedAt())
+                .build();
+    }
+    }
+
 }

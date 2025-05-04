@@ -7,15 +7,16 @@ import java.util.List;
 public class ProductResDTO {
 
     @Builder
-    public record ProductDTO(
-            Long productId,
-            String name,
+    public record ProductPreviewResDTO(
+            Long id,
+            String title,
             String content,
             String image,
-            Double price,
+            Integer price,
             Integer quantity,
             Double ratingAvg,
-            Integer reviewCount
+            Integer reviewCount,
+            LocalDateTime createdAt
     ){
     }
 
