@@ -21,13 +21,14 @@ public class ProductResDTO {
     }
 
     @Builder
-    public record ProductListDTO(
-            List<ProductDTO> productList
     public record ProductCreateResDTO(
             Long id,
             LocalDateTime createdAt
     ){}
 
+    @Builder
+    public record ProductListResDTO(
+            List<ProductPreviewResDTO> productList
     ){
     }
 }

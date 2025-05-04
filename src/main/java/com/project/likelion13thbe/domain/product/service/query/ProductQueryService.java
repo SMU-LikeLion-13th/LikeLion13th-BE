@@ -5,4 +5,5 @@ import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 public interface ProductQueryService {
     ProductResDTO.ProductPreviewResDTO getProduct(Long productId);
 
+    ProductResDTO.ProductListResDTO getProductList();
 }

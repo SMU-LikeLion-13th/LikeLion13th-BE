@@ -44,10 +44,9 @@ public class ProductController {
     }
 
     @Operation(description = "상품 목록 조회")
-    @GetMapping("/api/v1/products")
-    public ResponseEntity<ProductResDTO.ProductListDTO> getProducts(){
-        return ResponseEntity.ok(null);
     @GetMapping
+    public ResponseEntity<ProductResDTO.ProductListResDTO> getProducts(){
+        return ResponseEntity.ok(productQueryService.getProductList());
     }
 
     @Operation(description = "상품 생성")
