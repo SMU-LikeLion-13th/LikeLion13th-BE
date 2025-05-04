@@ -32,4 +32,11 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
         return ReviewConverter.toReviewPreviewResponseDTOList(reviews);
     }
 
+    @Override
+    public ReviewResDTO.ReviewListDTO getMyReview() {
+        //토큰 추출 말고 따로 맴버 아이디를 가져올 수 없는거 같아서 1L로 두었습니다!
+        List<Review> reviews = reviewRepository.findAllByMemberId(1L);
+
+        return ReviewConverter.toReviewPreviewResponseDTOList(reviews);
+    }
 }
