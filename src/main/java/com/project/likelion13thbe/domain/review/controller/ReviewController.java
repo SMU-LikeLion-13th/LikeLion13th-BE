@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.review.controller;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
+import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Tag(name="Review", description = "리뷰 관련 API")
 public class ReviewController {
+
+    private final ReviewQueryService reviewQueryService;
     private final ReviewCommandService reviewCommandService;
 
     @Operation(description = "리뷰 단건 조회")
@@ -26,14 +29,14 @@ public class ReviewController {
             @ApiResponse(
                     responseCode = "COMMON200", description = "Ok, 성공",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ReviewResDTO.ReviewDTO.class)
+                            schema = @Schema(implementation = ReviewResDTO.ReviewPreviewResDTO.class)
                     )
             )
     })
     @Parameter(name = "reviewId", description = "review PK", example = "1")
     @GetMapping("/api/v1/reviews/{reviewId}")
-    public ResponseEntity<ReviewResDTO.ReviewDTO> getReview(@PathVariable Long reviewId) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<ReviewResDTO.ReviewPreviewResDTO> getReview(@PathVariable Long reviewId) {
+        return ResponseEntity.ok(reviewQueryService.getReview(reviewId));
     }
 
     @Operation(description = "리뷰 목록 조회")
@@ -65,7 +68,7 @@ public class ReviewController {
     @Operation(description = "리뷰 수정")
     @Parameter(name = "reviewId", description = "review PK", example = "2")
     @PatchMapping("/api/v1/reviews/{reviewId}")
-    public ResponseEntity<ReviewResDTO.ReviewDTO> updateReview(
+    public ResponseEntity<ReviewResDTO.ReviewPreviewResDTO> updateReview(
             @PathVariable Long reviewId,
             @RequestBody ReviewReqDTO.UpdateReviewDTO dto
     ) {

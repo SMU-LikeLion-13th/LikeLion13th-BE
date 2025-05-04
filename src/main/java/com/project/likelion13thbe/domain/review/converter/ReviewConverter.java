@@ -27,4 +27,14 @@ public class ReviewConverter {
                 .build();
     }
 
+    public static ReviewResDTO.ReviewPreviewResDTO toReviewPreviewResponseDTO(Review review) {
+        return ReviewResDTO.ReviewPreviewResDTO.builder()
+                .id(review.getId())
+                .username(review.getMember().getName())
+                .profileImg(review.getMember().getImage())
+                .content(review.getContent())
+                .rate(review.getRate())
+                .createdAt(review.getCreatedAt())
+                .build();
+    }
 }
