@@ -18,10 +18,11 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
     @Override
     public ProductResDTO.ProductDetailResDTO getProduct(Long productId) {
-        ProductDetailDTO dto = productRepository.findProductWithReviewStats(productId)
+        ProductDetailDTO productDetailDTO = productRepository.findProductWithReviewStats(productId)
                 .orElseThrow(() -> new RuntimeException("Product가 존재하지 않음"));
 
-        return ProductConverter.toProductDetailResDTO(dto.product(), dto.ratingAvg(), dto.reviewCount().intValue());
+        return ProductConverter.toProductDetailResDTO(
+                productDetailDTO.product(), productDetailDTO.ratingAvg(), productDetailDTO.reviewCount().intValue());
     }
 
     @Override
@@ -30,7 +31,8 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
         List<ProductResDTO.ProductDetailResDTO> productDetailResDTOList =
                 productDetailDTOList.stream()
-                        .map(dto -> ProductConverter.toProductDetailResDTO(dto.product(), dto.ratingAvg(), dto.reviewCount().intValue()))
+                        .map(productDetailDTO -> ProductConverter.toProductDetailResDTO(
+                                productDetailDTO.product(), productDetailDTO.ratingAvg(), productDetailDTO.reviewCount().intValue()))
                         .toList();
 
         return ProductConverter.toProductListResDTO(productDetailResDTOList);
