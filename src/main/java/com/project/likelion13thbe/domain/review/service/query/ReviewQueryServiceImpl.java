@@ -35,13 +35,12 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
     @Override
     public ReviewResDTO.ReviewListResDTO getMyReviewList() {
-        List<Review> reviewList = reviewRepository.findAll();
+        List<Review> reviewList = reviewRepository.findAllReviewsByMemberId(1L);
+        // 이게 상품별 리뷰 조회는 Path Variable로 받아왔는데,
+        // 내 리뷰는 아직 토큰 구별 기능 불가능 이슈로 상수 넣었습니다
+
         List<ReviewResDTO.ReviewDetailResDTO> filteredReviewsDetailResDTOList =
                 reviewList.stream()
-                        .filter(review ->
-                                review.getMember().getMemberId().equals(1L))
-                                // 이게 상품별 리뷰 조회는 Path Variable로 받아왔는데,
-                                // 내 리뷰는 아직 토큰 구별 기능 불가능 이슈로 상수 넣었습니다
                         .map(ReviewConverter::toReviewDetailResDTO)
                         .toList();
 
