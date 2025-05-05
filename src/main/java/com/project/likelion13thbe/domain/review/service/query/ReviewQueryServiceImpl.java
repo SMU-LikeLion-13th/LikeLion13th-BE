@@ -18,13 +18,18 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
     @Override
     public ReviewResDTO.ReviewDetailResDTO getReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId).get();
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("Review가 존재하지 않음"));
         return ReviewConverter.toReviewDetailResDTO(review);
     }
 
     @Override
     public ReviewResDTO.ReviewListResDTO getReviewList(Long productId) {
         List<Review> reviewList = reviewRepository.findAllReviewsByProductId(productId);
+        if (reviewList.isEmpty()) {
+            throw new RuntimeException("review가 존재하지 않음");
+        }
+
         List<ReviewResDTO.ReviewDetailResDTO> filteredReviewsDetailResDTOList =
                 reviewList.stream()
                         .map(ReviewConverter::toReviewDetailResDTO)
@@ -38,6 +43,9 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
         List<Review> reviewList = reviewRepository.findAllReviewsByMemberId(1L);
         // 이게 상품별 리뷰 조회는 Path Variable로 받아왔는데,
         // 내 리뷰는 아직 토큰 구별 기능 불가능 이슈로 상수 넣었습니다
+        if (reviewList.isEmpty()) {
+            throw new RuntimeException("review가 존재하지 않음");
+        }
 
         List<ReviewResDTO.ReviewDetailResDTO> filteredReviewsDetailResDTOList =
                 reviewList.stream()
