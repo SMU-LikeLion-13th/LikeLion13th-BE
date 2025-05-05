@@ -21,7 +21,8 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     @Override
     public MemberResDTO.MemberPreviewResDTO getMember() {
         // DB에서 pk가 1인 Member 조회
-        Member member = memberRepository.findById(1L).get();
+        Member member = memberRepository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("Member가 존재하지 않음"));
 
         // 응답 DTO로 변환 후 return
         return MemberConverter.toMemberPreviewResDTO(member);
