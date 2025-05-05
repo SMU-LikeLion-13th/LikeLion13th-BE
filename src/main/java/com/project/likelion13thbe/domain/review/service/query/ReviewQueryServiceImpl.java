@@ -24,11 +24,9 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
     @Override
     public ReviewResDTO.ReviewListResDTO getReviewList(Long productId) {
-        List<Review> reviewList = reviewRepository.findAll();
+        List<Review> reviewList = reviewRepository.findAllReviewsByProductId(productId);
         List<ReviewResDTO.ReviewDetailResDTO> filteredReviewsDetailResDTOList =
                 reviewList.stream()
-                        .filter(review ->
-                                review.getProduct().getProductId().equals(productId))
                         .map(ReviewConverter::toReviewDetailResDTO)
                         .toList();
 
