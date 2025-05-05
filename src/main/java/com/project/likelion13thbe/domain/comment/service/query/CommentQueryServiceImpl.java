@@ -18,10 +18,9 @@ public class CommentQueryServiceImpl implements CommentQueryService {
 
     @Override
     public CommentResDTO.CommentListResDTO getCommentList(Long reviewId) {
-        List<Comment> commentList = commentRepository.findAll();
+        List<Comment> commentList = commentRepository.findCommentByReviewId(reviewId);
         List<CommentResDTO.CommentDetailResDTO> filteredCommentDetailResDTOList =
                 commentList.stream()
-                        .filter(comment -> comment.getReview().getReviewId().equals(reviewId))
                         .map(CommentConverter::toCommentDetailResDTO)
                         .toList();
 
