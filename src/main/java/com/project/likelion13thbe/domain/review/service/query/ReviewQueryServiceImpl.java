@@ -20,7 +20,8 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
     @Override
     public ReviewResDTO.ReviewPreviewResDTO getReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId).get();
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("reviewId에 해당하는 review가 존재하지 않습니다."));
 
         return ReviewConverter.toReviewPreviewResponseDTO(review);
     }

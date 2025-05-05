@@ -25,7 +25,8 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
     @Override
     public ProductResDTO.ProductPreviewResDTO getProduct(Long productId) {
-        Product product = productRepository.findById(productId).get();
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("productId에 해당하는 product가 존재하지 않습니다."));
 
         Double ratingAvg = reviewRepository.findRatingAvgByProductId(productId);
         Integer reviewCount = reviewRepository.findReviewCountByProductId(productId);

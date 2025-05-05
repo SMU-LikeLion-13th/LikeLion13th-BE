@@ -24,8 +24,11 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
 
     @Override
     public ReviewResDTO.ReviewCreateResDTO createReview(Long productId, ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
-        Member member = memberRepository.findById(reviewCreateReqDTO.memberId()).get();
-        Product product = productRepository.findById(productId).get();
+        Member member = memberRepository.findById(reviewCreateReqDTO.memberId())
+                .orElseThrow(() -> new RuntimeException("memberId에 해당하는 member가 존재하지 않습니다."));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("productId에 해당하는 product가 존재하지 않습니다."));
+
         Review review = ReviewConverter.toReview(reviewCreateReqDTO, product, member);
 
         reviewRepository.save(review);

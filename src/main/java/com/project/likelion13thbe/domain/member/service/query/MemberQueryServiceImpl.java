@@ -17,7 +17,9 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     @Override
     public MemberResDTO.MemberPreviewResDTO getMember() {
         //특정 유저 조회는 당장 토큰 추출이 불가해 1L로 했습니다!
-        Member member = memberRepository.findById(1L).get();
+        Member member = memberRepository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("memberId에 해당하는 member가 존재하지 않습니다."));
+
 
         return MemberConverter.toMemberPreviewResponseDTO(member);
     }

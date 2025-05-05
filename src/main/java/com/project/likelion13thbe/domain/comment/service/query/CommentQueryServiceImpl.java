@@ -21,7 +21,8 @@ public class CommentQueryServiceImpl implements CommentQueryService {
 
     @Override
     public CommentResDTO.CommentListResDTO getCommentList(Long productId, Long reviewId) {
-        Review review = reviewRepository.findById(reviewId).get();
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("reviewId에 해당하는 review가 존재하지 않습니다."));
 
         if (!review.getProduct().getId().equals(productId)) {
             throw new IllegalArgumentException("리뷰가 해당 상품에 속하지 않습니다.");

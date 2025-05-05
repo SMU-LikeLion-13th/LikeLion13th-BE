@@ -21,7 +21,8 @@ public class ProductCommandServiceImpl implements ProductCommandService {
 
     @Override
     public ProductResDTO.ProductCreateResDTO createProduct(ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
-        Member member = memberRepository.findById(productCreateReqDTO.memberId()).get();
+        Member member = memberRepository.findById(productCreateReqDTO.memberId())
+                .orElseThrow(() -> new RuntimeException("memberId에 해당하는 member가 존재하지 않습니다."));
 
         Product product = ProductConverter.toProduct(productCreateReqDTO, member);
 
