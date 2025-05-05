@@ -24,8 +24,10 @@ public class CommentCommandServiceImpl implements CommentCommandService {
 
     @Override
     public CommentResDTO.CommentCreateResDTO createComment(CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO, Long reviewId) {
-        Member member = memberRepository.findById(commentCreateReqDTO.memberId()).get();
-        Review review = reviewRepository.findById(reviewId).get();
+        Member member = memberRepository.findById(commentCreateReqDTO.memberId())
+                .orElseThrow(() -> new RuntimeException("Member가 존재하지 않음"));
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("review가 존재하지 않음"));
 
         Comment comment = CommentConverter.toComment(commentCreateReqDTO, member, review);
 

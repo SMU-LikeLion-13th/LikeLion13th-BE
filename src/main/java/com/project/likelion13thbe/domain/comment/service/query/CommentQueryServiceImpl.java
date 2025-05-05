@@ -19,6 +19,9 @@ public class CommentQueryServiceImpl implements CommentQueryService {
     @Override
     public CommentResDTO.CommentListResDTO getCommentList(Long reviewId) {
         List<Comment> commentList = commentRepository.findCommentByReviewId(reviewId);
+        if (commentList.isEmpty()) {
+            throw new RuntimeException("Comment가 존재하지 않음");
+        }
         List<CommentResDTO.CommentDetailResDTO> filteredCommentDetailResDTOList =
                 commentList.stream()
                         .map(CommentConverter::toCommentDetailResDTO)
