@@ -22,7 +22,8 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     public ProductResDTO.ProductCreateResDTO createProduct(ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
         // 멤버를 토큰으로 구별하지만 아직 방법을 몰라서 일단 직접 주입
         // Req로 받은 멤버 아이디로 멤버 객체를 찾고
-        Member member = memberRepository.findById(productCreateReqDTO.memberId()).get();
+        Member member = memberRepository.findById(productCreateReqDTO.memberId())
+                .orElseThrow(() -> new RuntimeException("Member가 존재하지 않음"));
 
         // ProductCreateReqDTO + Member => Entity
         Product product = ProductConverter.toProduct(productCreateReqDTO, member);

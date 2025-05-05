@@ -29,6 +29,10 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     public ProductResDTO.ProductListResDTO getProductList() {
         List<ProductDetailDTO> productDetailDTOList = productRepository.findAllProductsWithReviewStats();
 
+        if (productDetailDTOList.isEmpty()) {
+            throw new RuntimeException("Product가 존재하지 않음");
+        }
+
         List<ProductResDTO.ProductDetailResDTO> productDetailResDTOList =
                 productDetailDTOList.stream()
                         .map(productDetailDTO -> ProductConverter.toProductDetailResDTO(
