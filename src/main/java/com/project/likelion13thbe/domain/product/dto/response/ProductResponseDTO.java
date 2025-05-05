@@ -35,7 +35,7 @@ public class ProductResponseDTO {
     @AllArgsConstructor
     public static class ProductResDTO {
         @Schema(description = "product의 pk",example = "1")
-        private Long ProductId;
+        private Long productId;
         @Schema(description = "상품 설명", example = "~~한 상품입니다.")
         private String content;
     }

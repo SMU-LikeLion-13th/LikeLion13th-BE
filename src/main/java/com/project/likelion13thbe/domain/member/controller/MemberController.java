@@ -27,8 +27,9 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "카카오 로그인 성공")
     })
     @PostMapping("/api/v1/login/kakao")
-    public void kakaoLogin() {
+    public ResponseEntity<Void> kakaoLogin() {
         // 로그인 로직
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "일반 로그인", description = "일반 로그인을 수행")
@@ -36,8 +37,9 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "일반 로그인 성공")
     })
     @PostMapping("/api/v1/login")
-    public void login() {
+    public ResponseEntity<Void> login() {
         // 로그인 로직
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "비밀번호 수정", description = "비밀번호를 수정")
@@ -45,8 +47,9 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "비밀번호 수정 성공")
     })
     @PostMapping("/api/v1/password-reset")
-    public void resetPassword() {
+    public ResponseEntity<Void> resetPassword() {
         // 비밀번호 수정 로직
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "회원가입", description = "신규 회원을 등록")
@@ -54,8 +57,9 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "회원가입 성공")
     })
     @PostMapping("/api/v1/users")
-    public void signup(@RequestBody MemberRequestDTO.MemberCreateRequestDTO requestDTO) {
+    public ResponseEntity<Void> signup(@RequestBody MemberRequestDTO.MemberCreateRequestDTO requestDTO) {
         // 회원가입 로직
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     private final MemberCommandServiceImpl memberCommandService;

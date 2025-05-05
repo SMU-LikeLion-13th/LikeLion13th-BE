@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -52,8 +53,9 @@ public class CommentController {
 
     })
     @PatchMapping("/api/v1/comments/{commentId}")
-    public CommentResponseDTO.CommentListResponseDTO updateComment(
-            @RequestBody CommentRequestDTO.CommentListRequestDTO requestDTO
+    public ResponseEntity<CommentResponseDTO.CommentResDTO> updateComment(
+            @PathVariable Long commentId,
+            @RequestBody CommentRequestDTO.CommentUpdateRequestDTO requestDTO
     ) {
         return null;
     }

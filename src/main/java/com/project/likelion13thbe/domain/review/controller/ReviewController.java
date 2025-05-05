@@ -117,7 +117,7 @@ public class ReviewController {
             @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
     })
     @DeleteMapping("/api/v1/reviews/{reviewId}")
-    public ReviewResponseDTO.ReviewListResponseDTO deleteReview(@PathVariable Long productId, @PathVariable Long reviewId) {
+    public ReviewResponseDTO.ReviewListResponseDTO deleteReview(@PathVariable Long reviewId) {
         return null;
     }
 

@@ -25,7 +25,7 @@ public class CommentResponseDTO {
     @AllArgsConstructor
     public static class CommentCreateResponseDTO {
         @Schema(description = "댓글")
-        private List<CommentResDTO> comment;
+        private CommentResDTO comment;
     }
 
     @Builder
