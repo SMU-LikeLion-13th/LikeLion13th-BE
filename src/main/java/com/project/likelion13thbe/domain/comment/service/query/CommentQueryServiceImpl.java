@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class CommentQueryServiceImpl implements CommentQueryService {
     private final ReviewRepository reviewRepository;
     private final CommentRepository commentRepository;

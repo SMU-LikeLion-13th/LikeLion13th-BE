@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class ProductQueryServiceImpl implements ProductQueryService {
     private final ProductRepository productRepository;
     private final ReviewRepository reviewRepository;
