@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class MemberResDTO {
     public record MemberResponseDTO(){
@@ -22,6 +23,14 @@ public class MemberResDTO {
             Long id,
             String email,
             String name
+    ){
+    }
+
+    @Builder
+    public record MemberOffsetResDTO(
+            List<MemberPreviewResDTO> members,
+            Long totalElements,
+            Integer totalPages
     ){
     }
 

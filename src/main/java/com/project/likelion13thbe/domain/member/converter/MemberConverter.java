@@ -3,11 +3,11 @@ package com.project.likelion13thbe.domain.member.converter;
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-
+import org.springframework.data.domain.Page;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static ch.qos.logback.classic.spi.ThrowableProxyVO.build;
 
@@ -38,7 +38,17 @@ public class MemberConverter {
                 .build();
     }
 
+    public static MemberResDTO.MemberOffsetResDTO toMemberOffsetResponseDTO(Page<Member> page) {
 
+        List<MemberResDTO.MemberPreviewResDTO> members = page.getContent().stream()
+                .map(MemberConverter::toMemberPreviewResponseDTO)
+                .toList();
 
+        return MemberResDTO.MemberOffsetResDTO.builder()
+                .members(members)
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .build();
+    }
 
 }

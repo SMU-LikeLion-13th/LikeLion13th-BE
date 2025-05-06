@@ -56,4 +56,13 @@ public class MemberController {
         return ResponseEntity.ok(memberQueryService.getMember());
     }
 
+    @Operation(summary = "사용자 정보 페이지네이션 조회, offset 기반")
+    @GetMapping("/offset")
+    public ResponseEntity<MemberResDTO.MemberOffsetResDTO> getMemberOffset(
+            @RequestParam Integer offset,
+            @RequestParam Integer size
+    ){
+        return ResponseEntity.ok(memberQueryService.getMemberOffset(offset, size));
+    }
+
 }

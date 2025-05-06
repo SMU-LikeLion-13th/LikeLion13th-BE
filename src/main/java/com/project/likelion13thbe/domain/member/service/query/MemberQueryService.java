@@ -4,4 +4,6 @@ import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 
 public interface MemberQueryService {
     MemberResDTO.MemberPreviewResDTO getMember();
+
+    MemberResDTO.MemberOffsetResDTO getMemberOffset(Integer offset, Integer size);
 }
