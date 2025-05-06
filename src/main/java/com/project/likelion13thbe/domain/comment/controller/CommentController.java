@@ -2,18 +2,25 @@ package com.project.likelion13thbe.domain.comment.controller;
 
 import com.project.likelion13thbe.domain.comment.dto.request.CommentReqDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
+import com.project.likelion13thbe.domain.comment.service.command.CommentCommandServiceImpl;
+import com.project.likelion13thbe.domain.comment.service.query.CommentQueryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @Tag(name="Comment",description = "댓글 API")
 public class CommentController {
+    private final CommentCommandServiceImpl commentCommandService;
+    private final CommentQueryServiceImpl commentQueryService;
     @Operation(description = "댓글 목록 조회")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "ok, 성공",
@@ -24,7 +31,8 @@ public class CommentController {
     })
     @GetMapping("/reviews/{reviewId}/comments")
     public ResponseEntity<CommentResDTO.CommentListResDTO> getCommentList(@PathVariable Long reviewId) {
-        return null;
+        return ResponseEntity.ok(commentQueryService.getComments());
+
     }
 
     @Operation(description = "댓글 작성")
@@ -38,7 +46,10 @@ public class CommentController {
     @PostMapping("/reviews/{reviewId}/comments")
     public ResponseEntity<CommentResDTO.CommentCreateResDTO> createComment(@PathVariable Long reviewId,@RequestBody CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO
     ) {
-        return null;
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(commentCommandService.createComment(commentCreateReqDTO));
+
     }
 
     @Operation(description = "댓글 수정")
