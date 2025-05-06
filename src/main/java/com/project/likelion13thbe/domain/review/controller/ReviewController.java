@@ -44,7 +44,7 @@ public class ReviewController {
     })
     @GetMapping("/api/v1/products/{productId}/reviews")
     public ResponseEntity<ReviewResponseDTO.ReviewListResponseDTO> getReviewList(@PathVariable Long productId) {
-        return null;
+        return ResponseEntity.ok(reviewQueryServiceImpl.getReviews());
     }
 
     @Operation(summary = "리뷰 생성")

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,4 +25,11 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
         return ReviewConverter.toReviewDetailResponseDTO(review);
     }
 
+    @Override
+    public ReviewResponseDTO.ReviewListResponseDTO getReviews() {
+        List<ReviewResponseDTO.ReviewDetailResponseDTO> reviews = reviewRepository.findAll().stream()
+                .map(ReviewConverter::toReviewDetailResponseDTO).toList();
+
+        return ReviewResponseDTO.ReviewListResponseDTO.builder().reviewList(reviews).build();
+    }
 }

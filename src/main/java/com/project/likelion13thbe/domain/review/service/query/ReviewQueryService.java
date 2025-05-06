@@ -6,4 +6,5 @@ public interface ReviewQueryService {
 
     ReviewResponseDTO.ReviewDetailResponseDTO getReview(Long reviewId);
 
+    ReviewResponseDTO.ReviewListResponseDTO getReviews();
 }
