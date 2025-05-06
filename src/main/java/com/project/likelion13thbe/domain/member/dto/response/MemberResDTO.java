@@ -7,6 +7,7 @@ import lombok.Getter;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class MemberResDTO {
@@ -20,7 +21,7 @@ public class MemberResDTO {
     @Builder
     public  record MemberCreateResDTO(
             Long id,
-            LocalDate createAt
+            LocalDateTime createAt
     ){}
 
     @Builder

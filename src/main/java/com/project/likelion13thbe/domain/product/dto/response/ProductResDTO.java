@@ -2,6 +2,7 @@ package com.project.likelion13thbe.domain.product.dto.response;
 
 import lombok.Builder;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProductResDTO {
@@ -24,7 +25,7 @@ public class ProductResDTO {
     @Builder
     public record ProductCreateResDTO(
             Long productId,
-            LocalDate createdAt
+            LocalDateTime createdAt
 
     ) {}
 
