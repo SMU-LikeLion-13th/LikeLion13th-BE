@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.product.controller;
 import com.project.likelion13thbe.domain.product.dto.request.ProductRequestDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResponseDTO;
 import com.project.likelion13thbe.domain.product.service.command.ProductCommandServiceImpl;
+import com.project.likelion13thbe.domain.product.service.query.ProductQueryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     private final ProductCommandServiceImpl productCommandServiceImpl;
+    private final ProductQueryServiceImpl productQueryServiceImpl;
+
     @Operation(summary = "상품 상세 조회")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
@@ -29,7 +32,7 @@ public class ProductController {
     })
     @GetMapping("/api/v1/products/{productId}")
     public ResponseEntity<ProductResponseDTO.ProductDetailResponseDTO> getProductDetail(@PathVariable Long productId) {
-        return null;
+        return ResponseEntity.ok(productQueryServiceImpl.getProduct(productId));
     }
 
     @Operation(summary = "상품 목록 조회")
