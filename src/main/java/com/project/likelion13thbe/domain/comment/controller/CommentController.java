@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name="Commit", description = "댓글 관련 API")
+@Tag(name="Comment", description = "댓글 관련 API")
 public class CommentController {
 
     private final CommentCommandService commentCommandService;
