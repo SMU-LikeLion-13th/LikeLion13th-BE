@@ -2,19 +2,28 @@ package com.project.likelion13thbe.domain.member.controller;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
-
+import com.project.likelion13thbe.domain.member.service.command.MemberCommandServiceImpl;
+import com.project.likelion13thbe.domain.member.service.query.MemberQueryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @Tag(name="Member", description="회원/인증 API")
 public class MemberController {
+
+    private final MemberCommandServiceImpl memberCommandServiceImpl;
+    private final MemberQueryServiceImpl memberQueryServiceImpl;
 
     @Operation(description = "일반 로그인")
     @ApiResponses({
@@ -61,8 +70,11 @@ public class MemberController {
             )
     })
     @PostMapping("/users")
-    public ResponseEntity<Void> signUp(@RequestBody MemberReqDTO.SignUpRequest signUpRequest) {
-        return null;
+    public ResponseEntity<MemberResDTO.MemberCreateResDTO> createMember(
+            @RequestBody MemberReqDTO.SignUpRequest signUpRequest) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(memberCommandServiceImpl.createMember(signUpRequest));
     }
 
     @Operation(description = "비밀번호 수정")
@@ -78,6 +90,23 @@ public class MemberController {
     @PostMapping("/users/password")
     public ResponseEntity<Void> localLogin(@RequestBody MemberReqDTO.ResetPasswordRequest resetPasswordRequest) {
         return null;
+    }
+
+    @GetMapping
+    public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
+        return ResponseEntity.ok(memberQueryServiceImpl.getMember());
+    }
+    @GetMapping("/offset")
+    public ResponseEntity<MemberResDTO.MemberOffsetResDTO> getMemberOffset(
+            @RequestParam Integer offset, @RequestParam Integer size) {
+        return ResponseEntity.ok(memberQueryServiceImpl.getMemberOffset(offset, size));
+    }
+
+    @GetMapping("/cursor")
+    public ResponseEntity<MemberResDTO.MemberCursorResDTO> getMemberCursor(
+            @RequestParam Long cursor, @RequestParam Integer size
+    ) {
+        return ResponseEntity.ok(memberQueryServiceImpl.getMemberCursor(cursor, size));
     }
 
 }
