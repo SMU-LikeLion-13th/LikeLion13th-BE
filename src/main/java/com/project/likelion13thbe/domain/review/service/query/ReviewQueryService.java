@@ -22,6 +22,7 @@ public class ReviewQueryService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
 
+
     public ReviewResDTO.ReviewPreviewResDTO getReview() {
 
         Review review = reviewRepository.findById(1L).get();
