@@ -11,3 +11,10 @@ public class MemberResponseDTO {
     ) {
     }
 }
+
+    @Builder
+    public record MemberCreateResponseDTO(
+            Long id,
+            LocalDateTime createdAt
+    ) {
+    }

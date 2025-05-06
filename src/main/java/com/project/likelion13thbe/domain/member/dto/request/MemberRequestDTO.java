@@ -18,11 +18,12 @@ public class MemberRequestDTO {
     }
 
     @Builder
-    public record SignUpRequestDTO(
-            String nickname,
+    public record MemberCreateRequestDTO(
+            String name,
             String email,
             String password,
-            SocialType socialType
+            SocialType socialType,
+            String profileImage
     ) {
     }
 
