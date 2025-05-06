@@ -6,6 +6,8 @@ import com.project.likelion13thbe.domain.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
+
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -48,3 +50,21 @@ public class MemberConverter {
                 .totalPages(page.getTotalPages())
                 .build();
     }
+
+    public static MemberResponseDTO.MemberCursorResponseDTO toMemberCursorResponseDTO(Slice<Member> members) {
+        List<MemberResponseDTO.MemberPreviewResponseDTO> memberList = members.stream()
+                .map(MemberConverter::toMemberPreviewResponseDTO).toList();
+
+        // 다음 커서 지정
+        Long nextCursor = null;
+        if (!members.isEmpty() && members.hasNext()) {
+            nextCursor = members.getContent().get(members.getNumberOfElements() - 1).getId();
+        }
+
+        return MemberResponseDTO.MemberCursorResponseDTO.builder()
+                .members(memberList)
+                .hasNext(members.hasNext())
+                .nextCursor(nextCursor)
+                .build();
+    }
+}

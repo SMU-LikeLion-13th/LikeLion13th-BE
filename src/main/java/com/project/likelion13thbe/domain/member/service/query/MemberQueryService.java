@@ -8,4 +8,6 @@ public interface MemberQueryService {
 
     MemberResponseDTO.MemberOffsetResponseDTO getMemberOffset(Integer offset, Integer size);
 
+    MemberResponseDTO.MemberCursorResponseDTO getMemberCursor(Long cursor, Integer size);
+
 }

@@ -105,3 +105,11 @@ public class MemberController {
             @RequestParam Integer offset, @RequestParam Integer size) {
         return ResponseEntity.ok(memberQueryServiceImpl.getMemberOffset(offset, size));
     }
+
+    @GetMapping("/cursor")
+    public ResponseEntity<MemberResponseDTO.MemberCursorResponseDTO> getMemberCursor(
+            @RequestParam Long cursor, @RequestParam Integer size
+    ) {
+        return ResponseEntity.ok(memberQueryServiceImpl.getMemberCursor(cursor, size));
+    }
+}

@@ -2,6 +2,7 @@ package com.project.likelion13thbe.domain.member.dto.response;
 
 import lombok.Builder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class MemberResponseDTO {
@@ -37,3 +38,12 @@ public class MemberResponseDTO {
             Integer totalPages
     ) {
     }
+
+    @Builder
+    public record MemberCursorResponseDTO(
+            List<MemberPreviewResponseDTO> members,
+            Long nextCursor,
+            Boolean hasNext
+    ) {
+    }
+}
