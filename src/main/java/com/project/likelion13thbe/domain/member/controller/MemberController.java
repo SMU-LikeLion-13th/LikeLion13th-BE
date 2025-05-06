@@ -99,3 +99,9 @@ public class MemberController {
     public ResponseEntity<MemberResponseDTO.MemberPreviewResponseDTO> getMember() {
         return ResponseEntity.ok(memberQueryServiceImpl.getMember());
     }
+
+    @GetMapping("/offset")
+    public ResponseEntity<MemberResponseDTO.MemberOffsetResponseDTO> getMemberOffset(
+            @RequestParam Integer offset, @RequestParam Integer size) {
+        return ResponseEntity.ok(memberQueryServiceImpl.getMemberOffset(offset, size));
+    }

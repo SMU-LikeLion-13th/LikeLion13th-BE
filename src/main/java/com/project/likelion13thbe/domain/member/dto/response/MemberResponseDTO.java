@@ -2,6 +2,8 @@ package com.project.likelion13thbe.domain.member.dto.response;
 
 import lombok.Builder;
 
+import java.util.List;
+
 public class MemberResponseDTO {
     @Builder
     public record JwtTokenResponse(
@@ -25,5 +27,13 @@ public class MemberResponseDTO {
             String name,
             String email,
             String profileImage
+    ) {
+    }
+
+    @Builder
+    public record MemberOffsetResponseDTO(
+            List<MemberPreviewResponseDTO> members,
+            Long totalElements,
+            Integer totalPages
     ) {
     }
