@@ -6,6 +6,8 @@ import com.project.likelion13thbe.domain.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -50,5 +52,21 @@ public class MemberConverter {
                 .totalPages(page.getTotalPages())
                 .build();
     }
+    public static MemberResDTO.MemberCursorResDTO toMemberCursorResDTO(Slice<Member> members) {
+        List<MemberResDTO.MemberPreviewResDTO> memberLsit = members.stream()
+                .map(MemberConverter::toMemberPreviewResponseDTO)
+                .toList();
 
+        // 다음 cursor 지정
+        Long nextCursor = null;
+        if (!members.isEmpty() && members.hasNext()) {
+            nextCursor = members.getContent().get(members.getNumberOfElements() - 1).getId();
+        }
+
+        return MemberResDTO.MemberCursorResDTO.builder()
+                .members(memberLsit)
+                .hasNext(members.hasNext())
+                .nextCursor(nextCursor)
+                .build();
+    }
 }
