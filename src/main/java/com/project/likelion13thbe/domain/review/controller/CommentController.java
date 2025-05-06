@@ -35,7 +35,7 @@ public class CommentController {
     //댓글 작성
     @Operation(summary = "댓글 작성 API", description = "댓글 작성 API입니다.")
     @PostMapping("/api/v1/users/comments")
-    public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> createReview(
+    public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> createComment(
             @RequestBody ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)

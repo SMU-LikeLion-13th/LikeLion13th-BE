@@ -1,6 +1,8 @@
 package com.project.likelion13thbe.domain.review.controller;
 
+import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
+import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
 import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -10,18 +12,20 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/review")
 @Tag(name = "리뷰 관련", description = "리뷰 관련 API")
 public class ReviewController {
 
+    private final ReviewCommandService reviewCommandService;
     private final ReviewQueryService reviewQueryService;
 
-    public ReviewController(ReviewQueryService reviewQueryService) {
-        this.reviewQueryService = reviewQueryService;
-    }
 
     //내 리뷰 조회
     @Operation(summary = "내 리뷰 조회 API", description = "내 리뷰 조회 API입니다.")
@@ -50,9 +54,12 @@ public class ReviewController {
 
     //리뷰 내용 추가
     @Operation(summary = "리뷰 내용 추가 API", description = "리뷰 내용 수정 API입니다.")
-    @PostMapping("/api/v1/products/{productId}/reviews")
-    public ReviewResDTO.ReviewResponseDTO postReview(@PathVariable long productId) {
-        return null;
+    @PostMapping("/api/v1/products/reviews")
+    public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> createReview(
+            @RequestBody ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(reviewCommandService.createReview(reviewCreateReqDTO));
     }
 
     //리뷰 내용 삭제
