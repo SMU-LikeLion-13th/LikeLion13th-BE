@@ -19,7 +19,7 @@ public class ProductRequestDTO {
     public record ProductCreateRequestDTO(
             String name,
             String description,
-            Integer price,
+            Long price,
             String image
     ){}
 

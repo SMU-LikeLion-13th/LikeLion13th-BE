@@ -53,7 +53,7 @@ public class MemberConverter {
     }
 
     public static MemberResponseDTO.MemberCursorResDTO toMemberCursorResDTO(Slice<Member> members) {
-        List<MemberResponseDTO.MemberPreviewResDTO> memberLsit = members.stream()
+        List<MemberResponseDTO.MemberPreviewResDTO> memberList = members.stream()
                 .map(MemberConverter::toMemberPreviewResponseDTO)
                 .toList();
 
@@ -64,7 +64,7 @@ public class MemberConverter {
         }
 
         return MemberResponseDTO.MemberCursorResDTO.builder()
-                .members(memberLsit)
+                .members(memberList)
                 .hasNext(members.hasNext())
                 .nextCursor(nextCursor)
                 .build();
