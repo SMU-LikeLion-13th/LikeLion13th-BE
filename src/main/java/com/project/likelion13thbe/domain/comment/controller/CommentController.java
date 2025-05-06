@@ -1,7 +1,7 @@
-package com.project.likelion13thbe.domain.review.controller;
+package com.project.likelion13thbe.domain.comment.controller;
 
-import com.project.likelion13thbe.domain.review.dto.request.CommentReqDTO;
-import com.project.likelion13thbe.domain.review.dto.response.CommentResDTO;
+import com.project.likelion13thbe.domain.comment.dto.request.CommentReqDTO;
+import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
