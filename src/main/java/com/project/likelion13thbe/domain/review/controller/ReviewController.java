@@ -18,6 +18,7 @@ public class ReviewController {
     private final ReviewCommandService reviewCommandService;
     private final ReviewQueryService reviewQueryService;
 
+
     public ReviewController(ReviewCommandService reviewCommandService, ReviewQueryService reviewQueryService) {
         this.reviewCommandService = reviewCommandService;
         this.reviewQueryService = reviewQueryService;
@@ -30,16 +31,20 @@ public class ReviewController {
     }
 
     @Operation(summary = "리뷰 목록 조회")
-    @GetMapping("/products/{productid}/reviews")
+    @GetMapping("/products/{productId}/reviews")
     public  ReviewResDTO.ReviewListResponseDTO getReviewsList(@PathVariable Long productId) {
         return null;
     }
 
-    @Operation(summary = "내 리뷰 조회")
+    @Operation(summary = "내 리뷰목록 조회")
     @GetMapping("/users/{userId}/reviews")
-    public ReviewResDTO.ReviewListResponseDTO getReviewsMyList(@PathVariable Long userId) {
-        return null;
+    public ResponseEntity<ReviewResDTO.ReviewCursorResDTO> getMyReviewsCursor(
+            @PathVariable Long userId,
+            @RequestParam Long cursor,
+            @RequestParam Integer size) {
+        return ResponseEntity.ok(reviewQueryService.getMyReviewsCursor(userId, cursor, size));
     }
+
 
     @Operation(summary = "리뷰 생성")
     @PostMapping("/product/{productId}/reviews")
