@@ -7,6 +7,9 @@ import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.entity.Review;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Slice;
+
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReviewConverter {
@@ -26,6 +29,7 @@ public class ReviewConverter {
                 .build();
     }
 
+    //리뷰 단일 조회
     public static ReviewResDTO.ReviewPreviewResDTO toReviewPreviewResponseDTO(Review review) {
         return ReviewResDTO.ReviewPreviewResDTO.builder()
                 .id(review.getId())
@@ -34,6 +38,24 @@ public class ReviewConverter {
                 .content(review.getContent())
                 .score(review.getScore())
                 .createdAt(review.getCreatedAt())
+                .build();
+    }
+
+    public static ReviewResDTO.ReviewCursorResDTO toReviewCursorResDTO(Slice<Review> reviews) {
+        List<ReviewResDTO.ReviewPreviewResDTO> reviewList = reviews.getContent().stream()
+                .map(ReviewConverter::toReviewPreviewResponseDTO)
+                .toList();
+
+        // 다음 cursor 지정
+        Long nextCursor = null;
+        if (!reviews.isEmpty() && reviews.hasNext()) {
+            nextCursor = reviews.getContent().get(reviews.getNumberOfElements() - 1).getId();
+        }
+
+        return ReviewResDTO.ReviewCursorResDTO.builder()
+                .reviews(reviewList)
+                .hasNext(reviews.hasNext())
+                .nextCursor(nextCursor)
                 .build();
     }
 

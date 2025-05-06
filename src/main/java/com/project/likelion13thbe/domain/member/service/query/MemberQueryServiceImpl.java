@@ -37,6 +37,9 @@ public class MemberQueryServiceImpl implements MemberQueryService{
         return MemberConverter.toMemberOffsetResponseDTO(members);
     }
 
+
+
+    //커서기반 사용자 조회
     public MemberResDTO.MemberCursorResDTO getMemberCursor(Long cursor,Integer size)
     {
         Pageable pageable = PageRequest.of(0,size);
