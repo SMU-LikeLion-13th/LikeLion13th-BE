@@ -6,7 +6,8 @@ public class ReviewReqDTO {
     @Builder
     public record ReviewCreateReqDTO(
             String description,
-            Integer rating
+            Integer rating,
+            Long memberId
 
     ) {}
 }

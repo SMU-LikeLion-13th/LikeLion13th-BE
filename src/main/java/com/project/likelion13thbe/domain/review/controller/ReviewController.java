@@ -2,6 +2,8 @@ package com.project.likelion13thbe.domain.review.controller;
 
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
+import com.project.likelion13thbe.domain.review.service.command.ReviewCommandServiceImpl;
+import com.project.likelion13thbe.domain.review.service.query.ReviewQueryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,12 +11,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name="Review",description = "리뷰 API")
 @RestController
+@RequiredArgsConstructor
 public class ReviewController {
+    private final ReviewCommandServiceImpl reviewCommandServiceImpl;
+    private final ReviewQueryServiceImpl reviewQueryServiceImpl;
 
     @Operation(description = "리뷰 세부 조회")
     @ApiResponses({
@@ -26,7 +33,7 @@ public class ReviewController {
     })
     @GetMapping("/reviews/{reviewId}")
     public ResponseEntity<ReviewResDTO.ReviewDetailResDTO> getReview(@PathVariable Long reviewId) {
-        return null;
+        return ResponseEntity.ok(reviewQueryServiceImpl.getReview(reviewId));
     }
 
     @Operation(description = "리뷰 목록 조회")
@@ -40,8 +47,8 @@ public class ReviewController {
                     content = @Content(mediaType = "application/json")),
     })
     @GetMapping("/products/{productid}/reviews")
-    public ReviewResDTO.ReviewListResDTO getReviews(@PathVariable long productId) {
-        return null;
+    public ResponseEntity<ReviewResDTO.ReviewListResDTO>  getReviews(@PathVariable Long productId) {
+        return ResponseEntity.ok(reviewQueryServiceImpl.getReviews());
     }
 
     @Operation(description = "리뷰 생성")
@@ -56,8 +63,13 @@ public class ReviewController {
     })
     @Parameter(name="productId",description = "product PK",example = "1")
     @PostMapping ("/products/{productid}/reviews")
-    public ReviewResDTO.ReviewListResDTO postReviews(@PathVariable long productId,@RequestBody ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
-        return null;
+    public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> postReviews(
+            @PathVariable long productId,
+            @RequestBody ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO)
+    {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(reviewCommandServiceImpl.createReview(reviewCreateReqDTO));
     }
 
     @Operation(description = "리뷰 수정")

@@ -29,7 +29,9 @@ public class ReviewResDTO {
 
     @Builder
     public record ReviewCreateResDTO(
-            Long reviewId
+            Long reviewId,
+            LocalDateTime createdAt
+
     ) {
     }
 
