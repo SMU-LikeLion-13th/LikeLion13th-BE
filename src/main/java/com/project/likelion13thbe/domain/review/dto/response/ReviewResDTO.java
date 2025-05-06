@@ -20,6 +20,17 @@ public class ReviewResDTO {
     ){
     }
 
+    @Builder
+    public record ReviewPreviewResDTO(
+            Long id,
+            String username,
+            String image,
+            String content,
+            Double score,
+            LocalDateTime createdAt
+    ){
+    }//상품 id도 있어야하나
+
     //리뷰 생성
     @Builder
     public record ReviewCreateResDTO(

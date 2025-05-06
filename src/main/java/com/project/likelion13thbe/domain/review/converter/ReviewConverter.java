@@ -26,5 +26,15 @@ public class ReviewConverter {
                 .build();
     }
 
+    public static ReviewResDTO.ReviewPreviewResDTO toReviewPreviewResponseDTO(Review review) {
+        return ReviewResDTO.ReviewPreviewResDTO.builder()
+                .id(review.getId())
+                .username(review.getMember().getName())
+                .image(review.getMember().getImage())
+                .content(review.getContent())
+                .score(review.getScore())
+                .createdAt(review.getCreatedAt())
+                .build();
+    }
 
 }

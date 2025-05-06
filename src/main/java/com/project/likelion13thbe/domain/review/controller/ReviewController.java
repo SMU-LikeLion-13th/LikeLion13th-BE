@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.review.controller;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
+import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -15,15 +16,17 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewController {
 
     private final ReviewCommandService reviewCommandService;
+    private final ReviewQueryService reviewQueryService;
 
-    public ReviewController(ReviewCommandService reviewCommandService) {
+    public ReviewController(ReviewCommandService reviewCommandService, ReviewQueryService reviewQueryService) {
         this.reviewCommandService = reviewCommandService;
+        this.reviewQueryService = reviewQueryService;
     }
 
-    @Operation(summary = "리뷰단일조회")
+    @Operation(summary = "리뷰 단일 조회")
     @GetMapping("/reviews/{reviewId}")
-    public ReviewResDTO.ReviewResponseDTO getReview(@PathVariable Long reviewId) {
-        return null;
+    public ResponseEntity<ReviewResDTO.ReviewPreviewResDTO> getReview(@PathVariable Long reviewId) {
+        return ResponseEntity.ok(reviewQueryService.getReview(reviewId));
     }
 
     @Operation(summary = "리뷰 목록 조회")
