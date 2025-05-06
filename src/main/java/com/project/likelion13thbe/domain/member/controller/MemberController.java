@@ -27,13 +27,7 @@ public class MemberController {
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
 
-    @PostMapping
-    public ResponseEntity<MemberResDTO.MemberCreateResDTO> createMember
-            (@RequestBody MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(memberCommandService.createMember(memberCreateReqDTO));
-    }
+
 
     @GetMapping
     public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
@@ -63,6 +57,11 @@ public class MemberController {
     //회원가입
     @Operation(summary = "회원가입 API", description = "회원가입 API입니다.")
     @PostMapping("/api/v1/users")
-    public MemberResDTO.MemberResponseDTO postMember(){ return null; }
+    public ResponseEntity<MemberResDTO.MemberCreateResDTO> createMember
+    (@RequestBody MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(memberCommandService.createMember(memberCreateReqDTO));
+    }
 
 }
