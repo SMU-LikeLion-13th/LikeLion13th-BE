@@ -24,8 +24,14 @@ public class CommentResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CommentCreateResponseDTO {
-        @Schema(description = "댓글")
-        private CommentResDTO comment;
+        @Schema(description = "댓글의 pk", example = "1")
+        private Long commentId;
+
+        @Schema(description = "작성자", example = "홍길동")
+        private String nickname;
+
+        @Schema(description = "댓글 내용", example = "정말 좋은 제품이에요!")
+        private String content;
     }
 
     @Builder
@@ -35,6 +41,24 @@ public class CommentResponseDTO {
     public static class CommentResDTO {
         @Schema(description = "댓글의 pk", example = "1")
         private Long commentId;
+
+        @Schema(description = "작성자", example = "홍길동")
+        private String nickname;
+
+        @Schema(description = "댓글 내용", example = "정말 좋은 제품이에요!")
+        private String content;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommentPreviewResDTO {
+        @Schema(description = "댓글의 pk", example = "1")
+        private Long commentId;
+
+        @Schema(description = "작성자", example = "홍길동")
+        private String nickname;
 
         @Schema(description = "댓글 내용", example = "정말 좋은 제품이에요!")
         private String content;

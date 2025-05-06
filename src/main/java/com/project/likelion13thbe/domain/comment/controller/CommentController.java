@@ -2,6 +2,8 @@ package com.project.likelion13thbe.domain.comment.controller;
 
 import com.project.likelion13thbe.domain.comment.dto.request.CommentRequestDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResponseDTO;
+import com.project.likelion13thbe.domain.comment.service.command.CommentCommandServiceImpl;
+import com.project.likelion13thbe.domain.comment.service.query.CommentQueryServiceImpl;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewRequestDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,12 +14,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "Comment", description = "댓글 관련 API")
 public class CommentController {
+
+    private final CommentCommandServiceImpl commentCommandServiceImpl;
+    private final CommentQueryServiceImpl commentQueryServiceImpl;
+
+    public CommentController(CommentCommandServiceImpl commentCommandServiceImpl, CommentQueryServiceImpl commentQueryServiceImpl) {
+        this.commentCommandServiceImpl = commentCommandServiceImpl;
+        this.commentQueryServiceImpl = commentQueryServiceImpl;
+    }
 
     @Operation(summary = "댓글 목록 조회 API", description = "댓글 목록 조회")
     @ApiResponses({
@@ -34,8 +45,8 @@ public class CommentController {
     })
     @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
     @GetMapping("/api/v1/reviews/{reviewId}/comments")
-    public CommentResponseDTO.CommentListResponseDTO getComments() {
-        return null;
+    public ResponseEntity<CommentResponseDTO.CommentListResponseDTO> getComments() {
+        return ResponseEntity.ok(commentQueryServiceImpl.getCommentList());
     }
 
     @Operation(summary = "댓글 수정 API", description = "댓글 수정")
@@ -74,10 +85,12 @@ public class CommentController {
     })
     @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
     @PostMapping("/api/v1/reviews/{reviewId}/comments")
-    public CommentResponseDTO.CommentListResponseDTO postComment(
+    public ResponseEntity<CommentResponseDTO.CommentCreateResponseDTO> postComment(
             @RequestBody CommentRequestDTO.CommentCreateRequestDTO requestDTO
     ) {
-        return null;
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(commentCommandServiceImpl.createComment(requestDTO));
     }
 
     @Operation(summary = "댓글 삭제 API", description = "댓글 삭제")
