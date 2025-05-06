@@ -40,7 +40,9 @@ public class CommentController {
     public ResponseEntity<CommentResponseDTO.CommentCreateResponseDTO> createComment(@PathVariable Long reviewId,
                                                                                      @RequestBody CommentRequestDTO.CommentCreateRequestDTO commentCreateRequestDTO
     ) {
-        return null;
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(commentCommandServiceImpl.createComment(commentCreateRequestDTO));
     }
 
     @Operation(summary = "댓글 수정")
