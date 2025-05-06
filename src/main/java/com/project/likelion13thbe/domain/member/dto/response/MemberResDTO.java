@@ -2,17 +2,12 @@ package com.project.likelion13thbe.domain.member.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 public class MemberResDTO {
-    public record MemberResponseDTO(
-            Long id,
-            String content
-    ){
+    public record MemberResponseDTO(){
     }
-
 
     @Builder
     public record MemberCreateResDTO(
@@ -21,5 +16,14 @@ public class MemberResDTO {
             ){
 
     }
+
+    @Builder
+    public record MemberPreviewResDTO(
+            Long id,
+            String email,
+            String name
+    ){
+    }
+
 
 }
