@@ -1,7 +1,10 @@
 package com.project.likelion13thbe.domain.review.dto.response;
 
 
+import lombok.Builder;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ReviewResDTO {
@@ -16,11 +19,12 @@ public class ReviewResDTO {
             List<ReviewResponseDTO> reviews
     ){
     }
-    public record ReviewCreateDTO(
+
+    //리뷰 생성
+    @Builder
+    public record ReviewCreateResDTO(
             Long id,
-            String content,
-            Integer rating,
-            LocalDate createdAt
+            LocalDateTime createdAt
     ){
     }
     public record ReviewUpdateDTO(

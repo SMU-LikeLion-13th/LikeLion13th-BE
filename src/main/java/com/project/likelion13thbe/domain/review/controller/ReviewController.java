@@ -2,14 +2,23 @@ package com.project.likelion13thbe.domain.review.controller;
 
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
+import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
 @Tag(name="Review",description = "리뷰 API")
 public class ReviewController {
+
+    private final ReviewCommandService reviewCommandService;
+
+    public ReviewController(ReviewCommandService reviewCommandService) {
+        this.reviewCommandService = reviewCommandService;
+    }
 
     @Operation(summary = "리뷰단일조회")
     @GetMapping("/reviews/{reviewId}")
@@ -29,11 +38,14 @@ public class ReviewController {
         return null;
     }
 
-    @Operation(summary = "리뷰 작성")
+    @Operation(summary = "리뷰 생성")
     @PostMapping("/product/{productId}/reviews")
-    public ReviewResDTO.ReviewCreateDTO postReview(@PathVariable Long productId ) {
-
-        return null;
+    public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> createReview(
+            @PathVariable Long productId,
+            @RequestBody ReviewReqDTO.ReviewCreateReqDTO dto){
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(reviewCommandService.createReview(productId, dto));
     }
 
     @Operation(summary = "리뷰 삭제")
