@@ -1,8 +1,12 @@
 package com.project.likelion13thbe.domain.product.repository;
 
+import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.product.entity.Product;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
+    Slice<Product> findAllByIdLessThanOrderByIdDesc(Long id, Pageable pageable);
 }
