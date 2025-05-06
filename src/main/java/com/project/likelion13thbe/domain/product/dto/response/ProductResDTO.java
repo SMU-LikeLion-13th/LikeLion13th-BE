@@ -17,4 +17,18 @@ public class ProductResDTO {
             LocalDateTime createdAt
     ){
     }
+
+    @Builder
+    public record ProductPreviewResDTO(
+            Long id,
+            String name,
+            String content,
+            String image,
+            Integer price,
+            Integer quantity,
+            Double scoreAvg,
+            Integer reviewCount,
+            LocalDateTime createdAt
+    ){
+    }
 }

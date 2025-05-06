@@ -19,6 +19,20 @@ public class ProductConverter {
                 .member(member)
                 .build();
     }
+    public static ProductResDTO.ProductPreviewResDTO toProductPreviewResDTO(Product product, Double scoreAVG, Integer reviewCount) {
+
+        return ProductResDTO.ProductPreviewResDTO.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .content(product.getContent())
+                .image(product.getImage())
+                .price(product.getPrice())
+                .quantity(product.getQuantity())
+                .scoreAvg(scoreAVG)
+                .reviewCount(reviewCount)
+                .createdAt(product.getCreatedAt())
+                .build();
+    }
 
     public static ProductResDTO.ProductCreateResDTO toProductResponseDTO(Product product) {
         return ProductResDTO.ProductCreateResDTO.builder()
