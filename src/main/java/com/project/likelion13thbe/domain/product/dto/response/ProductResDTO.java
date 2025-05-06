@@ -15,7 +15,7 @@ public class ProductResDTO {
             Integer price,
             Integer quantity,
             Double ratingAvg,
-            Integer reviewCount,
+            Long reviewCount,
             LocalDateTime createdAt
     ){
     }

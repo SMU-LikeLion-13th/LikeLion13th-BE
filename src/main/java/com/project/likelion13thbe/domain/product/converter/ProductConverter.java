@@ -30,7 +30,7 @@ public class ProductConverter {
 
     }
 
-    public static ProductResDTO.ProductPreviewResDTO toProductPreviewResDTO(Product product, Double ratingAvg, Integer reviewCount) {
+    public static ProductResDTO.ProductPreviewResDTO toProductPreviewResDTO(Product product, Double ratingAvg, Long reviewCount) {
 
         return ProductResDTO.ProductPreviewResDTO.builder()
                 .id(product.getId())
