@@ -25,4 +25,15 @@ public class CommentConverter {
                 .createdAt(comment.getCreatedAt())
                 .build();
     }
+
+    public static CommentResponseDTO.CommentDetailResponseDTO toCommentDetailResponseDTO(Comment comment) {
+        return CommentResponseDTO.CommentDetailResponseDTO.builder()
+                .commentId(comment.getId())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
+                .likeCount(comment.getLikeCount())
+                .nickname(comment.getMember().getName())
+                .build();
+    }
 }
