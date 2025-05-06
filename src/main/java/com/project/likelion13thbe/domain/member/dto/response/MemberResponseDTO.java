@@ -13,7 +13,6 @@ public class MemberResponseDTO {
             Long expiresIn
     ) {
     }
-}
 
     @Builder
     public record MemberCreateResponseDTO(

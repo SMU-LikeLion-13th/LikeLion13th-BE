@@ -74,8 +74,8 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ReviewResponseDTO.ReviewListResponseDTO.class))),})
-            @GetMapping("/api/v1/my/reviews")
+                            schema = @Schema(implementation = ReviewResponseDTO.ReviewListResponseDTO.class))),})
+    @GetMapping("/api/v1/my/reviews")
     public ResponseEntity<ReviewResponseDTO.ReviewListResponseDTO> getMyReviews() {
         return null;
     }
@@ -84,14 +84,14 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = MemberResponseDTO.JwtTokenResponse.class))),
+                            schema = @Schema(implementation = MemberResponseDTO.JwtTokenResponse.class))),
             @ApiResponse(responseCode = "400", description = "BadRequest",
                     content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "401", description = "카카오 토큰 발급 실패",
                     content = @Content(mediaType = "application/json"))
     })
     @PostMapping("/api/v1/kakao/login")
-    public ResponseEntity<MemberResponseDTO.JwtTokenResponse> kakaoLogin(@RequestBody MemberRequestDTO.kakaoLoginRequestDTO kakaoLoginRequestDTO) {
+    public ResponseEntity<MemberResponseDTO.JwtTokenResponse> kakaoLogin(@RequestBody MemberRequestDTO.KakaoLoginRequestDTO kakaoLoginRequestDTO) {
         return null;
     }
 
