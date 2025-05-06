@@ -30,33 +30,5 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         return MemberConverter.toMemberResponseDTO(member);
     }
 
-    public MemberResponseDTO.MemberPreviewResDTO getMember() {
-        // DB에서 pk가 1인 Member 조회
-        Member member = memberRepository.findById(1L).get();
 
-        // 응답 DTO로 변환 후 return
-        return MemberConverter.toMemberPreviewResponseDTO(member);
-    }
-
-    public MemberResponseDTO.MemberOffsetResDTO getMemberOffset(Integer offset,Integer size) {
-        Pageable pageable = PageRequest.of(offset-1, size);
-        // Spring Data JPA의 페이지 번호는 0부터 시작하기 때문dp -1 해주기
-        Page<Member> members = memberRepository.findAllByOrderByCreatedAtDesc(pageable);
-
-        return MemberConverter.toMemberOffsetResponseDTO(members);
-    }
-
-    public MemberResponseDTO.MemberCursorResDTO getMemberCursor(Long cursor,Integer size)
-    {
-        Pageable pageable = PageRequest.of(0,size);
-
-        // cursor가 0일 경우(첫 페이지)
-        if (cursor  == 0){
-            cursor = Long.MAX_VALUE;
-        }
-
-        Slice<Member> members = memberRepository.findAllByIdLessThanOrderByIdDesc(cursor,pageable);
-
-        return MemberConverter.toMemberCursorResDTO(members);
-    }
 }

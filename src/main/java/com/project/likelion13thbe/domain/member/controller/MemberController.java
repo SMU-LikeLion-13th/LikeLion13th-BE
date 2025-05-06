@@ -3,6 +3,8 @@ package com.project.likelion13thbe.domain.member.controller;
 import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandServiceImpl;
+import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
+import com.project.likelion13thbe.domain.member.service.query.MemberQueryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Member", description = "회원 관련 API")
 public class MemberController {
 
+
+    private final MemberQueryService memberQueryService;
+    private final MemberQueryServiceImpl memberQueryServiceImpl;
 
     @Operation(summary = "카카오 로그인", description = "카카오 로그인을 수행합니다.")
     @ApiResponses({
@@ -52,16 +57,6 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "회원가입", description = "신규 회원을 등록")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "회원가입 성공")
-    })
-    @PostMapping("/api/v1/users")
-    public ResponseEntity<Void> signup(@RequestBody MemberRequestDTO.MemberCreateRequestDTO requestDTO) {
-        // 회원가입 로직
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
     private final MemberCommandServiceImpl memberCommandService;
 
     @Operation(summary = "4주차 실습", description = "사용자 회원가입")
@@ -90,7 +85,7 @@ public class MemberController {
     )
     @GetMapping
     public ResponseEntity<MemberResponseDTO.MemberPreviewResDTO> getMember(){
-        return ResponseEntity.ok(memberCommandService.getMember());
+        return ResponseEntity.ok(memberQueryServiceImpl.getMember());
     }
 
     @Operation(summary = "4주차 실습", description = "사용자 정보 페이지네이션 조회_offset 기반")
@@ -106,6 +101,6 @@ public class MemberController {
             @RequestParam Integer offset,
             @RequestParam Integer size
     ){
-        return ResponseEntity.ok(memberCommandService.getMemberOffset(offset, size));
+        return ResponseEntity.ok(memberQueryServiceImpl.getMemberOffset(offset, size));
     }
 }
