@@ -19,10 +19,20 @@ public class CommentConverter {
                 .build();
     }
 
-    public static CommentResDTO.CommentCreateResponseDTO toCommentResponseDTO(Comment comment) {
+    public static CommentResDTO.CommentCreateResponseDTO toCommentCreateResponseDTO(Comment comment) {
         return CommentResDTO.CommentCreateResponseDTO.builder()
                 .commentId(comment.getId())
                 .createdAt(comment.getCreatedAt())
+                .build();
+    }
+
+    public static CommentResDTO.CommentResponseDTO toCommentResponseDTO(Comment comment) {
+        return CommentResDTO.CommentResponseDTO.builder()
+                .commentId(comment.getId())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .likeCount(comment.getLikeCount())
+                .name(comment.getMember().getName())
                 .build();
     }
 }

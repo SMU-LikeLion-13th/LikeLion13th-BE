@@ -33,7 +33,7 @@ public class CommentCommendServiceImpl implements CommentCommendService{
 
         commentRepository.save(comment);
 
-        return CommentConverter.toCommentResponseDTO(comment);
+        return CommentConverter.toCommentCreateResponseDTO(comment);
     }
 
 }
