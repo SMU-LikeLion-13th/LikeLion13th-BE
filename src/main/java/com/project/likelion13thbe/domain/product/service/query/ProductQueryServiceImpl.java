@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -21,6 +23,15 @@ public class ProductQueryServiceImpl implements ProductQueryService {
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
         return ProductConverter.toProductDetailResponseDTO(product);
+    }
+
+    // 갑자기 든 생각인데 productType에 따른 목록 조회는 ... 흠
+    @Override
+    public ProductResponseDTO.ProductListResponseDTO getProducts() {
+        List<ProductResponseDTO.ProductDetailResponseDTO> products = productRepository.findAll().stream()
+                .map(ProductConverter::toProductDetailResponseDTO).toList();
+
+        return ProductResponseDTO.ProductListResponseDTO.builder().productList(products).build();
     }
 
 }

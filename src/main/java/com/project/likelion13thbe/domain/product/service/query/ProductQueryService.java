@@ -6,4 +6,5 @@ public interface ProductQueryService {
 
     ProductResponseDTO.ProductDetailResponseDTO getProduct(Long productId);
 
+    ProductResponseDTO.ProductListResponseDTO getProducts();
 }

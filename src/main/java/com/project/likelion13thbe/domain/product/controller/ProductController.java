@@ -44,7 +44,7 @@ public class ProductController {
     })
     @GetMapping("/api/v1/products")
     public ResponseEntity<ProductResponseDTO.ProductListResponseDTO> getProductList() {
-        return null;
+        return ResponseEntity.ok(productQueryServiceImpl.getProducts());
     }
 
     @Operation(summary = "상품 추가")
