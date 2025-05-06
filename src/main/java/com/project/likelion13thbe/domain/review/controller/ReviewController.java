@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.review.controller;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewRequestDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandServiceImpl;
+import com.project.likelion13thbe.domain.review.service.query.ReviewQueryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewController {
 
     private final ReviewCommandServiceImpl reviewCommandServiceImpl;
+    private final ReviewQueryServiceImpl reviewQueryServiceImpl;
 
     @Operation(summary = "리뷰 단건 조회")
     @ApiResponses({
@@ -30,7 +32,7 @@ public class ReviewController {
     })
     @GetMapping("/api/v1/reviews/{reviewId}")
     public ResponseEntity<ReviewResponseDTO.ReviewDetailResponseDTO> getReview(@PathVariable Long reviewId) {
-        return null;
+        return ResponseEntity.ok(reviewQueryServiceImpl.getReview(reviewId));
     }
 
     @Operation(summary = "리뷰 목록 조회")
