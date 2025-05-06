@@ -1,8 +1,31 @@
 package com.project.likelion13thbe.domain.product.converter;
 
+import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.product.dto.request.ProductRequestDTO;
+import com.project.likelion13thbe.domain.product.dto.response.ProductResponseDTO;
+import com.project.likelion13thbe.domain.product.entity.Product;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProductConverter {
+
+    public static Product toProduct(ProductRequestDTO.ProductCreateRequestDTO productCreateRequestDTO, Member member) {
+        return Product.builder()
+                .name(productCreateRequestDTO.name())
+                .description(productCreateRequestDTO.description())
+                .price(productCreateRequestDTO.price())
+                .quantity(productCreateRequestDTO.productQuantity())
+                .image(productCreateRequestDTO.productImage())
+                .productType(productCreateRequestDTO.productType())
+                .member(member)
+                .build();
+    }
+
+    public static ProductResponseDTO.ProductCreateResponseDTO toProductResponseDTO(Product product) {
+        return ProductResponseDTO.ProductCreateResponseDTO.builder()
+                .productId(product.getId())
+                .createdAt(product.getCreatedAt())
+                .build();
+    }
 }
