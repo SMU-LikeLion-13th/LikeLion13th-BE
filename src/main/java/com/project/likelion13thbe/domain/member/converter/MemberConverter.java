@@ -26,3 +26,12 @@ public class MemberConverter {
                 .createdAt(member.getCreatedAt())
                 .build();
     }
+
+    public static MemberResponseDTO.MemberPreviewResponseDTO toMemberPreviewResponseDTO(Member member) {
+        return MemberResponseDTO.MemberPreviewResponseDTO.builder()
+                .id(member.getId())
+                .name(member.getName())
+                .email(member.getEmail())
+                .profileImage(member.getProfileImage())
+                .build();
+    }

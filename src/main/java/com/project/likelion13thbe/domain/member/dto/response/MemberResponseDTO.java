@@ -18,3 +18,12 @@ public class MemberResponseDTO {
             LocalDateTime createdAt
     ) {
     }
+
+    @Builder
+    public record MemberPreviewResponseDTO(
+            Long id,
+            String name,
+            String email,
+            String profileImage
+    ) {
+    }

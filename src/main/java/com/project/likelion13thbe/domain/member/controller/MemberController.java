@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.member.controller;
 import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandServiceImpl;
+import com.project.likelion13thbe.domain.member.service.query.MemberQueryServiceImpl;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberCommandServiceImpl memberCommandServiceImpl;
+    private final MemberQueryServiceImpl memberQueryServiceImpl;
+
     @Operation(summary = "일반 로그인")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
@@ -91,4 +94,8 @@ public class MemberController {
     public ResponseEntity<MemberResponseDTO.JwtTokenResponse> kakaoLogin(@RequestBody MemberRequestDTO.kakaoLoginRequestDTO kakaoLoginRequestDTO) {
         return null;
     }
-}
+
+    @GetMapping
+    public ResponseEntity<MemberResponseDTO.MemberPreviewResponseDTO> getMember() {
+        return ResponseEntity.ok(memberQueryServiceImpl.getMember());
+    }
