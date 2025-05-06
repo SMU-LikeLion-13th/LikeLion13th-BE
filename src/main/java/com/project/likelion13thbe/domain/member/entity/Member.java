@@ -1,6 +1,7 @@
 package com.project.likelion13thbe.domain.member.entity;
 
 
+import com.project.likelion13thbe.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,10 +11,12 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Member {
+// JPA가 사용할 수 있도록 안전한 생성자 구조를 보장하고
+// 개발자는 Builder로만 객체를 생성하도록 유도하는 구조 대충 외부에서 못건들게함
+public class Member extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id //기본키
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // DB가 자동으로 기본키를 생성하도록 함
     private Long id;
 
     @Column(name = "name" ,nullable = false)
