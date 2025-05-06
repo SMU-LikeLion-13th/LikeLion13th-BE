@@ -1,7 +1,9 @@
 package com.project.likelion13thbe.domain.comment.repository;
 
-import org.springframework.stereotype.Repository;
+import com.project.likelion13thbe.domain.comment.entity.Comment;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface CommentRepository {
+
+public interface CommentRepository extends JpaRepository<Comment, Long> {
+
 }

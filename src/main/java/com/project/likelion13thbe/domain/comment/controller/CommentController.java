@@ -2,14 +2,22 @@ package com.project.likelion13thbe.domain.comment.controller;
 
 import com.project.likelion13thbe.domain.comment.dto.request.CommentReqDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
+import com.project.likelion13thbe.domain.comment.service.commend.CommentCommendService;
+import com.project.likelion13thbe.domain.comment.service.commend.CommentCommendServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Comment", description = "댓글 API")
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 @RestController
 public class CommentController {
+
+    private  final CommentCommendServiceImpl CommentCommendServiceImpl;
 
     @Operation(summary = "댓글 조회")
     @GetMapping("/reviews/{reviewId}/comments")
@@ -26,8 +34,13 @@ public class CommentController {
 
     @Operation(summary = "댓글 작성")
     @PostMapping("/users/{userId}/comments")
-    public CommentResDTO.CommentResponseDTO postComment(@PathVariable long userId ,@RequestBody CommentReqDTO CommentReqDTO) {
-        return null;
+    public ResponseEntity<CommentResDTO.CommentCreateResponseDTO> createComment(
+            @PathVariable Long reviewId,
+            @RequestBody CommentReqDTO.CommentCreateRequestDTO commentCreateRequestDTO
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(CommentCommendServiceImpl.createComment(commentCreateRequestDTO));
     }
 
     @Operation(summary = "댓글 수정")
