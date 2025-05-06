@@ -1,6 +1,7 @@
 package com.project.likelion13thbe.domain.member.service.command;
 
 import com.project.likelion13thbe.domain.member.converter.MemberConverter;
+import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
@@ -14,11 +15,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberCommandServicelmpl implements MemberCommandService{
     private final MemberRepository memberRepository;
 
-    public MemberResDTO.MemberCreateDTO createMember(MemberResDTO.MemberCreateDTO memberCreateDTO) {
-        Member member = MemberConverter.toMember(memberCreateDTO);
+    @Override
+    public MemberResDTO.MemberCreateResDTO createMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+        //DTO -> Member
+        Member member = MemberConverter.toMember(memberCreateReqDTO);
 
+        // Member 엔티티 DB에 저장
         memberRepository.save(member);
 
-        return null;
+        // 응답 DTO로 변환 후 return
+        return MemberConverter.toMemberResponseDTO(member);
     }
 }

@@ -15,7 +15,7 @@ public class MemberResDTO {
 
 
     @Builder
-    public record MemberCreateDTO(
+    public record MemberCreateResDTO(
                     Long id,
                     LocalDateTime createdAt
             ){
