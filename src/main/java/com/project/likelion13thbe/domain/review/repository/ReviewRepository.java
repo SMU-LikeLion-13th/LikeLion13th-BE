@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 @Repository
 public interface ReviewRepository  extends JpaRepository<Review, Long> {
@@ -19,7 +18,8 @@ public interface ReviewRepository  extends JpaRepository<Review, Long> {
     Integer findReviewCountByProductId(@Param("productId") Long productId);
 
 
-    Slice<Review> findByMemberIdOrderByCreatedAtDesc(Long memberId, Pageable pageable); //내 리뷰 조회 최신순 정렬
+    Slice<Review> findByMemberIdAndIdLessThanOrderByCreatedAtDesc(Long memberId, Pageable pageable);//내 리뷰 조회 최신순 정렬
+    Slice<Review> findByProductIdAndIdLessThanOrderByCreatedAtDesc(Long productId, Pageable pageable); // 상품 리뷰 목록 조회
 
 }
 

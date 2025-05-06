@@ -16,11 +16,6 @@ public class ReviewResDTO {
     ){
     }
 
-    public record ReviewListResponseDTO(
-            List<ReviewResponseDTO> reviews
-    ){
-    }
-
     @Builder
     public record ReviewPreviewResDTO(
             Long id,
@@ -41,7 +36,7 @@ public class ReviewResDTO {
     }
 
 
-    //내 리뷰 조회
+    //리뷰 목록 조회
     @Builder
     public record ReviewCursorResDTO(
             List<ReviewPreviewResDTO> reviews,

@@ -32,8 +32,11 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 목록 조회")
     @GetMapping("/products/{productId}/reviews")
-    public  ReviewResDTO.ReviewListResponseDTO getReviewsList(@PathVariable Long productId) {
-        return null;
+    public ResponseEntity<ReviewResDTO.ReviewCursorResDTO> getReviews(
+            @PathVariable Long productId,
+            @RequestParam Long cursor,
+            @RequestParam Integer size) {
+        return ResponseEntity.ok(reviewQueryService.getMyReviewsCursor(cursor, size));
     }
 
     @Operation(summary = "내 리뷰목록 조회")
@@ -42,7 +45,7 @@ public class ReviewController {
             @PathVariable Long userId,
             @RequestParam Long cursor,
             @RequestParam Integer size) {
-        return ResponseEntity.ok(reviewQueryService.getMyReviewsCursor(userId, cursor, size));
+        return ResponseEntity.ok(reviewQueryService.getMyReviewsCursor(cursor, size));
     }
 
 

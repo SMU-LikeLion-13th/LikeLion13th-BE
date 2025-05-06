@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewQueryServiceImpl implements ReviewQueryService {
     private final ReviewRepository reviewRepository;
 
-    @Override // 리뷰 단일 조회
+    @Override
     public ReviewResDTO.ReviewPreviewResDTO getReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow();
 
@@ -27,17 +27,30 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
 
     @Override
-    public ReviewResDTO.ReviewCursorResDTO getMyReviewsCursor(Long memberId, Long cursor, Integer size) {
+    public ReviewResDTO.ReviewCursorResDTO getMyReviewsCursor(Long cursor, Integer size) {
         Pageable pageable = PageRequest.of(0, size);
 
         if (cursor == 0) {
             cursor = Long.MAX_VALUE;
         }
 
-        Slice<Review> reviews = reviewRepository.findByMemberIdOrderByCreatedAtDesc(memberId, pageable);
+        Slice<Review> reviews = reviewRepository.findByMemberIdAndIdLessThanOrderByCreatedAtDesc(cursor, pageable);
 
         return ReviewConverter.toReviewCursorResDTO(reviews);
     }
 
+
+    @Override
+    public ReviewResDTO.ReviewCursorResDTO getReviewsCursor(Long cursor, Integer size) {
+        Pageable pageable = PageRequest.of(0, size);
+
+        if (cursor == 0) {
+            cursor = Long.MAX_VALUE;
+        }
+
+        Slice<Review> reviews = reviewRepository.findByProductIdAndIdLessThanOrderByCreatedAtDesc(cursor, pageable);
+
+        return ReviewConverter.toReviewCursorResDTO(reviews);
+    }
 
 }

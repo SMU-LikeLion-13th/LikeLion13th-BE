@@ -41,6 +41,7 @@ public class ReviewConverter {
                 .build();
     }
 
+    //목록 조회
     public static ReviewResDTO.ReviewCursorResDTO toReviewCursorResDTO(Slice<Review> reviews) {
         List<ReviewResDTO.ReviewPreviewResDTO> reviewList = reviews.getContent().stream()
                 .map(ReviewConverter::toReviewPreviewResponseDTO)
