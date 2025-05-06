@@ -9,9 +9,9 @@ public class ProductReqDTO {
     public record ProductCreateReqDTO(
             String name,
             String description,
-            String imageUrl,
+            String image,
             Integer price,
-            Integer productQuantity,
+            Integer quantity,
             LocalDateTime createdAt
     ) {
     }
