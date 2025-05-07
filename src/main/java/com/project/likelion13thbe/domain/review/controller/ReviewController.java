@@ -2,8 +2,12 @@ package com.project.likelion13thbe.domain.review.controller;
 
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
+import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
+import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,29 +15,48 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name="Review",description = "리뷰 API")
 public class ReviewController {
 
-    @Operation(summary = "리뷰단일조회")
+    private final ReviewCommandService reviewCommandService;
+    private final ReviewQueryService reviewQueryService;
+
+
+    public ReviewController(ReviewCommandService reviewCommandService, ReviewQueryService reviewQueryService) {
+        this.reviewCommandService = reviewCommandService;
+        this.reviewQueryService = reviewQueryService;
+    }
+
+    @Operation(summary = "리뷰 단일 조회")
     @GetMapping("/reviews/{reviewId}")
-    public ReviewResDTO.ReviewResponseDTO getReview(@PathVariable Long reviewId) {
-        return null;
+    public ResponseEntity<ReviewResDTO.ReviewPreviewResDTO> getReview(@PathVariable Long reviewId) {
+        return ResponseEntity.ok(reviewQueryService.getReview(reviewId));
     }
 
     @Operation(summary = "리뷰 목록 조회")
-    @GetMapping("/products/{productid}/reviews")
-    public  ReviewResDTO.ReviewListResponseDTO getReviewsList(@PathVariable Long productId) {
-        return null;
+    @GetMapping("/products/{productId}/reviews")
+    public ResponseEntity<ReviewResDTO.ReviewCursorResDTO> getReviews(
+            @PathVariable Long productId,
+            @RequestParam Long cursor,
+            @RequestParam Integer size) {
+        return ResponseEntity.ok(reviewQueryService.getMyReviewsCursor(cursor, size));
     }
 
-    @Operation(summary = "내 리뷰 조회")
+    @Operation(summary = "내 리뷰목록 조회")
     @GetMapping("/users/{userId}/reviews")
-    public ReviewResDTO.ReviewListResponseDTO getReviewsMyList(@PathVariable Long userId) {
-        return null;
+    public ResponseEntity<ReviewResDTO.ReviewCursorResDTO> getMyReviewsCursor(
+            @PathVariable Long userId,
+            @RequestParam Long cursor,
+            @RequestParam Integer size) {
+        return ResponseEntity.ok(reviewQueryService.getMyReviewsCursor(cursor, size));
     }
 
-    @Operation(summary = "리뷰 작성")
-    @PostMapping("/product/{productId}/reviews")
-    public ReviewResDTO.ReviewCreateDTO postReview(@PathVariable Long productId ) {
 
-        return null;
+    @Operation(summary = "리뷰 생성")
+    @PostMapping("/product/{productId}/reviews")
+    public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> createReview(
+            @PathVariable Long productId,
+            @RequestBody ReviewReqDTO.ReviewCreateReqDTO dto){
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(reviewCommandService.createReview(productId, dto));
     }
 
     @Operation(summary = "리뷰 삭제")
