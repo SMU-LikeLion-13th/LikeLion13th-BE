@@ -37,5 +37,12 @@ public class MemberCommandServiceImpl implements MemberCommandService{
         member.updatePassword(resetPasswordReqDTO.password());
     }
 
+    @Override
+    public void deleteMember(Long memberId) {
+        Member member = memberRepository.findByIdAndNotDeleted(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        member.delete();
+    }
 }
 
