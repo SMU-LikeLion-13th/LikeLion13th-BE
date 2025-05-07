@@ -33,7 +33,7 @@ public class CommentController {
 
 
     @Operation(summary = "댓글 작성")
-    @PostMapping("/users/{userId}/comments")
+    @PostMapping("reviews/{reviewId}/comments")
     public ResponseEntity<CommentResDTO.CommentCreateResponseDTO> createComment(
             @PathVariable Long reviewId,
             @RequestBody CommentReqDTO.CommentCreateRequestDTO commentCreateRequestDTO
