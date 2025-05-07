@@ -11,11 +11,13 @@ public class ProductRequestDTO {
     public record ProductCreateRequestDTO(
             String name,
             String description,
-            String url,
+            String productImage,
             Integer price,
             ProductType productType,
             Integer productQuantity,
-            LocalDateTime createdAt
+            LocalDateTime createdAt,
+
+            Long memberId
     ) {
     }
 }

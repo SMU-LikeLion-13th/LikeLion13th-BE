@@ -28,7 +28,8 @@ public class ReviewResponseDTO {
 
     @Builder
     public record ReviewCreateResponseDTO(
-            Long reviewId
+            Long reviewId,
+            LocalDateTime createdAt
     ) {
     }
 }

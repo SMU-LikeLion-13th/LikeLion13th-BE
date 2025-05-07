@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.product.dto.response;
 import com.project.likelion13thbe.domain.product.entity.ProductType;
 import lombok.Builder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProductResponseDTO {
@@ -27,7 +28,8 @@ public class ProductResponseDTO {
 
     @Builder
     public record ProductCreateResponseDTO(
-            Long productId
+            Long productId,
+            LocalDateTime createdAt
     ) {
     }
 

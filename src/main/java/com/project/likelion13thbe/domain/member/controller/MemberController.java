@@ -2,6 +2,8 @@ package com.project.likelion13thbe.domain.member.controller;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
+import com.project.likelion13thbe.domain.member.service.command.MemberCommandServiceImpl;
+import com.project.likelion13thbe.domain.member.service.query.MemberQueryServiceImpl;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,15 +11,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @Tag(name = "Member", description = "유저 관련 API")
+@RequestMapping("/api/v1/members")
 public class MemberController {
+
+    private final MemberCommandServiceImpl memberCommandServiceImpl;
+    private final MemberQueryServiceImpl memberQueryServiceImpl;
 
     @Operation(summary = "일반 로그인")
     @ApiResponses({
@@ -29,7 +35,7 @@ public class MemberController {
             @ApiResponse(responseCode = "401", description = "Unauthorized 아이디나 비밀번호 오류",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("/api/v1/login")
+    @PostMapping("/login")
     public ResponseEntity<MemberResponseDTO.JwtTokenResponse> localLogin(@RequestBody MemberRequestDTO.LoginRequestDTO loginRequestDTO) {
         return null;
     }
@@ -43,7 +49,7 @@ public class MemberController {
             @ApiResponse(responseCode = "401", description = "Unauthorized\t\n 1. jwt 유효하지 않음 \t\n 2. 비밀번호 유형 맞지 않음",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("/api/v1/password-reset")
+    @PostMapping("/password-reset")
     public ResponseEntity<?> resetPassword(@RequestBody MemberRequestDTO.ResetPasswordRequestDTO resetPasswordRequestDTO) {
         return null;
     }
@@ -57,17 +63,20 @@ public class MemberController {
             @ApiResponse(responseCode = "409", description = "Conflict, 중복된 이메일",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("/api/v1/signup")
-    public ResponseEntity<?> localSignUp(@RequestBody MemberRequestDTO.SignUpRequestDTO signUpRequestDTO) {
-        return null;
+    @PostMapping("/signup")
+    public ResponseEntity<MemberResponseDTO.MemberCreateResponseDTO> localSignUp(
+            @RequestBody MemberRequestDTO.MemberCreateRequestDTO memberCreateRequestDTO) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(memberCommandServiceImpl.createMember(memberCreateRequestDTO));
     }
 
     @Operation(summary = "내 리뷰 조회")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ReviewResponseDTO.ReviewListResponseDTO.class))),})
-            @GetMapping("/api/v1/my/reviews")
+                            schema = @Schema(implementation = ReviewResponseDTO.ReviewListResponseDTO.class))),})
+    @GetMapping("/my/reviews")
     public ResponseEntity<ReviewResponseDTO.ReviewListResponseDTO> getMyReviews() {
         return null;
     }
@@ -76,14 +85,32 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = MemberResponseDTO.JwtTokenResponse.class))),
+                            schema = @Schema(implementation = MemberResponseDTO.JwtTokenResponse.class))),
             @ApiResponse(responseCode = "400", description = "BadRequest",
                     content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "401", description = "카카오 토큰 발급 실패",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("/api/v1/kakao/login")
-    public ResponseEntity<MemberResponseDTO.JwtTokenResponse> kakaoLogin(@RequestBody MemberRequestDTO.kakaoLoginRequestDTO kakaoLoginRequestDTO) {
+    @PostMapping("/kakao/login")
+    public ResponseEntity<MemberResponseDTO.JwtTokenResponse> kakaoLogin(@RequestBody MemberRequestDTO.KakaoLoginRequestDTO kakaoLoginRequestDTO) {
         return null;
+    }
+
+    @GetMapping
+    public ResponseEntity<MemberResponseDTO.MemberPreviewResponseDTO> getMember() {
+        return ResponseEntity.ok(memberQueryServiceImpl.getMember());
+    }
+
+    @GetMapping("/offset")
+    public ResponseEntity<MemberResponseDTO.MemberOffsetResponseDTO> getMemberOffset(
+            @RequestParam Integer offset, @RequestParam Integer size) {
+        return ResponseEntity.ok(memberQueryServiceImpl.getMemberOffset(offset, size));
+    }
+
+    @GetMapping("/cursor")
+    public ResponseEntity<MemberResponseDTO.MemberCursorResponseDTO> getMemberCursor(
+            @RequestParam Long cursor, @RequestParam Integer size
+    ) {
+        return ResponseEntity.ok(memberQueryServiceImpl.getMemberCursor(cursor, size));
     }
 }

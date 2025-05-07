@@ -26,7 +26,8 @@ public class CommentResponseDTO {
 
     @Builder
     public record CommentCreateResponseDTO(
-            Long commentId
+            Long commentId,
+            LocalDateTime createdAt
     ) {
     }
 }

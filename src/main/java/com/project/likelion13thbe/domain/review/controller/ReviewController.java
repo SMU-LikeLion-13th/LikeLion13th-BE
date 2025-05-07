@@ -2,18 +2,27 @@ package com.project.likelion13thbe.domain.review.controller;
 
 import com.project.likelion13thbe.domain.review.dto.request.ReviewRequestDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
+import com.project.likelion13thbe.domain.review.service.command.ReviewCommandServiceImpl;
+import com.project.likelion13thbe.domain.review.service.query.ReviewQueryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @Tag(name = "Review", description = "리뷰 관련 API")
+@RequestMapping("/api/v1")
 public class ReviewController {
+
+    private final ReviewCommandServiceImpl reviewCommandServiceImpl;
+    private final ReviewQueryServiceImpl reviewQueryServiceImpl;
 
     @Operation(summary = "리뷰 단건 조회")
     @ApiResponses({
@@ -22,9 +31,9 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @GetMapping("/api/v1/reviews/{reviewId}")
+    @GetMapping("/reviews/{reviewId}")
     public ResponseEntity<ReviewResponseDTO.ReviewDetailResponseDTO> getReview(@PathVariable Long reviewId) {
-        return null;
+        return ResponseEntity.ok(reviewQueryServiceImpl.getReview(reviewId));
     }
 
     @Operation(summary = "리뷰 목록 조회")
@@ -34,9 +43,9 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @GetMapping("/api/v1/products/{productId}/reviews")
+    @GetMapping("/products/{productId}/reviews")
     public ResponseEntity<ReviewResponseDTO.ReviewListResponseDTO> getReviewList(@PathVariable Long productId) {
-        return null;
+        return ResponseEntity.ok(reviewQueryServiceImpl.getReviews());
     }
 
     @Operation(summary = "리뷰 생성")
@@ -48,9 +57,11 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "NotFound",
             content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("/api/v1/products/{productId}/reviews")
+    @PostMapping("/products/{productId}/reviews")
     public ResponseEntity<ReviewResponseDTO.ReviewCreateResponseDTO> createReview(@PathVariable Long productId, @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
-        return null;
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(reviewCommandServiceImpl.createReview(reviewCreateRequestDTO));
     }
 
     @Operation(summary = "리뷰 수정")
@@ -62,7 +73,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @PatchMapping("/api/v1/reviews/{reviewId}")
+    @PatchMapping("/reviews/{reviewId}")
     public ResponseEntity<?> editReview(@PathVariable Long reviewId, @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
         return null;
     }
@@ -74,7 +85,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @DeleteMapping("/api/v1/reviews/{reviewId}")
+    @DeleteMapping("/reviews/{reviewId}")
     public ResponseEntity<?> deleteReview(@PathVariable Long reviewId) {
         return null;
     }

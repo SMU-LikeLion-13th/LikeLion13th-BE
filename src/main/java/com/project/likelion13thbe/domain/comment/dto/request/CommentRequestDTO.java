@@ -6,7 +6,10 @@ public class CommentRequestDTO {
 
     @Builder
     public record CommentCreateRequestDTO(
-            String content
+            String content,
+
+            Long memberId,
+            Long reviewId
     ) {
     }
 
