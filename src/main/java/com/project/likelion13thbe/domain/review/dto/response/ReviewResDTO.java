@@ -10,6 +10,7 @@ public class ReviewResDTO {
 
     @Builder
     public record ReviewDetailResDTO(
+            Long productId,
             Long reviewId,
             Double rating,
             String content,
@@ -22,9 +23,15 @@ public class ReviewResDTO {
 
     @Builder
     public record ReviewListResDTO(
-            List<ReviewDetailResDTO> reviews
+            List<ReviewDetailResDTO> reviewList
     ) {
     }
 
+    @Builder
+    public record ReviewCreateResDTO(
+            Long reviewId,
+            LocalDateTime createdAt
+    ) {
+    }
 
 }

@@ -1,7 +1,37 @@
 package com.project.likelion13thbe.domain.review.service.command;
 
+import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.repository.MemberRepository;
+import com.project.likelion13thbe.domain.product.entity.Product;
+import com.project.likelion13thbe.domain.product.repository.ProductRepository;
+import com.project.likelion13thbe.domain.review.converter.ReviewConverter;
+import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
+import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
+import com.project.likelion13thbe.domain.review.entity.Review;
+import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ReviewCommandServiceImpl implements ReviewCommandService{
+@RequiredArgsConstructor
+@Transactional
+public class ReviewCommandServiceImpl implements ReviewCommandService {
+    private final ReviewRepository reviewRepository;
+    private final ProductRepository productRepository;
+    private final MemberRepository memberRepository;
+
+    @Override
+    public ReviewResDTO.ReviewCreateResDTO createReview(ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO, Long productId) {
+        Member member = memberRepository.findById(reviewCreateReqDTO.memberId())
+                .orElseThrow(() -> new RuntimeException("Member가 존재하지 않음"));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product가 존재하지 않음"));
+        
+        Review review = ReviewConverter.toReview(reviewCreateReqDTO, member, product);
+
+        reviewRepository.save(review);
+
+        return ReviewConverter.toReviewCreateResDTO(review);
+    }
 }

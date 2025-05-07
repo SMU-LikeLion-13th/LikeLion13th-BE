@@ -9,18 +9,26 @@ public class CommentResDTO {
 
     @Builder
     public record CommentListResDTO(
-            List<CommentDetailResDTO> comments
+            List<CommentDetailResDTO> commentList
     ) {
     }
 
     @Builder
     public record CommentDetailResDTO(
+            Long memberId,
+            Long reviewId,
             Long commentId,
             String content,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
-            String nickname,
             Integer likeCount
+    ) {
+    }
+
+    @Builder
+    public record CommentCreateResDTO(
+            Long commentId,
+            LocalDateTime createdAt
     ) {
     }
 }

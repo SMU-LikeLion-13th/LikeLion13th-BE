@@ -2,20 +2,59 @@ package com.project.likelion13thbe.domain.member.controller;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
+import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
+import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/members")
 @Tag(name = "Member", description = "멤버 관련 API")
 public class MemberController {
+    private final MemberCommandService memberCommandService;
+    private final MemberQueryService memberQueryService;
+
+    @Operation(summary = "createMember")
+    @PostMapping
+    public ResponseEntity<MemberResDTO.MemberCreateResDTO> createMember(
+            @RequestBody MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(memberCommandService.createMember(memberCreateReqDTO));
+    }
+
+    @Operation(summary = "getMember")
+    @GetMapping
+    public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
+        return ResponseEntity.ok(memberQueryService.getMember());
+    }
+
+    @Operation(summary = "getOffset")
+    @GetMapping("/offset")
+    public ResponseEntity<MemberResDTO.MemberOffsetResDTO> getMemberOffset(
+            @RequestParam Integer offset,
+            @RequestParam Integer size
+    ) {
+        return ResponseEntity.ok(memberQueryService.getMemberOffset(offset, size));
+    }
+
+    @Operation(summary = "getCursor")
+    @GetMapping("/cursor")
+    public ResponseEntity<MemberResDTO.MemberCursorResDTO> getMemberCursor(
+            @RequestParam Long cursor,
+            @RequestParam Integer size
+    ) {
+        return ResponseEntity.ok(memberQueryService.getMemberCursor(cursor, size));
+    }
 
     @Operation(summary = "비밀번호 수정")
     @ApiResponses({
@@ -26,7 +65,7 @@ public class MemberController {
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("/api/v1/password-reset")
+    @PostMapping("password-reset")
     public ResponseEntity<?> resetPassword(@RequestBody MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO) {
         return null;
     }
@@ -40,7 +79,7 @@ public class MemberController {
             @ApiResponse(responseCode = "409", description = "Conflict",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("api/v1/sign-up")
+    @PostMapping("sign-up")
     public ResponseEntity<?> signUp(@RequestBody MemberReqDTO.SignUpResDTO signUpResDTO) {
         return null;
     }
@@ -53,7 +92,7 @@ public class MemberController {
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("/api/v1/login")
+    @PostMapping("login")
     public ResponseEntity<MemberResDTO.LoginJwtTokenResDTO> login(@RequestBody MemberReqDTO.LoginResDTO LoginResDTO) {
         return null;
     }
@@ -66,7 +105,7 @@ public class MemberController {
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("api/v1/login/kakao")
+    @PostMapping("login/kakao")
     public ResponseEntity<MemberResDTO.LoginJwtTokenResDTO> kakaoLogin(@RequestBody MemberReqDTO.KakaoLoginResDTO KakaoLoginResDTO) {
         // 프론트가 카카오에게 받은 인가코드를 Req에 넣어서 백엔드에 전달하면
         // 백엔드가 카카오에서 토큰을 받아오고

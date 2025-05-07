@@ -4,14 +4,13 @@ import lombok.Builder;
 
 public class CommentReqDTO {
 
-    @Builder
-    public record createCommentReqDTO(
+    public record CommentCreateReqDTO(
+            Long memberId,
             String content
     ) {
     }
 
-    @Builder
-    public record updateCommentReqDTO(
+    public record CommentUpdateReqDTO(
             String content
     ) {
     }

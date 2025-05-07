@@ -1,7 +1,18 @@
 package com.project.likelion13thbe.domain.review.repository;
 
+import com.project.likelion13thbe.domain.review.entity.Review;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface ReviewRepository {
+public interface ReviewRepository extends JpaRepository<Review, Long> {
+    @Query("SELECT r FROM Review r WHERE r.product.productId = :productId")
+    List<Review> findAllReviewsByProductId(Long productId);
+
+    // 이런 식으로 안하는 것을 알고는 있지만 일단 토큰 방식을 몰라서 내 리뷰 조회가 작동만 할 수 있게 작성했습니다
+    @Query("SELECT r FROM Review r WHERE r.member.memberId = :memberId")
+    List<Review> findAllReviewsByMemberId(Long memberId);
 }
