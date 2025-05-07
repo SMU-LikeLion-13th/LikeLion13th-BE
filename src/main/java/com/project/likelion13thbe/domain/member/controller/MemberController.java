@@ -4,10 +4,10 @@ import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +21,9 @@ public class MemberController {
     private final MemberQueryService memberQueryService;
     @Operation(description = "회원가입")
     @PostMapping
-    public ResponseEntity<MemberResDTO.MemberCreateResDTO> createMember(
+    public CustomResponse<MemberResDTO.MemberCreateResDTO> createMember(
             @RequestBody MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(memberCommandService.createMember(memberCreateReqDTO));
+        return CustomResponse.onSuccess(memberCommandService.createMember(memberCreateReqDTO));
     }
 
     @Operation(description = "유저 조회")
