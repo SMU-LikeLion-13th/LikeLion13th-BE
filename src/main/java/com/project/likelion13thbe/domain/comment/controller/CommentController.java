@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Comment", description = "댓글 관련 API")
+@RequestMapping("/api/v1")
 public class CommentController {
 
     private final CommentQueryServiceImpl commentQueryServiceImpl;
@@ -30,7 +31,7 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @GetMapping("/api/v1/reviews/{reviewId}/comments")
+    @GetMapping("/reviews/{reviewId}/comments")
     public ResponseEntity<CommentResponseDTO.CommentListResponseDTO> getCommentList(@PathVariable Long reviewId) {
         return ResponseEntity.ok(commentQueryServiceImpl.getComments());
     }
@@ -44,7 +45,7 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("/api/v1/reviews/{reviewId}/comments")
+    @PostMapping("/reviews/{reviewId}/comments")
     public ResponseEntity<CommentResponseDTO.CommentCreateResponseDTO> createComment(@PathVariable Long reviewId,
                                                                                      @RequestBody CommentRequestDTO.CommentCreateRequestDTO commentCreateRequestDTO
     ) {
@@ -62,7 +63,7 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @PatchMapping("/api/v1/comments/{commentId}")
+    @PatchMapping("/comments/{commentId}")
     public ResponseEntity<?> editComment(@PathVariable String commentId) {
         return null;
     }
@@ -74,7 +75,7 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @DeleteMapping("/api/v1/comments/{commentId}")
+    @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
         return null;
     }

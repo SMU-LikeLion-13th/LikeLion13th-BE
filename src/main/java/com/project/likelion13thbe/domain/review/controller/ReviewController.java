@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Review", description = "리뷰 관련 API")
+@RequestMapping("/api/v1")
 public class ReviewController {
 
     private final ReviewCommandServiceImpl reviewCommandServiceImpl;
@@ -30,7 +31,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @GetMapping("/api/v1/reviews/{reviewId}")
+    @GetMapping("/reviews/{reviewId}")
     public ResponseEntity<ReviewResponseDTO.ReviewDetailResponseDTO> getReview(@PathVariable Long reviewId) {
         return ResponseEntity.ok(reviewQueryServiceImpl.getReview(reviewId));
     }
@@ -42,7 +43,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @GetMapping("/api/v1/products/{productId}/reviews")
+    @GetMapping("/products/{productId}/reviews")
     public ResponseEntity<ReviewResponseDTO.ReviewListResponseDTO> getReviewList(@PathVariable Long productId) {
         return ResponseEntity.ok(reviewQueryServiceImpl.getReviews());
     }
@@ -56,7 +57,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "NotFound",
             content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("/api/v1/products/{productId}/reviews")
+    @PostMapping("/products/{productId}/reviews")
     public ResponseEntity<ReviewResponseDTO.ReviewCreateResponseDTO> createReview(@PathVariable Long productId, @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -72,7 +73,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @PatchMapping("/api/v1/reviews/{reviewId}")
+    @PatchMapping("/reviews/{reviewId}")
     public ResponseEntity<?> editReview(@PathVariable Long reviewId, @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
         return null;
     }
@@ -84,7 +85,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @DeleteMapping("/api/v1/reviews/{reviewId}")
+    @DeleteMapping("/reviews/{reviewId}")
     public ResponseEntity<?> deleteReview(@PathVariable Long reviewId) {
         return null;
     }

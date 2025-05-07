@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Product", description = "상품 관련 API")
+@RequestMapping("/api/v1/products")
 public class ProductController {
 
     private final ProductCommandServiceImpl productCommandServiceImpl;
@@ -30,7 +31,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @GetMapping("/api/v1/products/{productId}")
+    @GetMapping("/{productId}")
     public ResponseEntity<ProductResponseDTO.ProductDetailResponseDTO> getProductDetail(@PathVariable Long productId) {
         return ResponseEntity.ok(productQueryServiceImpl.getProduct(productId));
     }
@@ -42,7 +43,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @GetMapping("/api/v1/products")
+    @GetMapping
     public ResponseEntity<ProductResponseDTO.ProductListResponseDTO> getProductList() {
         return ResponseEntity.ok(productQueryServiceImpl.getProducts());
     }
@@ -56,7 +57,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("/api/v1/products")
+    @PostMapping()
     public ResponseEntity<ProductResponseDTO.ProductCreateResponseDTO> createProduct(@RequestBody ProductRequestDTO.ProductCreateRequestDTO productCreateRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -70,7 +71,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "NotFound",
                     content = @Content(mediaType = "application/json"))
     })
-    @DeleteMapping("/api/v1/products/{productId}")
+    @DeleteMapping("/{productId}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
         return null;
     }
