@@ -1,17 +1,14 @@
 package com.project.likelion13thbe.domain.review.dto.request;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-
 import java.time.LocalDateTime;
 
-public class ReviewReqDTO {
+public class CommentReqDTO {
 
-    public record ReviewCreateReqDTO(
+    public record CommentCreateReqDTO(
             String content,
             LocalDateTime date,
             Long userId,
-            Long productId
+            Long reviewId
     ) {}
+
 }
