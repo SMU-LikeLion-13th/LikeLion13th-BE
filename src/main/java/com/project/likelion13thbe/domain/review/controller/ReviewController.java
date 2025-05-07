@@ -2,6 +2,9 @@ package com.project.likelion13thbe.domain.review.controller;
 
 import com.project.likelion13thbe.domain.review.dto.request.ReviewRequestDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
+import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
+import com.project.likelion13thbe.domain.review.service.command.ReviewCommandServiceImpl;
+import com.project.likelion13thbe.domain.review.service.query.ReviewQueryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -10,11 +13,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "Review", description = "리뷰 관련 API")
 public class ReviewController {
+    private final ReviewCommandServiceImpl reviewCommandService;
+    private final ReviewQueryServiceImpl reviewQueryServiceImpl;
+
+    public ReviewController(ReviewCommandServiceImpl reviewCommandService, ReviewQueryServiceImpl reviewQueryServiceImpl) {
+        this.reviewCommandService = reviewCommandService;
+        this.reviewQueryServiceImpl = reviewQueryServiceImpl;
+    }
 
     @Operation(summary = "리뷰 상세 조회 API", description = "리뷰 상세 조회")
     @ApiResponses({
@@ -32,9 +45,8 @@ public class ReviewController {
     @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
 
     @GetMapping("/api/v1/reviews/{reviewId}")
-    public ReviewResponseDTO.ReviewListResponseDTO getReview(@PathVariable Long reviewId) {
-
-        return null;
+    public ResponseEntity<ReviewResponseDTO.ReviewPreviewResDTO> getReview(@PathVariable Long reviewId) {
+        return ResponseEntity.ok(reviewQueryServiceImpl.getReview());
     }
 
     @Operation(summary = "리뷰 목록 조회 API", description = "리뷰 목록 조회")
@@ -52,8 +64,8 @@ public class ReviewController {
     })
     @Parameter(name="productId", description = "상품 아이디", example = "1")
     @GetMapping("api/v1/products/{productId}/reviews")
-    public ReviewResponseDTO.ReviewListResponseDTO getReviews(@PathVariable Long productId) {
-        return null;
+    public ResponseEntity<ReviewResponseDTO.ReviewListResponseDTO> getReviews(@PathVariable Long productId) {
+        return ResponseEntity.ok(reviewQueryServiceImpl.getReviewList());
     }
 
     @Operation(summary = "리뷰 수정 API", description = "리뷰 수정")
@@ -93,11 +105,12 @@ public class ReviewController {
     })
     @Parameter(name = "productId", description = "상품 아이디", example = "1")
     @PostMapping("/api/v1/users/{userId}/products/{productId}/reviews")
-    public ReviewResponseDTO.ReviewListResponseDTO postReview(
+    public ResponseEntity<ReviewResponseDTO.ReviewCreateResDTO> postReview(
             @PathVariable Long productId,
-            @RequestBody ReviewRequestDTO.ReviewListRequestDTO requestDTO
+            @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO
     ) {
-        return null;
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(reviewCommandService.createReview(reviewCreateRequestDTO));
     }
 
     @Operation(summary = "리뷰 삭제 API", description = "리뷰 삭제")
@@ -117,7 +130,7 @@ public class ReviewController {
             @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
     })
     @DeleteMapping("/api/v1/reviews/{reviewId}")
-    public ReviewResponseDTO.ReviewListResponseDTO deleteReview(@PathVariable Long productId, @PathVariable Long reviewId) {
+    public ReviewResponseDTO.ReviewListResponseDTO deleteReview(@PathVariable Long reviewId) {
         return null;
     }
 

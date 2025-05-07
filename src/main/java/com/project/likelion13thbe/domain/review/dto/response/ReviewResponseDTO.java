@@ -30,5 +30,16 @@ public class ReviewResponseDTO {
         private String content;
     }
 
+    @Builder
+    public record ReviewCreateResDTO(
+            Long reviewId,
+            String content
+    ) {}
 
+    @Builder
+    public record ReviewPreviewResDTO(
+            Long reviewId,
+            String content,
+            Long rating
+    ){}
 }

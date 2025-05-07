@@ -25,4 +25,10 @@ public class CommentRequestDTO {
         @Schema(description = "댓글 내용", example = "입력한 댓글 내용")
         private String content;
     }
+
+    @Getter
+    public static class CommentUpdateRequestDTO {
+        @Schema(description = "댓글 내용", example = "수정된 댓글 내용")
+        private String content;
+    }
 }

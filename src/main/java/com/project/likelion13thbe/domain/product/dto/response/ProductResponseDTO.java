@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProductResponseDTO {
@@ -25,8 +26,8 @@ public class ProductResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ProductCreateResponseDTO {
-        @Schema(description = "상품")
-        private List<ProductResDTO> product;
+        private Long productId;
+        LocalDateTime createdAt;
     }
 
     @Builder
@@ -35,8 +36,18 @@ public class ProductResponseDTO {
     @AllArgsConstructor
     public static class ProductResDTO {
         @Schema(description = "product의 pk",example = "1")
-        private Long ProductId;
+        private Long productId;
         @Schema(description = "상품 설명", example = "~~한 상품입니다.")
+        private String content;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProductPreviewResDTO {
+        private Long productId;
+        private String name;
         private String content;
     }
 

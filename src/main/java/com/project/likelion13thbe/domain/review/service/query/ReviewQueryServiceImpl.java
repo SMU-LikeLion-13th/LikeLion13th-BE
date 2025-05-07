@@ -1,8 +1,34 @@
 package com.project.likelion13thbe.domain.review.service.query;
 
+import com.project.likelion13thbe.domain.review.converter.ReviewConverter;
+import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
+import com.project.likelion13thbe.domain.review.entity.Review;
+import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ReviewQueryServiceImpl implements ReviewQueryService {
+    private final ReviewRepository reviewRepository;
+
+    public ReviewQueryServiceImpl(ReviewRepository reviewRepository) {
+        this.reviewRepository = reviewRepository;
+    }
+
+    public ReviewResponseDTO.ReviewPreviewResDTO getReview(){
+        // DB에서 pk가 1인 Review 조회
+        Review review = reviewRepository.findById(1L).get();
+
+        // 응답 DTO로 변환 후 return
+        return ReviewConverter.toReviewPreviewResponseDTO(review);
+    }
+
+    public ReviewResponseDTO.ReviewListResponseDTO getReviewList(){
+        List<Review> review = reviewRepository.findAll();
+
+        return ReviewConverter.toReviewListResponseDTO(review);
+
+    }
 }
