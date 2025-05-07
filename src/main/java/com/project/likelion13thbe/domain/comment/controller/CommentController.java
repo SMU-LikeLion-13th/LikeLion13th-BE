@@ -61,7 +61,7 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = "application/json"))
     })
-    @PatchMapping("/api/v1/comment/{commentId}")
+    @PatchMapping("comment/{commentId}")
     public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
         return null;
     }
@@ -73,7 +73,7 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = "application/json"))
     })
-    @DeleteMapping("api/v1/comment/{commentId}")
+    @DeleteMapping("comment/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
         return null;
     }

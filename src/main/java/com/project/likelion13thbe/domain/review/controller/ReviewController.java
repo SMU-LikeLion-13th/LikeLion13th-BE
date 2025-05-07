@@ -75,7 +75,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = "application/json"))
     })
-    @PatchMapping("/api/v1/reviews/{reviewId}")
+    @PatchMapping("reviews/{reviewId}")
     public ResponseEntity<?> patchReview(@PathVariable Long reviewId, @RequestBody ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
         return null;
     }
@@ -87,7 +87,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = "application/json"))
     })
-    @DeleteMapping("api/v1/reviews/{reviewId}")
+    @DeleteMapping("reviews/{reviewId}")
     public ResponseEntity<?> deleteReview(@PathVariable Long reviewId) {
         return null;
     }

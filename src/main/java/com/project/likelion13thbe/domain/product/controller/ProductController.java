@@ -41,7 +41,7 @@ public class ProductController {
 //                    content = @Content(mediaType = "application/json",
 //                            schema = @Schema(implementation = ProductResDTO.ProductListResDTO.class)))
 //    })
-    @GetMapping("products")
+    @GetMapping
     public ResponseEntity<ProductResDTO.ProductListResDTO> getProductList() {
         return ResponseEntity.ok(productQueryService.getProductList());
     }
@@ -68,7 +68,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "Not Found",
                     content = @Content(mediaType = "application/json"))
     })
-    @DeleteMapping("api/v1/product/{productId}")
+    @DeleteMapping("{productId}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
         return null;
     }
