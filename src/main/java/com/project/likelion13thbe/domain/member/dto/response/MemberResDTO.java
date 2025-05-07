@@ -3,6 +3,8 @@ package com.project.likelion13thbe.domain.member.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 public class MemberResDTO {
     public record Test1DTO(
             Long id,
@@ -19,5 +21,12 @@ public class MemberResDTO {
 
         @Schema(description = "Member의 PK? UserId")
         private Long userId;
+    }
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class MemberCreateResDTO {
+        private Long id;
+        private LocalDateTime createdAt;
     }
 }

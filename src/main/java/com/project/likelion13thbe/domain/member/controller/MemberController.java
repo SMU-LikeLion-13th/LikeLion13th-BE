@@ -1,7 +1,13 @@
 package com.project.likelion13thbe.domain.member.controller;
 
+import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
+import com.project.likelion13thbe.domain.member.repository.MemberRepository;
+import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,8 +19,19 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 
 @RestController
+@RequiredArgsConstructor
 @Tag(name="Member API", description = "멤버 관련 API입니다.")
 public class MemberController {
+
+    private final MemberCommandService memberCommandService;
+
+    @PostMapping
+    public ResponseEntity<MemberResDTO.MemberCreateResDTO> createMember(
+            @RequestBody MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(memberCommandService.createMember(MemberReqDTO.memberCreateReqDTO));
+    }
 
     // 카카오 로그인 OAuth 이거 어케 함?
 

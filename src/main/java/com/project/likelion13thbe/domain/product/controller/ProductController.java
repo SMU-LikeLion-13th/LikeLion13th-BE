@@ -1,6 +1,11 @@
 package com.project.likelion13thbe.domain.product.controller;
 
+import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
+import com.project.likelion13thbe.domain.product.service.command.ProductCommandService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,8 +16,19 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
+@RequiredArgsConstructor
 @Tag(name="Product API", description = "Product 관련 API입니다.")
 public class ProductController {
+
+    private final ProductCommandService productCommandService;
+
+    @PostMapping
+    public ResponseEntity<ProductResDTO.ProductCreateResDTO> createProduct(
+            @RequestBody ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(productCommandService.createProduct(productCreateReqDTO));
+    }
 
     // 상품 목록 조회
     @Operation(summary = "상품 목록 조회")
