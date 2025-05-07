@@ -48,6 +48,15 @@ public class MemberController {
         return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
+    // 회원 탈퇴 (JWT 인증 필요)
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴 성공")
+    @DeleteMapping("/{memberId}")
+    public CustomResponse<String> deleteMember(@PathVariable("memberId") Long memberId) {
+        memberCommandService.deleteMember(memberId);
+        return CustomResponse.onSuccess("회원 탈퇴 성공");
+    }
+
+
     @Operation(summary = "getOffset")
     @GetMapping("/offset")
     public ResponseEntity<MemberResDTO.MemberOffsetResDTO> getMemberOffset(

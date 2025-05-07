@@ -8,4 +8,5 @@ public interface MemberCommandService {
 
     public void updatePassword(Long memberId, MemberReqDTO.PasswordResetDTO passwordResetDTO);
 
+    public void deleteMember(Long memberId);
 }
