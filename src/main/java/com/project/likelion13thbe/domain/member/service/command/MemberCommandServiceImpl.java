@@ -4,6 +4,8 @@ import com.project.likelion13thbe.domain.member.converter.MemberConverter;
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
+import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberRepository memberRepository;
+//    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public MemberResDTO.MemberCreateResDTO createMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
@@ -26,4 +29,14 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         // 응답 DTO로 변환 후 return
         return MemberConverter.toMemberResponseDTO(member);
     }
+
+    @Override
+    public void updatePassword(Long memberId, MemberReqDTO.PasswordResetDTO passwordResetDTO) {
+        // 회원 정보 조회
+        Member member = memberRepository.findByMemberIdAndNotDeleted(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        member.updatePassword(passwordResetDTO.password());
+    }
+
 }

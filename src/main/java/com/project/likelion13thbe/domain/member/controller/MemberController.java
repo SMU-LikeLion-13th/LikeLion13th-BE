@@ -4,6 +4,7 @@ import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +36,16 @@ public class MemberController {
     @GetMapping
     public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
         return ResponseEntity.ok(memberQueryService.getMember());
+    }
+
+    @Operation(summary = "비밀번호 수정")
+    @PatchMapping("/{memberId}/password")
+    public CustomResponse<String> resetPassword(
+            @PathVariable("memberId") Long memberId,
+            @RequestBody MemberReqDTO.PasswordResetDTO passwordResetDTO
+    ) {
+        memberCommandService.updatePassword(memberId, passwordResetDTO);
+        return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
     @Operation(summary = "getOffset")
