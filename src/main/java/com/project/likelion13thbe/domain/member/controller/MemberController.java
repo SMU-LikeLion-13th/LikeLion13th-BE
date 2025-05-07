@@ -25,11 +25,9 @@ public class MemberController {
 
     @Operation(summary = "createMember")
     @PostMapping
-    public ResponseEntity<MemberResDTO.MemberCreateResDTO> createMember(
+    public CustomResponse<MemberResDTO.MemberCreateResDTO> createMember(
             @RequestBody MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(memberCommandService.createMember(memberCreateReqDTO));
+        return CustomResponse.onSuccess(memberCommandService.createMember(memberCreateReqDTO));
     }
 
     @Operation(summary = "getMember")
