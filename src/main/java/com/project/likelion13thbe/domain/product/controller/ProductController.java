@@ -1,21 +1,28 @@
 package com.project.likelion13thbe.domain.product.controller;
 
-import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
-import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
+
 import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
+import com.project.likelion13thbe.domain.product.service.command.ProductCommandServiceImpl;
+import com.project.likelion13thbe.domain.product.service.query.ProductQueryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @Tag(name="Product",description = "상품 API")
 public class ProductController {
+
+    private final ProductCommandServiceImpl productCommandServiceImpl;
+    private final ProductQueryServiceImpl productQueryServiceImpl;
 
     @Operation(description = "상품 목록 조회")
     @ApiResponses({
@@ -31,7 +38,7 @@ public class ProductController {
     })
     @GetMapping("/products")
     public ResponseEntity<ProductResDTO.ProductListResDTO> getProductList() {
-        return null;
+        return ResponseEntity.ok(productQueryServiceImpl.getProducts());
     }
 
     @Operation(description = "상품 상세 조회")
@@ -48,7 +55,7 @@ public class ProductController {
     })
     @GetMapping("/products/{productId}")
     public ResponseEntity<ProductResDTO.ProductDetailResDTO> getProductDetail(@PathVariable Long productId) {
-        return null;
+        return ResponseEntity.ok(productQueryServiceImpl.getProduct(productId));
     }
 
     @Operation(description = "상품 추가")
@@ -62,7 +69,9 @@ public class ProductController {
     })
     @PostMapping("/products")
     public ResponseEntity<ProductResDTO.ProductCreateResDTO> createProduct(@RequestBody ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
-        return null;
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(productCommandServiceImpl.addProduct(productCreateReqDTO));
     }
 
     @Operation(description = "상품 삭제")
