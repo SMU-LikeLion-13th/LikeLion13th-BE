@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.member.entity;
 import com.project.likelion13thbe.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -28,7 +29,15 @@ public class Member extends BaseEntity {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "delated_at")
+    private LocalDateTime deletedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
 }

@@ -6,4 +6,7 @@ import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 public interface MemberCommandService {
 
     MemberResDTO.MemberCreateResDTO createMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO);
+
+    void updatePassword(Long memberId, MemberReqDTO.ResetPasswordReqDTO dto);
+
 }

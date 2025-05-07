@@ -34,11 +34,13 @@ public class MemberController {
 
 
     @Operation(description = "비밀번호 수정")
-    @PatchMapping("/users/reset-password")
-    public ResponseEntity<MemberResDTO.ResetPasswordReqDTO> updatePassword(
-            @RequestBody MemberReqDTO.ResetPasswordReqDTO dto
+    @PatchMapping("/{memberId}/reset-password")
+    public CustomResponse<String> resetPassword(
+            @RequestBody MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO,
+            @PathVariable("memberId") Long memberId
     ) {
-        return ResponseEntity.ok(null);
+        memberCommandService.updatePassword(memberId, resetPasswordReqDTO);
+        return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
     @Operation(description = "로그인")
