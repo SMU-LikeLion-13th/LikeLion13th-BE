@@ -1,29 +1,34 @@
 package com.project.likelion13thbe.domain.product.dto.response;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProductResDTO {
 
     @Builder
-    public record ProductDTO(
-            Long productId,
-            String name,
+    public record ProductPreviewResDTO(
+            Long id,
+            String title,
             String content,
             String image,
-            Double price,
+            Integer price,
             Integer quantity,
             Double ratingAvg,
-            Integer reviewCount
+            Long reviewCount,
+            LocalDateTime createdAt
     ){
     }
 
     @Builder
-    public record ProductListDTO(
-            List<ProductDTO> productList
+    public record ProductCreateResDTO(
+            Long id,
+            LocalDateTime createdAt
+    ){}
+
+    @Builder
+    public record ProductListResDTO(
+            List<ProductPreviewResDTO> productList
     ){
     }
 }

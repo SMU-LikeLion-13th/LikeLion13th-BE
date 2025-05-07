@@ -8,18 +8,24 @@ import java.util.List;
 public class ReviewResDTO {
 
     @Builder
-    public record ReviewDTO (
+    public record ReviewCreateResDTO(
+            Long id,
+            LocalDateTime createdAt
+    ){
+    }
+    @Builder
+    public record ReviewPreviewResDTO(
             Long id,
             String username,
             String profileImg,
             String content,
-            int rate,
-            LocalDateTime createAt
+            double rate,
+            LocalDateTime createdAt
     ){
     }
     @Builder
     public record ReviewListDTO (
-            List<ReviewDTO> reviews
+            List<ReviewPreviewResDTO> reviews
     ){
     }
 }

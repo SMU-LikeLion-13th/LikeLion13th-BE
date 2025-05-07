@@ -2,27 +2,41 @@ package com.project.likelion13thbe.domain.member.controller;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
+import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
+import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/members")
 @Tag(name="Member", description = "Member 관련 API")
 public class MemberController {
+
+    private final MemberCommandService memberCommandService;
+    private final MemberQueryService memberQueryService;
     @Operation(description = "회원가입")
-    @PostMapping("/api/v1/signup")
-    public ResponseEntity<MemberResDTO.SignupResDTO> signup(
-            @RequestBody MemberReqDTO.SignupReqDTO dto
-    ) {
-        return ResponseEntity.ok(null);
+    @PostMapping
+    public ResponseEntity<MemberResDTO.MemberCreateResDTO> createMember(
+            @RequestBody MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(memberCommandService.createMember(memberCreateReqDTO));
     }
 
+    @Operation(description = "유저 조회")
+    @GetMapping
+    public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
+        return ResponseEntity.ok(memberQueryService.getMember());
+    }
+
+
     @Operation(description = "비밀번호 수정")
-    @PatchMapping("/api/v1/users/reset-password")
+    @PatchMapping("/users/reset-password")
     public ResponseEntity<MemberResDTO.ResetPasswordReqDTO> updatePassword(
             @RequestBody MemberReqDTO.ResetPasswordReqDTO dto
     ) {
@@ -30,7 +44,7 @@ public class MemberController {
     }
 
     @Operation(description = "로그인")
-    @PostMapping("/api/v1/login")
+    @PostMapping("/login")
     public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> login(
             @RequestBody MemberReqDTO.LoginReqDTO dto
     ) {
@@ -38,7 +52,7 @@ public class MemberController {
     }
 
     @Operation(description = "카카오 로그인")
-    @PostMapping("/api/v1/login/kakao")
+    @PostMapping("/login/kakao")
     public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> kakaoLogin(
             @RequestBody MemberReqDTO.KakaoLoginRequestDTO dto
     ) {

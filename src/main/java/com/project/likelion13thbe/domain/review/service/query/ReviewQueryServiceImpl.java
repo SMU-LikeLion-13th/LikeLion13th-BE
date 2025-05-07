@@ -1,7 +1,43 @@
 package com.project.likelion13thbe.domain.review.service.query;
 
+import com.project.likelion13thbe.domain.review.converter.ReviewConverter;
+import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
+import com.project.likelion13thbe.domain.review.entity.Review;
+import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ReviewQueryServiceImpl implements ReviewQueryService {
+
+
+    private final ReviewRepository reviewRepository;
+
+    @Override
+    public ReviewResDTO.ReviewPreviewResDTO getReview(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("reviewId에 해당하는 review가 존재하지 않습니다."));
+
+        return ReviewConverter.toReviewPreviewResponseDTO(review);
+    }
+
+    @Override
+    public ReviewResDTO.ReviewListDTO getReviewList(Long productId) {
+        List<Review> reviews = reviewRepository.findAllByProductId(productId);
+
+        return ReviewConverter.toReviewPreviewResponseDTOList(reviews);
+    }
+
+    @Override
+    public ReviewResDTO.ReviewListDTO getMyReview() {
+        //토큰 추출 말고 따로 맴버 아이디를 가져올 수 없는거 같아서 1L로 두었습니다!
+        List<Review> reviews = reviewRepository.findAllByMemberId(1L);
+
+        return ReviewConverter.toReviewPreviewResponseDTOList(reviews);
+    }
 }
