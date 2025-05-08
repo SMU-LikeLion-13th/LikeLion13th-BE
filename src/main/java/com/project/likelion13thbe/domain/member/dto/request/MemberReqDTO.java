@@ -21,5 +21,9 @@ public class MemberReqDTO {
             Long userId
     ) {}
 
+    public record MemberDeleteDTO(
+            Long userId
+    ) {}
+
 
 };

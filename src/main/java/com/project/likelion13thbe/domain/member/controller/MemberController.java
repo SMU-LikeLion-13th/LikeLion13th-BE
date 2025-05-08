@@ -52,6 +52,7 @@ public class MemberController {
     @Operation(summary = "일반 로그인 API", description = "일반 로그인 API입니다.")
     @PostMapping("/api/v1/auth/login")
     public MemberResDTO.MemberResponseDTO login() { return null; } //request는 구현하지 않았음.
+
     //비밀번호 수정
     @Operation(summary = "비밀번호 수정 API", description = "비밀번호 수정 API입니다.")
     @PatchMapping("/api/v1/users")
@@ -69,6 +70,14 @@ public class MemberController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(memberCommandService.createMember(memberCreateReqDTO));
+    }
+
+    //회원 탈퇴 (JWT 인증 필요)
+    public CustomResponse<String> deleteMember(
+            @RequestBody MemberReqDTO.MemberDeleteDTO memberDeleteDTO
+    ) {
+        memberCommandService.deleteMember(memberDeleteDTO);
+        return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
 
 

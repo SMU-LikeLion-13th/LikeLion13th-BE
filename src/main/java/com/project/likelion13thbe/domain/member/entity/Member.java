@@ -5,6 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,8 +28,15 @@ public class Member extends BaseEntity {
     @Column(name = "password")
     private Long password;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     public void updatePassword(Long newPassword) {
         this.password = newPassword;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
     }
 
 }

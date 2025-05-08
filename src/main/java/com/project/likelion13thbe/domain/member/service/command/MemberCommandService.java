@@ -37,5 +37,12 @@ public class MemberCommandService {
 
     }
 
+    public void deleteMember(MemberReqDTO.MemberDeleteDTO memberDeleteDTO) {
+        Member member = memberRepository.findByUserIdAndNotDeleted(memberDeleteDTO.userId()).orElseThrow(
+                () -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        member.delete();
+    }
+
 
 }
