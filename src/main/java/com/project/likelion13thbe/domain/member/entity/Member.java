@@ -23,6 +23,10 @@ public class Member extends BaseEntity {
     private String name;
 
     @Column(name = "password")
-    private long password;
+    private Long password;
+
+    public void updatePassword(Long newPassword) {
+        this.password = newPassword;
+    }
 
 }

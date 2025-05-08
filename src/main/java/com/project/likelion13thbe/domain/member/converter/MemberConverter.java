@@ -72,4 +72,10 @@ public class MemberConverter {
         );
     }
 
+    public static MemberResDTO.MemberPatchPasswordResDTO toMemberPatchResDTO(Member member) {
+        return  new MemberResDTO.MemberPatchPasswordResDTO(
+                member.getUserId(),
+                member.getUpdatedAt()
+        );
+    }
 }

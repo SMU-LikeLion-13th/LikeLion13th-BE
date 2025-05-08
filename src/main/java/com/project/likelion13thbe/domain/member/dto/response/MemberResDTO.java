@@ -33,4 +33,9 @@ public class MemberResDTO {
             Long nextCursor,
             Boolean hasNext
     ) {}
+
+    public record MemberPatchPasswordResDTO (
+            Long id,
+            LocalDateTime updatedAt
+    ) {}
 }

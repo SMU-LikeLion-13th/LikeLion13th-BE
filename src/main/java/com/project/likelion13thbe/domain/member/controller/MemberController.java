@@ -2,9 +2,11 @@ package com.project.likelion13thbe.domain.member.controller;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
+import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -53,7 +55,12 @@ public class MemberController {
     //비밀번호 수정
     @Operation(summary = "비밀번호 수정 API", description = "비밀번호 수정 API입니다.")
     @PatchMapping("/api/v1/users")
-    public MemberResDTO.MemberResponseDTO patchMember(@PathVariable long userId) { return null; }
+    public CustomResponse<String> resetPassword(
+            @RequestBody MemberReqDTO.PasswordResetDTO passwordResetDTO
+    ){
+        memberCommandService.updatePassword(passwordResetDTO);
+        return CustomResponse.onSuccess("비밀번호 변경 성공");
+    }
     //회원가입
     @Operation(summary = "회원가입 API", description = "회원가입 API입니다.")
     @PostMapping("/api/v1/users")
@@ -63,5 +70,6 @@ public class MemberController {
                 .status(HttpStatus.CREATED)
                 .body(memberCommandService.createMember(memberCreateReqDTO));
     }
+
 
 }

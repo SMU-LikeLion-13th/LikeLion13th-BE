@@ -22,5 +22,5 @@ public class BaseEntity {
 
     @LastModifiedDate
     @Column(name = "updated_at")
-    private LocalDateTime updated_At;
+    private LocalDateTime updatedAt;
 }
