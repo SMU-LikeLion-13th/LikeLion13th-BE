@@ -2,9 +2,11 @@ package com.project.likelion13thbe.domain.member.controller;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
+import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandServiceImpl;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryServiceImpl;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +26,8 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Member", description = "회원 관련 API")
 public class MemberController {
 
-
+    private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
-    private final MemberQueryServiceImpl memberQueryServiceImpl;
 
     @Operation(summary = "카카오 로그인", description = "카카오 로그인을 수행합니다.")
     @ApiResponses({
@@ -52,15 +54,17 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "비밀번호 수정 성공")
     })
     @PostMapping("/api/v1/password-reset")
-    public ResponseEntity<Void> resetPassword() {
+    public CustomResponse<String> resetPassword(
+            @RequestBody MemberRequestDTO.PasswordResetDTO requestDTO
+
+    ) {
+        memberCommandService.updatePassword(1L, requestDTO);
         // 비밀번호 수정 로직
-        return ResponseEntity.ok().build();
+        return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
-    private final MemberCommandServiceImpl memberCommandService;
-
     @Operation(summary = "4주차 실습", description = "사용자 회원가입")
-    @ApiResponse(   responseCode = "201",
+    @ApiResponse(responseCode = "201",
             description = "회원 생성 성공",
             content = @Content(
                     mediaType = "application/json",
@@ -76,7 +80,7 @@ public class MemberController {
     }
 
     @Operation(summary = "4주차 실습", description = "사용자 정보 조회")
-    @ApiResponse(   responseCode = "200",
+    @ApiResponse(responseCode = "200",
             description = "사용자 정보 조회 성공",
             content = @Content(
                     mediaType = "application/json",
@@ -84,12 +88,12 @@ public class MemberController {
             )
     )
     @GetMapping
-    public ResponseEntity<MemberResponseDTO.MemberPreviewResDTO> getMember(){
-        return ResponseEntity.ok(memberQueryServiceImpl.getMember());
+    public ResponseEntity<MemberResponseDTO.MemberPreviewResDTO> getMember() {
+        return ResponseEntity.ok(memberQueryService.getMember());
     }
 
     @Operation(summary = "4주차 실습", description = "사용자 정보 페이지네이션 조회_offset 기반")
-    @ApiResponse(   responseCode = "200",
+    @ApiResponse(responseCode = "200",
             description = "사용자 정보 조회 성공",
             content = @Content(
                     mediaType = "application/json",
@@ -97,10 +101,20 @@ public class MemberController {
             )
     )
     @GetMapping("/offset")
-    public ResponseEntity<MemberResponseDTO.MemberOffsetResDTO> getMemberOffset(
+    public CustomResponse<MemberResponseDTO.MemberOffsetResDTO> getMemberOffset(
             @RequestParam Integer offset,
             @RequestParam Integer size
-    ){
-        return ResponseEntity.ok(memberQueryServiceImpl.getMemberOffset(offset, size));
+    ) {
+        return CustomResponse.onSuccess(memberQueryService.getMemberOffset(offset, size));
+    }
+
+    @DeleteMapping("/api/v1/members/{memberId}")
+    @Operation(summary = "회원 탈퇴", description = "회원 계정 삭제")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원 탈퇴 성공")
+    })
+    public CustomResponse<String> deleteMember(@PathVariable Long memberId) {
+        memberCommandService.deleteMember(memberId);
+        return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
 }

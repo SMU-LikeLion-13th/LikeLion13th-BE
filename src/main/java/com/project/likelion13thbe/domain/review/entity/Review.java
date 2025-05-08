@@ -19,9 +19,6 @@ public class Review extends BaseEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "content", nullable = false)
-    private Long rating;
-
     @Column(name = "image")
     private String image;
 }

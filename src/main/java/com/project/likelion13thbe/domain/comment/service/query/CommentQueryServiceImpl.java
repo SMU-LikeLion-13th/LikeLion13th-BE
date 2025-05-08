@@ -5,12 +5,13 @@ import com.project.likelion13thbe.domain.comment.dto.response.CommentResponseDTO
 import com.project.likelion13thbe.domain.comment.entity.Comment;
 import com.project.likelion13thbe.domain.comment.repository.CommentRepository;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
+import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CommentQueryServiceImpl implements MemberCommandService {
+public class CommentQueryServiceImpl implements CommentQueryService {
     private final CommentRepository commentRepository;
 
     public CommentQueryServiceImpl(CommentRepository commentRepository) {

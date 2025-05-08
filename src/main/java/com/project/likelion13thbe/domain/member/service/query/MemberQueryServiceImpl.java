@@ -19,6 +19,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         this.memberRepository = memberRepository;
     }
 
+    @Override
     public MemberResponseDTO.MemberPreviewResDTO getMember() {
         // DB에서 pk가 1인 Member 조회
         Member member = memberRepository.findById(1L).get();
@@ -27,6 +28,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         return MemberConverter.toMemberPreviewResponseDTO(member);
     }
 
+    @Override
     public MemberResponseDTO.MemberOffsetResDTO getMemberOffset(Integer offset,Integer size) {
         Pageable pageable = PageRequest.of(offset-1, size);
         // Spring Data JPA의 페이지 번호는 0부터 시작하기 때문dp -1 해주기
@@ -35,6 +37,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         return MemberConverter.toMemberOffsetResponseDTO(members);
     }
 
+    @Override
     public MemberResponseDTO.MemberCursorResDTO getMemberCursor(Long cursor,Integer size)
     {
         Pageable pageable = PageRequest.of(0,size);

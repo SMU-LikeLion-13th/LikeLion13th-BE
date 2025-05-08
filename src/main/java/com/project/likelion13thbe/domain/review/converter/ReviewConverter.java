@@ -15,7 +15,6 @@ public class ReviewConverter {
     public static Review toReview(ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
         return Review.builder()
                 .content(reviewCreateRequestDTO.content())
-                .rating(reviewCreateRequestDTO.rating())
                 .image(reviewCreateRequestDTO.image())
                 .build();
     }
@@ -31,7 +30,6 @@ public class ReviewConverter {
         return ReviewResponseDTO.ReviewPreviewResDTO.builder()
                 .reviewId(review.getReviewId())
                 .content(review.getContent())
-                .rating(review.getRating())
                 .build();
     }
 
