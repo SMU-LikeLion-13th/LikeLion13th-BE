@@ -38,6 +38,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
         return ProductConverter.toProductResponseDTO(product);
     }
 
+    @Override
     public void deleteProduct(Long productId) {
         Product product = productRepository.findByIdAndNotDeleted(productId)
                 .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
