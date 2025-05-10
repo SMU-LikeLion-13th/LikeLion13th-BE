@@ -46,4 +46,9 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
+
+    // 비밀번호 변경 메서드
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }

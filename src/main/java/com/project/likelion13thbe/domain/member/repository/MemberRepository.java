@@ -13,4 +13,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Page<Member> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     Slice<Member> findAllByIdLessThanOrderByIdDesc(Long id, Pageable pageable);
+
+    @Query("SELECT m FROM Member m WHERE m.email = :email")
+    Optional<Member> findByEmailAndNotDeleted(@Param("email") String email);
 }

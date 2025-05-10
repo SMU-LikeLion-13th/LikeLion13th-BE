@@ -50,10 +50,12 @@ public class MemberController {
             @ApiResponse(responseCode = "401", description = "Unauthorized\t\n 1. jwt 유효하지 않음 \t\n 2. 비밀번호 유형 맞지 않음",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("/password-reset")
-    public ResponseEntity<?> resetPassword(@RequestBody MemberRequestDTO.ResetPasswordRequestDTO resetPasswordRequestDTO) {
-        return null;
+    @PatchMapping("/password-reset/{email}")
+    public CustomResponse<?> resetPassword(
+            @PathVariable String email,
+            @RequestBody MemberRequestDTO.ResetPasswordRequestDTO resetPasswordRequestDTO) {
         memberCommandService.updatePassword(email, resetPasswordRequestDTO);
+        return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
     @Operation(summary = "회원가입")
