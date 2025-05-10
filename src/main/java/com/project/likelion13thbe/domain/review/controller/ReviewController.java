@@ -4,6 +4,7 @@ import com.project.likelion13thbe.domain.review.dto.request.ReviewRequestDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandServiceImpl;
 import com.project.likelion13thbe.domain.review.service.query.ReviewQueryServiceImpl;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -78,13 +79,13 @@ public class ReviewController {
             )
 
     })
-    @Parameter(name="productId", description = "상품 아이디", example = "1")
     @PatchMapping("/reviews/{reviewId}")
-    public ReviewResponseDTO.ReviewListResponseDTO updateReview(
-            @PathVariable Long productId,
-            @RequestBody ReviewRequestDTO.ReviewListRequestDTO requestDTO
+    public CustomResponse<String> updateReview(
+            @PathVariable Long reviewId,
+            @RequestBody ReviewRequestDTO.ReviewUpdateRequestDTO requestDTO
             ) {
-        return null;
+        reviewCommandService.updateReview(reviewId, requestDTO);
+        return CustomResponse.onSuccess("리뷰 수정 성공");
     }
 
     @Operation(summary = "리뷰 생성 API", description = "리뷰 생성")
@@ -102,6 +103,7 @@ public class ReviewController {
     @Parameter(name = "productId", description = "상품 아이디", example = "1")
     @PostMapping("/users/{userId}/products/{productId}/reviews")
     public ResponseEntity<ReviewResponseDTO.ReviewCreateResDTO> postReview(
+            @PathVariable Long userId,
             @PathVariable Long productId,
             @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO
     ) {
@@ -126,12 +128,8 @@ public class ReviewController {
             @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
     })
     @DeleteMapping("/reviews/{reviewId}")
-    public ReviewResponseDTO.ReviewListResponseDTO deleteReview(@PathVariable Long reviewId) {
-        return null;
+    public CustomResponse<String> deleteReview(@PathVariable Long reviewId) {
+        reviewCommandService.deleteReview(reviewId);
+        return CustomResponse.onSuccess("리뷰 삭제 성공");
     }
-
-
-
-
-
 }
