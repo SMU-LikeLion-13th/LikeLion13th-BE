@@ -72,8 +72,9 @@ public class ReviewController {
                     content = @Content(mediaType = "application/json"))
     })
     @PatchMapping("/reviews/{reviewId}")
-    public CustomResponse<?> editReview(@PathVariable Long reviewId, @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
-        return null;
+    public CustomResponse<String> editReview(@PathVariable Long reviewId, @RequestBody ReviewRequestDTO.ReviewUpdateRequestDTO reviewUpdateRequestDTO) {
+        reviewCommandService.updateReview(reviewId, reviewUpdateRequestDTO);
+        return CustomResponse.onSuccess("리뷰 수정 성공");
     }
 
     @Operation(summary = "리뷰 삭제")

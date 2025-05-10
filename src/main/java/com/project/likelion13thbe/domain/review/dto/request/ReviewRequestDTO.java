@@ -13,4 +13,12 @@ public class ReviewRequestDTO {
             Long memberId
     ) {
     }
+
+    @Builder
+    public record ReviewUpdateRequestDTO(
+            String content,
+            Integer rating,
+            String image
+    ) {
+    }
 }

@@ -53,4 +53,11 @@ public class Review extends BaseEntity {
     public void delete() {
         this.deletedAt = LocalDateTime.now();
     }
+
+    // update method
+    public void update(String content, int rating, String image) {
+        this.content = content;
+        this.rating = rating;
+        this.image = image;
+    }
 }

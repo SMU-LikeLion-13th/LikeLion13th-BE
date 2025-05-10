@@ -6,4 +6,6 @@ import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 public interface ReviewCommandService {
 
     ReviewResponseDTO.ReviewCreateResponseDTO createReview(Long productId, ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO);
+
+    void updateReview(Long reviewId, ReviewRequestDTO.ReviewUpdateRequestDTO reviewUpdateRequestDTO);
 }
