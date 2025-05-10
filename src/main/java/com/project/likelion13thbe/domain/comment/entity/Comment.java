@@ -7,6 +7,8 @@ import com.project.likelion13thbe.global.BaseEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -36,4 +38,14 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
     private Review review;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    // 댓글 변경 메서드
+    public void updateComment(String content) { this.content = content; }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

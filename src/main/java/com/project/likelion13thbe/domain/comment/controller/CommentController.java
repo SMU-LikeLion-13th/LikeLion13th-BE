@@ -4,6 +4,7 @@ import com.project.likelion13thbe.domain.comment.dto.request.CommentRequestDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResponseDTO;
 import com.project.likelion13thbe.domain.comment.service.command.CommentCommandService;
 import com.project.likelion13thbe.domain.comment.service.query.CommentQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -60,11 +61,13 @@ public class CommentController {
 
     })
     @PatchMapping("/comments/{commentId}")
-    public ResponseEntity<CommentResponseDTO.CommentResDTO> updateComment(
+    public CustomResponse<String> updateComment(
             @PathVariable Long commentId,
             @RequestBody CommentRequestDTO.CommentUpdateRequestDTO requestDTO
     ) {
-        return null;
+        commentCommandService.updateComment(commentId, requestDTO);
+        // 댓글 수정 로직
+        return CustomResponse.onSuccess("댓글 수정 성공");
     }
 
     @Operation(summary = "댓글 생성 API", description = "댓글 생성")
@@ -105,7 +108,9 @@ public class CommentController {
             @Parameter(name = "commentId", description = "댓글 아이디", example = "1")
     })
     @DeleteMapping("/comments/{commentId}")
-    public CommentResponseDTO.CommentCreateResponseDTO deleteComment(@PathVariable Long commentId) {
-        return null;
+    public CustomResponse<String> deleteComment(@PathVariable Long commentId) {
+        commentCommandService.deleteComment(commentId);
+        return CustomResponse.onSuccess("댓글 삭제 성공");
     }
+
 }
