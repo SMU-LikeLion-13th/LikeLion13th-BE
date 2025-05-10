@@ -51,7 +51,7 @@ public class MemberController {
                     content = @Content(mediaType = "application/json"))
     })
     @PatchMapping("/password-reset/{email}")
-    public CustomResponse<?> resetPassword(
+    public CustomResponse<String> resetPassword(
             @PathVariable String email,
             @RequestBody MemberRequestDTO.ResetPasswordRequestDTO resetPasswordRequestDTO) {
         memberCommandService.updatePassword(email, resetPasswordRequestDTO);
