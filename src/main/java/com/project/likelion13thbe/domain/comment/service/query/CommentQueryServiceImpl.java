@@ -21,6 +21,7 @@ public class CommentQueryServiceImpl implements CommentQueryService {
     public CommentResponseDTO.CommentDetailResponseDTO getComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Comment Not Found"));
+        Comment comment = commentRepository.findByIdAndNotDeleted(commentId)
 
         return CommentConverter.toCommentDetailResponseDTO(comment);
     }
