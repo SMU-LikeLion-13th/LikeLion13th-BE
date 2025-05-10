@@ -14,8 +14,10 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
+    @Query("SELECT m FROM Member m ORDER BY m.createdAt DESC")
     Page<Member> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
+    @Query("SELECT m FROM Member m WHERE m.id < :id ORDER BY m.id DESC")
     Slice<Member> findAllByIdLessThanOrderByIdDesc(Long id, Pageable pageable);
 
     @Query("SELECT m FROM Member m WHERE m.email = :email")
