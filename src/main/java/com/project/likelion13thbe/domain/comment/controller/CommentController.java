@@ -77,7 +77,8 @@ public class CommentController {
                     content = @Content(mediaType = "application/json"))
     })
     @DeleteMapping("/comments/{commentId}")
-    public CustomResponse<?> deleteComment(@PathVariable Long commentId) {
-        return null;
+    public CustomResponse<String> deleteComment(@PathVariable Long commentId) {
+        commentCommandService.deleteComment(commentId);
+        return CustomResponse.onSuccess("댓글 삭제 성공");
     }
 }

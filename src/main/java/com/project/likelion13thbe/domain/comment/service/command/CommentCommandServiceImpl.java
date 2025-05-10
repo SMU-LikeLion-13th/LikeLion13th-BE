@@ -50,4 +50,12 @@ public class CommentCommandServiceImpl implements CommentCommandService {
 
         comment.update(commentUpdateRequestDTO.content());
     }
+
+    @Override
+    public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findByIdAndNotDelete(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        comment.delete();
+    }
 }
