@@ -1,6 +1,7 @@
 package com.project.likelion13thbe.domain.review.converter;
 
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.product.entity.Product;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewRequestDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import com.project.likelion13thbe.domain.review.entity.Review;
@@ -10,12 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReviewConverter {
 
-    public static Review toReview(ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO, Member member) {
+    public static Review toReview(ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO, Member member, Product product) {
         return Review.builder()
                 .content(reviewCreateRequestDTO.content())
                 .rating(reviewCreateRequestDTO.rating())
                 .image(reviewCreateRequestDTO.image())
                 .member(member)
+                .product(product)
                 .build();
     }
 

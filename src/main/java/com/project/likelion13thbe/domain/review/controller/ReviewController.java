@@ -59,7 +59,7 @@ public class ReviewController {
     })
     @PostMapping("/products/{productId}/reviews")
     public CustomResponse<ReviewResponseDTO.ReviewCreateResponseDTO> createReview(@PathVariable Long productId, @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
-        return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(reviewCreateRequestDTO));
+        return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(productId, reviewCreateRequestDTO));
     }
 
     @Operation(summary = "리뷰 수정")
