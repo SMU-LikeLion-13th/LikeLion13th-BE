@@ -5,6 +5,7 @@ import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -101,13 +102,13 @@ public class MemberController {
     }
 
     @GetMapping("/offset")
-    public ResponseEntity<MemberResponseDTO.MemberOffsetResponseDTO> getMemberOffset(
+    public CustomResponse<MemberResponseDTO.MemberOffsetResponseDTO> getMemberOffset(
             @RequestParam Integer offset, @RequestParam Integer size) {
         return CustomResponse.onSuccess(memberQueryService.getMemberOffset(offset, size));
     }
 
     @GetMapping("/cursor")
-    public ResponseEntity<MemberResponseDTO.MemberCursorResponseDTO> getMemberCursor(
+    public CustomResponse<MemberResponseDTO.MemberCursorResponseDTO> getMemberCursor(
             @RequestParam Long cursor, @RequestParam Integer size
     ) {
         return CustomResponse.onSuccess(memberQueryService.getMemberCursor(cursor, size));

@@ -4,6 +4,7 @@ import com.project.likelion13thbe.domain.product.dto.request.ProductRequestDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResponseDTO;
 import com.project.likelion13thbe.domain.product.service.command.ProductCommandService;
 import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,8 +33,8 @@ public class ProductController {
                     content = @Content(mediaType = "application/json"))
     })
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponseDTO.ProductDetailResponseDTO> getProductDetail(@PathVariable Long productId) {
-        return ResponseEntity.ok(productQueryService.getProduct(productId));
+    public CustomResponse<ProductResponseDTO.ProductDetailResponseDTO> getProductDetail(@PathVariable Long productId) {
+        return CustomResponse.onSuccess(productQueryService.getProduct(productId));
     }
 
     @Operation(summary = "상품 목록 조회")
@@ -44,8 +45,8 @@ public class ProductController {
                     content = @Content(mediaType = "application/json"))
     })
     @GetMapping
-    public ResponseEntity<ProductResponseDTO.ProductListResponseDTO> getProductList() {
-        return ResponseEntity.ok(productQueryService.getProducts());
+    public CustomResponse<ProductResponseDTO.ProductListResponseDTO> getProductList() {
+        return CustomResponse.onSuccess(productQueryService.getProducts());
     }
 
     @Operation(summary = "상품 추가")
@@ -58,10 +59,8 @@ public class ProductController {
                     content = @Content(mediaType = "application/json"))
     })
     @PostMapping()
-    public ResponseEntity<ProductResponseDTO.ProductCreateResponseDTO> createProduct(@RequestBody ProductRequestDTO.ProductCreateRequestDTO productCreateRequestDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(productCommandService.createProduct(productCreateRequestDTO));
+    public CustomResponse<ProductResponseDTO.ProductCreateResponseDTO> createProduct(@RequestBody ProductRequestDTO.ProductCreateRequestDTO productCreateRequestDTO) {
+        return CustomResponse.onSuccess(HttpStatus.CREATED, productCommandService.createProduct(productCreateRequestDTO));
     }
 
     @Operation(summary = "상품 삭제")
@@ -72,7 +71,7 @@ public class ProductController {
                     content = @Content(mediaType = "application/json"))
     })
     @DeleteMapping("/{productId}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
+    public CustomResponse<?> deleteProduct(@PathVariable Long productId) {
         return null;
     }
 }

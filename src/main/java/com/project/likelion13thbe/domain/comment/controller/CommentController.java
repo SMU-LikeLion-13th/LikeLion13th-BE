@@ -4,6 +4,7 @@ import com.project.likelion13thbe.domain.comment.dto.request.CommentRequestDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResponseDTO;
 import com.project.likelion13thbe.domain.comment.service.command.CommentCommandService;
 import com.project.likelion13thbe.domain.comment.service.query.CommentQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,8 +33,8 @@ public class CommentController {
                     content = @Content(mediaType = "application/json"))
     })
     @GetMapping("/reviews/{reviewId}/comments")
-    public ResponseEntity<CommentResponseDTO.CommentListResponseDTO> getCommentList(@PathVariable Long reviewId) {
-        return ResponseEntity.ok(commentQueryService.getComments());
+    public CustomResponse<CommentResponseDTO.CommentListResponseDTO> getCommentList(@PathVariable Long reviewId) {
+        return CustomResponse.onSuccess(commentQueryService.getComments());
     }
 
     @Operation(summary = "댓글 작성")
@@ -46,12 +47,10 @@ public class CommentController {
                     content = @Content(mediaType = "application/json"))
     })
     @PostMapping("/reviews/{reviewId}/comments")
-    public ResponseEntity<CommentResponseDTO.CommentCreateResponseDTO> createComment(@PathVariable Long reviewId,
+    public CustomResponse<CommentResponseDTO.CommentCreateResponseDTO> createComment(@PathVariable Long reviewId,
                                                                                      @RequestBody CommentRequestDTO.CommentCreateRequestDTO commentCreateRequestDTO
     ) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(commentCommandService.createComment(commentCreateRequestDTO));
+        return CustomResponse.onSuccess(HttpStatus.CREATED, commentCommandService.createComment(commentCreateRequestDTO));
     }
 
     @Operation(summary = "댓글 수정")
@@ -64,7 +63,7 @@ public class CommentController {
                     content = @Content(mediaType = "application/json"))
     })
     @PatchMapping("/comments/{commentId}")
-    public ResponseEntity<?> editComment(@PathVariable String commentId) {
+    public CustomResponse<?> editComment(@PathVariable String commentId) {
         return null;
     }
 
@@ -76,7 +75,7 @@ public class CommentController {
                     content = @Content(mediaType = "application/json"))
     })
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
+    public CustomResponse<?> deleteComment(@PathVariable Long commentId) {
         return null;
     }
 }
