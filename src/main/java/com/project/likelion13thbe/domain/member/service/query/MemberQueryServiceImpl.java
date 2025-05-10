@@ -20,9 +20,9 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     private final MemberRepository memberRepository;
 
     @Override
-    public MemberResponseDTO.MemberPreviewResponseDTO getMember() {
+    public MemberResponseDTO.MemberPreviewResponseDTO getMember(Long memberId) {
         // 1L인 member 조회
-        Member member = memberRepository.findById(1L)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("Member Not Found"));
 
         // 응답 DTO로 변환

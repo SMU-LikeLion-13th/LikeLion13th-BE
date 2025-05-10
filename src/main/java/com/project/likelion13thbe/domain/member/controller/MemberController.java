@@ -98,9 +98,9 @@ public class MemberController {
         return null;
     }
 
-    @GetMapping
-    public ResponseEntity<MemberResponseDTO.MemberPreviewResponseDTO> getMember() {
-        return ResponseEntity.ok(memberQueryServiceImpl.getMember());
+    @GetMapping("/{memberId}")
+    public CustomResponse<MemberResponseDTO.MemberPreviewResponseDTO> getMember(@PathVariable Long memberId) {
+        return CustomResponse.onSuccess(memberQueryService.getMember(memberId));
     }
 
     @GetMapping("/offset")
