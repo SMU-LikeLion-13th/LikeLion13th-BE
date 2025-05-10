@@ -20,10 +20,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m FROM Member m WHERE m.id < :id ORDER BY m.id DESC")
     Slice<Member> findAllByIdLessThanOrderByIdDesc(Long id, Pageable pageable);
 
-    @Query("SELECT m FROM Member m WHERE m.email = :email")
+    @Query("SELECT m FROM Member m WHERE m.email = :email AND m.deletedAt IS NULL")
     Optional<Member> findByEmailAndNotDeleted(@Param("email") String email);
 
-    @Query("SELECT m FROM Member m WHERE m.id = :id")
+    @Query("SELECT m FROM Member m WHERE m.id = :id AND m.deletedAt IS NULL")
     Optional<Member> findByIdAndNotDeleted(@Param("id") Long memberId);
 
 }
