@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class ProductCommandServiceImpl implements ProductCommandService {
     private final ProductRepository productRepository;
 
+    @Override
     public ProductResponseDTO.ProductCreateResponseDTO createProduct(ProductRequestDTO.ProductCreateRequestDTO productCreateRequestDTO) {
         // DTO -> Product
         Product product = ProductConverter.toProduct(productCreateRequestDTO);

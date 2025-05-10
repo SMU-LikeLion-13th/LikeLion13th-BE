@@ -3,9 +3,7 @@ package com.project.likelion13thbe.domain.member.controller;
 import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
-import com.project.likelion13thbe.domain.member.service.command.MemberCommandServiceImpl;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
-import com.project.likelion13thbe.domain.member.service.query.MemberQueryServiceImpl;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,15 +12,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping("/api/v1/")
 @Tag(name = "Member", description = "회원 관련 API")
 public class MemberController {
 
@@ -33,7 +29,7 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "카카오 로그인 성공")
     })
-    @PostMapping("/api/v1/login/kakao")
+    @PostMapping("/login/kakao")
     public ResponseEntity<Void> kakaoLogin() {
         // 로그인 로직
         return ResponseEntity.ok().build();
@@ -43,7 +39,7 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "일반 로그인 성공")
     })
-    @PostMapping("/api/v1/login")
+    @PostMapping("/login")
     public ResponseEntity<Void> login() {
         // 로그인 로직
         return ResponseEntity.ok().build();
@@ -53,7 +49,7 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "비밀번호 수정 성공")
     })
-    @PostMapping("/api/v1/password-reset")
+    @PostMapping("/password-reset")
     public CustomResponse<String> resetPassword(
             @RequestBody MemberRequestDTO.PasswordResetDTO requestDTO
 
@@ -108,7 +104,7 @@ public class MemberController {
         return CustomResponse.onSuccess(memberQueryService.getMemberOffset(offset, size));
     }
 
-    @DeleteMapping("/api/v1/members/{memberId}")
+    @DeleteMapping("/members/{memberId}")
     @Operation(summary = "회원 탈퇴", description = "회원 계정 삭제")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "회원 탈퇴 성공")

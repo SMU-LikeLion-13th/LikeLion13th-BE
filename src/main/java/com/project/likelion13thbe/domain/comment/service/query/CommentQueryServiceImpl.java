@@ -6,18 +6,19 @@ import com.project.likelion13thbe.domain.comment.entity.Comment;
 import com.project.likelion13thbe.domain.comment.repository.CommentRepository;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class CommentQueryServiceImpl implements CommentQueryService {
     private final CommentRepository commentRepository;
 
-    public CommentQueryServiceImpl(CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
-    }
-
+    @Override
     public CommentResponseDTO.CommentPreviewResDTO getComment() {
         // DB에서 pk가 1인 Comment 조회
         Comment comment = commentRepository.findById(1L).get();
@@ -26,6 +27,7 @@ public class CommentQueryServiceImpl implements CommentQueryService {
         return CommentConverter.toCommentPreviewResDTO(comment);
     }
 
+    @Override
     public CommentResponseDTO.CommentListResponseDTO getCommentList() {
         List<Comment> comments = commentRepository.findAll();
         return CommentConverter.toCommentListResponseDTO(comments);

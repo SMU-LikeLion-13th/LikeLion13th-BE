@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class ReviewCommandServiceImpl implements ReviewCommandService {
     private final ReviewRepository reviewRepository;
 
+    @Override
     public ReviewResponseDTO.ReviewCreateResDTO createReview(ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
         // DTO -> Review
         Review review = ReviewConverter.toReview(reviewCreateRequestDTO);

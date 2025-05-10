@@ -16,6 +16,7 @@ public class CommentCommandServiceImpl implements CommentCommandService {
 
     private final CommentRepository commentRepository;
 
+    @Override
     public CommentResponseDTO.CommentCreateResponseDTO createComment(CommentRequestDTO.CommentCreateRequestDTO requestDTO) {
         // DTO → Entity
         Comment comment = CommentConverter.toComment(requestDTO);
