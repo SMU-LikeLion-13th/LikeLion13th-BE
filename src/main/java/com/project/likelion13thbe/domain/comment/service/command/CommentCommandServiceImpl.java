@@ -6,8 +6,12 @@ import com.project.likelion13thbe.domain.comment.dto.response.CommentResponseDTO
 import com.project.likelion13thbe.domain.comment.entity.Comment;
 import com.project.likelion13thbe.domain.comment.repository.CommentRepository;
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
+import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.domain.review.entity.Review;
+import com.project.likelion13thbe.domain.review.exception.ReviewErrorCode;
+import com.project.likelion13thbe.domain.review.exception.ReviewException;
 import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,12 +27,12 @@ public class CommentCommandServiceImpl implements CommentCommandService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public CommentResponseDTO.CommentCreateResponseDTO createComment(CommentRequestDTO.CommentCreateRequestDTO commentCreateRequestDTO) {
+    public CommentResponseDTO.CommentCreateResponseDTO createComment(Long reviewId, CommentRequestDTO.CommentCreateRequestDTO commentCreateRequestDTO) {
         Member member = memberRepository.findById(commentCreateRequestDTO.memberId())
-                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        Review review = reviewRepository.findById(commentCreateRequestDTO.reviewId())
-                .orElseThrow(() -> new IllegalArgumentException("Review not found"));
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
 
         Comment comment = CommentConverter.toComment(commentCreateRequestDTO, member, review);
 

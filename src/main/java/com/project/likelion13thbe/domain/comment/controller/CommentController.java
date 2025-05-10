@@ -49,7 +49,7 @@ public class CommentController {
     public CustomResponse<CommentResponseDTO.CommentCreateResponseDTO> createComment(@PathVariable Long reviewId,
                                                                                      @RequestBody CommentRequestDTO.CommentCreateRequestDTO commentCreateRequestDTO
     ) {
-        return CustomResponse.onSuccess(HttpStatus.CREATED, commentCommandService.createComment(commentCreateRequestDTO));
+        return CustomResponse.onSuccess(HttpStatus.CREATED, commentCommandService.createComment(reviewId, commentCreateRequestDTO));
     }
 
     @Operation(summary = "댓글 수정")
