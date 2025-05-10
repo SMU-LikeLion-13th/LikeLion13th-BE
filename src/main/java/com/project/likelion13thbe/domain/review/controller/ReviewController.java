@@ -2,8 +2,8 @@ package com.project.likelion13thbe.domain.review.controller;
 
 import com.project.likelion13thbe.domain.review.dto.request.ReviewRequestDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
-import com.project.likelion13thbe.domain.review.service.command.ReviewCommandServiceImpl;
-import com.project.likelion13thbe.domain.review.service.query.ReviewQueryServiceImpl;
+import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
+import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 public class ReviewController {
 
-    private final ReviewCommandServiceImpl reviewCommandServiceImpl;
-    private final ReviewQueryServiceImpl reviewQueryServiceImpl;
+    private final ReviewCommandService reviewCommandService;
+    private final ReviewQueryService reviewQueryService;
 
     @Operation(summary = "리뷰 단건 조회")
     @ApiResponses({
@@ -33,7 +33,7 @@ public class ReviewController {
     })
     @GetMapping("/reviews/{reviewId}")
     public ResponseEntity<ReviewResponseDTO.ReviewDetailResponseDTO> getReview(@PathVariable Long reviewId) {
-        return ResponseEntity.ok(reviewQueryServiceImpl.getReview(reviewId));
+        return ResponseEntity.ok(reviewQueryService.getReview(reviewId));
     }
 
     @Operation(summary = "리뷰 목록 조회")
@@ -45,7 +45,7 @@ public class ReviewController {
     })
     @GetMapping("/products/{productId}/reviews")
     public ResponseEntity<ReviewResponseDTO.ReviewListResponseDTO> getReviewList(@PathVariable Long productId) {
-        return ResponseEntity.ok(reviewQueryServiceImpl.getReviews());
+        return ResponseEntity.ok(reviewQueryService.getReviews());
     }
 
     @Operation(summary = "리뷰 생성")
@@ -61,7 +61,7 @@ public class ReviewController {
     public ResponseEntity<ReviewResponseDTO.ReviewCreateResponseDTO> createReview(@PathVariable Long productId, @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(reviewCommandServiceImpl.createReview(reviewCreateRequestDTO));
+                .body(reviewCommandService.createReview(reviewCreateRequestDTO));
     }
 
     @Operation(summary = "리뷰 수정")

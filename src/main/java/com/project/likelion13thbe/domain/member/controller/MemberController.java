@@ -2,8 +2,8 @@ package com.project.likelion13thbe.domain.member.controller;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
-import com.project.likelion13thbe.domain.member.service.command.MemberCommandServiceImpl;
-import com.project.likelion13thbe.domain.member.service.query.MemberQueryServiceImpl;
+import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
+import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/members")
 public class MemberController {
 
-    private final MemberCommandServiceImpl memberCommandServiceImpl;
-    private final MemberQueryServiceImpl memberQueryServiceImpl;
+    private final MemberCommandService memberCommandService;
+    private final MemberQueryService memberQueryService;
 
     @Operation(summary = "일반 로그인")
     @ApiResponses({
@@ -52,6 +52,7 @@ public class MemberController {
     @PostMapping("/password-reset")
     public ResponseEntity<?> resetPassword(@RequestBody MemberRequestDTO.ResetPasswordRequestDTO resetPasswordRequestDTO) {
         return null;
+        memberCommandService.updatePassword(email, resetPasswordRequestDTO);
     }
 
     @Operation(summary = "회원가입")
@@ -66,9 +67,7 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<MemberResponseDTO.MemberCreateResponseDTO> localSignUp(
             @RequestBody MemberRequestDTO.MemberCreateRequestDTO memberCreateRequestDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(memberCommandServiceImpl.createMember(memberCreateRequestDTO));
+        return CustomResponse.onSuccess(HttpStatus.CREATED, memberCommandService.createMember(memberCreateRequestDTO));
     }
 
     @Operation(summary = "내 리뷰 조회")
@@ -104,13 +103,14 @@ public class MemberController {
     @GetMapping("/offset")
     public ResponseEntity<MemberResponseDTO.MemberOffsetResponseDTO> getMemberOffset(
             @RequestParam Integer offset, @RequestParam Integer size) {
-        return ResponseEntity.ok(memberQueryServiceImpl.getMemberOffset(offset, size));
+        return CustomResponse.onSuccess(memberQueryService.getMemberOffset(offset, size));
     }
 
     @GetMapping("/cursor")
     public ResponseEntity<MemberResponseDTO.MemberCursorResponseDTO> getMemberCursor(
             @RequestParam Long cursor, @RequestParam Integer size
     ) {
-        return ResponseEntity.ok(memberQueryServiceImpl.getMemberCursor(cursor, size));
+        return CustomResponse.onSuccess(memberQueryService.getMemberCursor(cursor, size));
     }
+        memberCommandService.deleteMember(memberId);
 }

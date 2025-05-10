@@ -2,8 +2,8 @@ package com.project.likelion13thbe.domain.comment.controller;
 
 import com.project.likelion13thbe.domain.comment.dto.request.CommentRequestDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResponseDTO;
-import com.project.likelion13thbe.domain.comment.service.command.CommentCommandServiceImpl;
-import com.project.likelion13thbe.domain.comment.service.query.CommentQueryServiceImpl;
+import com.project.likelion13thbe.domain.comment.service.command.CommentCommandService;
+import com.project.likelion13thbe.domain.comment.service.query.CommentQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 public class CommentController {
 
-    private final CommentQueryServiceImpl commentQueryServiceImpl;
-    private final CommentCommandServiceImpl commentCommandServiceImpl;
+    private final CommentQueryService commentQueryService;
+    private final CommentCommandService commentCommandService;
 
     @Operation(summary = "댓글 목록 조회")
     @ApiResponses({
@@ -33,7 +33,7 @@ public class CommentController {
     })
     @GetMapping("/reviews/{reviewId}/comments")
     public ResponseEntity<CommentResponseDTO.CommentListResponseDTO> getCommentList(@PathVariable Long reviewId) {
-        return ResponseEntity.ok(commentQueryServiceImpl.getComments());
+        return ResponseEntity.ok(commentQueryService.getComments());
     }
 
     @Operation(summary = "댓글 작성")
@@ -51,7 +51,7 @@ public class CommentController {
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(commentCommandServiceImpl.createComment(commentCreateRequestDTO));
+                .body(commentCommandService.createComment(commentCreateRequestDTO));
     }
 
     @Operation(summary = "댓글 수정")

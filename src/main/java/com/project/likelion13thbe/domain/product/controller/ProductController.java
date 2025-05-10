@@ -2,8 +2,8 @@ package com.project.likelion13thbe.domain.product.controller;
 
 import com.project.likelion13thbe.domain.product.dto.request.ProductRequestDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResponseDTO;
-import com.project.likelion13thbe.domain.product.service.command.ProductCommandServiceImpl;
-import com.project.likelion13thbe.domain.product.service.query.ProductQueryServiceImpl;
+import com.project.likelion13thbe.domain.product.service.command.ProductCommandService;
+import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/products")
 public class ProductController {
 
-    private final ProductCommandServiceImpl productCommandServiceImpl;
-    private final ProductQueryServiceImpl productQueryServiceImpl;
+    private final ProductCommandService productCommandService;
+    private final ProductQueryService productQueryService;
 
     @Operation(summary = "상품 상세 조회")
     @ApiResponses({
@@ -33,7 +33,7 @@ public class ProductController {
     })
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponseDTO.ProductDetailResponseDTO> getProductDetail(@PathVariable Long productId) {
-        return ResponseEntity.ok(productQueryServiceImpl.getProduct(productId));
+        return ResponseEntity.ok(productQueryService.getProduct(productId));
     }
 
     @Operation(summary = "상품 목록 조회")
@@ -45,7 +45,7 @@ public class ProductController {
     })
     @GetMapping
     public ResponseEntity<ProductResponseDTO.ProductListResponseDTO> getProductList() {
-        return ResponseEntity.ok(productQueryServiceImpl.getProducts());
+        return ResponseEntity.ok(productQueryService.getProducts());
     }
 
     @Operation(summary = "상품 추가")
@@ -61,7 +61,7 @@ public class ProductController {
     public ResponseEntity<ProductResponseDTO.ProductCreateResponseDTO> createProduct(@RequestBody ProductRequestDTO.ProductCreateRequestDTO productCreateRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(productCommandServiceImpl.createProduct(productCreateRequestDTO));
+                .body(productCommandService.createProduct(productCreateRequestDTO));
     }
 
     @Operation(summary = "상품 삭제")
