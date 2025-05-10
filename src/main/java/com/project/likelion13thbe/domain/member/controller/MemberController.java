@@ -68,7 +68,7 @@ public class MemberController {
                     content = @Content(mediaType = "application/json"))
     })
     @PostMapping("/signup")
-    public ResponseEntity<MemberResponseDTO.MemberCreateResponseDTO> localSignUp(
+    public CustomResponse<MemberResponseDTO.MemberCreateResponseDTO> localSignUp(
             @RequestBody MemberRequestDTO.MemberCreateRequestDTO memberCreateRequestDTO) {
         return CustomResponse.onSuccess(HttpStatus.CREATED, memberCommandService.createMember(memberCreateRequestDTO));
     }
