@@ -8,4 +8,6 @@ public interface MemberCommandService {
     MemberResponseDTO.MemberCreateResponseDTO createMember(MemberRequestDTO.MemberCreateRequestDTO memberCreateRequestDTO);
 
     void updatePassword(String email, MemberRequestDTO.ResetPasswordRequestDTO passwordResetRequestDTO);
+
+    void deleteMember(Long memberId);
 }

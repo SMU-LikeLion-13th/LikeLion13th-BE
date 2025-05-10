@@ -115,5 +115,14 @@ public class MemberController {
     ) {
         return CustomResponse.onSuccess(memberQueryService.getMemberCursor(cursor, size));
     }
+
+
+    @DeleteMapping("/{memberId}")
+    @Operation(summary = "회원 탈퇴")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK")})
+    public CustomResponse<String> deleteMember(@PathVariable Long memberId) {
         memberCommandService.deleteMember(memberId);
+        return CustomResponse.onSuccess("회원 탈퇴 성공");
+    }
 }
