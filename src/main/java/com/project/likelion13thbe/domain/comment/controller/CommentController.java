@@ -62,8 +62,11 @@ public class CommentController {
                     content = @Content(mediaType = "application/json"))
     })
     @PatchMapping("/comments/{commentId}")
-    public CustomResponse<?> editComment(@PathVariable String commentId) {
-        return null;
+    public CustomResponse<String> editComment(
+            @PathVariable Long commentId,
+            @RequestBody CommentRequestDTO.CommentUpdateRequestDTO commentUpdateRequestDTO) {
+        commentCommandService.updateComment(commentId, commentUpdateRequestDTO);
+        return CustomResponse.onSuccess("댓글 수정 완료");
     }
 
     @Operation(summary = "댓글 삭제")

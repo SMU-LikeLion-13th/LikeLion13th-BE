@@ -12,4 +12,10 @@ public class CommentRequestDTO {
     ) {
     }
 
+    @Builder
+    public record CommentUpdateRequestDTO(
+            String content
+    ) {
+    }
+
 }

@@ -4,6 +4,8 @@ import com.project.likelion13thbe.domain.comment.converter.CommentConverter;
 import com.project.likelion13thbe.domain.comment.dto.request.CommentRequestDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResponseDTO;
 import com.project.likelion13thbe.domain.comment.entity.Comment;
+import com.project.likelion13thbe.domain.comment.exception.CommentErrorCode;
+import com.project.likelion13thbe.domain.comment.exception.CommentException;
 import com.project.likelion13thbe.domain.comment.repository.CommentRepository;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
@@ -39,5 +41,13 @@ public class CommentCommandServiceImpl implements CommentCommandService {
         commentRepository.save(comment);
 
         return CommentConverter.toCommentResponseDTO(comment);
+    }
+
+    @Override
+    public void updateComment(Long commentId, CommentRequestDTO.CommentUpdateRequestDTO commentUpdateRequestDTO) {
+        Comment comment = commentRepository.findByIdAndNotDelete(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        comment.update(commentUpdateRequestDTO.content());
     }
 }
