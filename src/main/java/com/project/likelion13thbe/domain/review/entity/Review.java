@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static lombok.AccessLevel.*;
@@ -44,4 +45,12 @@ public class Review extends BaseEntity {
 
     @OneToMany(mappedBy = "review")
     private List<Comment> comments;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    // soft delete method
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

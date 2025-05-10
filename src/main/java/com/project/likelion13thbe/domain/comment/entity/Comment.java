@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 import static lombok.AccessLevel.*;
 
 @Entity
@@ -35,4 +37,12 @@ public class Comment extends BaseEntity {
 
     @Column(nullable = false)
     private int likeCount;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    // soft delete method
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }
