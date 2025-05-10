@@ -70,7 +70,8 @@ public class ProductController {
                     content = @Content(mediaType = "application/json"))
     })
     @DeleteMapping("/{productId}")
-    public CustomResponse<?> deleteProduct(@PathVariable Long productId) {
-        return null;
+    public CustomResponse<String> deleteProduct(@PathVariable Long productId) {
+        productCommandService.deleteProduct(productId);
+        return CustomResponse.onSuccess("상품 삭제 성공");
     }
 }

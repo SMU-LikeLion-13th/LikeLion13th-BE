@@ -6,6 +6,8 @@ import com.project.likelion13thbe.domain.product.converter.ProductConverter;
 import com.project.likelion13thbe.domain.product.dto.request.ProductRequestDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResponseDTO;
 import com.project.likelion13thbe.domain.product.entity.Product;
+import com.project.likelion13thbe.domain.product.exception.ProductErrorCode;
+import com.project.likelion13thbe.domain.product.exception.ProductException;
 import com.project.likelion13thbe.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,13 @@ public class ProductCommandServiceImpl implements ProductCommandService {
 
         // 응답 DTO로 변환 후 return
         return ProductConverter.toProductResponseDTO(product);
+    }
+
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findByIdAndNotDeleted(productId)
+                .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
+
+        product.delete();
     }
 
 }
