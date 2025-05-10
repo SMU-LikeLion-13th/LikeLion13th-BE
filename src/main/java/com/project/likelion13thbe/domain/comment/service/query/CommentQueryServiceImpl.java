@@ -3,6 +3,8 @@ package com.project.likelion13thbe.domain.comment.service.query;
 import com.project.likelion13thbe.domain.comment.converter.CommentConverter;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResponseDTO;
 import com.project.likelion13thbe.domain.comment.entity.Comment;
+import com.project.likelion13thbe.domain.comment.exception.CommentErrorCode;
+import com.project.likelion13thbe.domain.comment.exception.CommentException;
 import com.project.likelion13thbe.domain.comment.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,9 +21,8 @@ public class CommentQueryServiceImpl implements CommentQueryService {
 
     @Override
     public CommentResponseDTO.CommentDetailResponseDTO getComment(Long commentId) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Comment Not Found"));
         Comment comment = commentRepository.findByIdAndNotDeleted(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         return CommentConverter.toCommentDetailResponseDTO(comment);
     }

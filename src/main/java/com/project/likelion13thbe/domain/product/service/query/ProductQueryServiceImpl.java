@@ -3,6 +3,8 @@ package com.project.likelion13thbe.domain.product.service.query;
 import com.project.likelion13thbe.domain.product.converter.ProductConverter;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResponseDTO;
 import com.project.likelion13thbe.domain.product.entity.Product;
+import com.project.likelion13thbe.domain.product.exception.ProductErrorCode;
+import com.project.likelion13thbe.domain.product.exception.ProductException;
 import com.project.likelion13thbe.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     @Override
     public ProductResponseDTO.ProductDetailResponseDTO getProduct(Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+                .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
 
         return ProductConverter.toProductDetailResponseDTO(product);
     }

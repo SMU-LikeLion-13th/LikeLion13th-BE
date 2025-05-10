@@ -3,6 +3,8 @@ package com.project.likelion13thbe.domain.member.service.query;
 import com.project.likelion13thbe.domain.member.converter.MemberConverter;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
+import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,9 +23,8 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 
     @Override
     public MemberResponseDTO.MemberPreviewResponseDTO getMember(Long memberId) {
-        // 1L인 member 조회
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Member Not Found"));
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         // 응답 DTO로 변환
         return MemberConverter.toMemberPreviewResponseDTO(member);
