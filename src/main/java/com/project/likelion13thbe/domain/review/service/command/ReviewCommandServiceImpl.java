@@ -54,4 +54,12 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
         review.update(reviewUpdateRequestDTO.content(), reviewUpdateRequestDTO.rating(), reviewUpdateRequestDTO.image());
 
     }
+
+    @Override
+    public void deleteReview(Long reviewId) {
+        Review review = reviewRepository.findByIdAndNotDeleted(reviewId)
+                .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
+
+        review.delete();
+    }
 }

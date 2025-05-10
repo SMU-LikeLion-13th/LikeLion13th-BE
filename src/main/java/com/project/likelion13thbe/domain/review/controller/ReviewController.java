@@ -85,7 +85,8 @@ public class ReviewController {
                     content = @Content(mediaType = "application/json"))
     })
     @DeleteMapping("/reviews/{reviewId}")
-    public CustomResponse<?> deleteReview(@PathVariable Long reviewId) {
-        return null;
+    public CustomResponse<String> deleteReview(@PathVariable Long reviewId) {
+        reviewCommandService.deleteReview(reviewId);
+        return CustomResponse.onSuccess("리뷰 삭제 성공");
     }
 }
