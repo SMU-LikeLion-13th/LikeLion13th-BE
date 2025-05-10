@@ -14,9 +14,10 @@ public class ProductConverter {
     public static Product toProduct(ProductRequestDTO.ProductCreateRequestDTO productCreateRequestDTO) {
         return Product.builder()
                 .name(productCreateRequestDTO.name())
-                .content(productCreateRequestDTO.description())
+                .content(productCreateRequestDTO.content())
                 .price(productCreateRequestDTO.price())
                 .image(productCreateRequestDTO.image())
+                .quantity(productCreateRequestDTO.quantity())
                 .build();
     }
 

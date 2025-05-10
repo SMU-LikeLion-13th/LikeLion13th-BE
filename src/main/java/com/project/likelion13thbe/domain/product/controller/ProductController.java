@@ -5,6 +5,7 @@ import com.project.likelion13thbe.domain.product.dto.response.ProductResponseDTO
 import com.project.likelion13thbe.domain.product.service.command.ProductCommandServiceImpl;
 import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -102,7 +103,8 @@ public class ProductController {
             @Parameter(name = "productId", description = "상품 아이디", example = "1")
     })
     @DeleteMapping("api/v1/products/{productId}")
-    public ProductResponseDTO.ProductCreateResponseDTO deleteProduct(@PathVariable Long productId) {
-        return null;
+    public CustomResponse<String> deleteProduct(@PathVariable Long productId) {
+        productCommandService.deleteProduct(productId);
+        return CustomResponse.onSuccess("상품 삭제 성공");
     }
 }

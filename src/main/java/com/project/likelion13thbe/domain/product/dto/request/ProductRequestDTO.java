@@ -18,10 +18,14 @@ public class ProductRequestDTO {
     @Builder
     public record ProductCreateRequestDTO(
             String name,
-            String description,
+            String content,
             Long price,
-            String image
-    ){}
+            String image,
+            Long quantity,
+
+            Long memberId
+    ) {
+    }
 
     @Getter
     public static class ProductReqDTO {
