@@ -7,6 +7,7 @@ import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
 import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
+import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ public class MemberCommandServiceImpl implements MemberCommandService{
 
     @Override
     public MemberResDTO.MemberCreateResDTO createMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+        if (memberRepository.existsByEmail(memberCreateReqDTO.email())) {
+            throw new CustomException(MemberErrorCode.MEMBER_EMAIL_DUPLICATE);
+        }
         //DTO -> Member
         Member member = MemberConverter.toMember(memberCreateReqDTO);
 
