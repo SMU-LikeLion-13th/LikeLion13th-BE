@@ -7,6 +7,7 @@ import com.project.likelion13thbe.domain.member.service.query.MemberQueryService
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class MemberController {
     @Operation(description = "비밀번호 수정")
     @PatchMapping("/{memberId}/reset-password")
     public CustomResponse<String> resetPassword(
-            @RequestBody MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO,
+            @RequestBody @Valid MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO,
             @PathVariable("memberId") Long memberId
     ) {
         memberCommandService.updatePassword(memberId, resetPasswordReqDTO);
