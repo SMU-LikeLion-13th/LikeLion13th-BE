@@ -61,8 +61,11 @@ public class ProductController {
             )
     })
     @GetMapping("/api/v1/products")
-    public ResponseEntity<ProductResponseDTO.ProductListResponseDTO> getProducts() {
-        return ResponseEntity.ok(productQueryService.getProductList());
+    public CustomResponse<ProductResponseDTO.ProductOffsetResponseDTO> getProducts(
+            @RequestParam Integer offset,
+            @RequestParam Integer size
+    ) {
+        return CustomResponse.onSuccess(productQueryService.getProductOffset(offset,size));
     }
 
 

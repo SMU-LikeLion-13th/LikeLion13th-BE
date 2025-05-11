@@ -6,4 +6,6 @@ public interface ProductQueryService {
 
     public ProductResponseDTO.ProductPreviewResDTO getProduct();
     public ProductResponseDTO.ProductListResponseDTO getProductList();
+
+    ProductResponseDTO.ProductOffsetResponseDTO getProductOffset(Integer offset, Integer size);
 }
