@@ -10,4 +10,6 @@ public interface MemberCommandService {
     MemberResDTO.ResetPasswordResDTO updatePassword(Long memberId, MemberReqDTO.ResetPasswordReqDTO dto);
 
     void deleteMember(Long memberId);
+
+    void cleanupDeletedMembers();
 }
