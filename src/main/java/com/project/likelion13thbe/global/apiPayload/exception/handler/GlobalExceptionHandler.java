@@ -24,7 +24,8 @@ public class GlobalExceptionHandler {
         //예외가 발생하면 로그 기록
         log.warn("[ CustomException ]: {}", ex.getCode().getMessage());
         //커스텀 예외에 정의된 에러 코드와 메시지를 포함한 응답 제공
-        return ResponseEntity.status(ex.getCode().getHttpStatus())
+        return ResponseEntity
+                .status(ex.getCode().getHttpStatus())
                 .body(ex.getCode().getErrorResponse());
     }
     // MethodArgumentNotValidException
