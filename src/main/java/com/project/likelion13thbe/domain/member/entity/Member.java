@@ -29,7 +29,7 @@ public class Member extends BaseEntity {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "delated_at")
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
