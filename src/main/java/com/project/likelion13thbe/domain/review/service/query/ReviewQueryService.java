@@ -6,4 +6,6 @@ public interface ReviewQueryService {
     public ReviewResponseDTO.ReviewPreviewResDTO getReview();
 
     public ReviewResponseDTO.ReviewListResponseDTO getReviewList();
+
+    ReviewResponseDTO.ReviewOffsetResponseDTO getReviewOffset(Integer offset, Integer size);
 }

@@ -4,9 +4,11 @@ import com.project.likelion13thbe.domain.review.converter.ReviewConverter;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import com.project.likelion13thbe.domain.review.entity.Review;
 import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
-import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,5 +34,12 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
         return ReviewConverter.toReviewListResponseDTO(review);
 
+    }
+
+    @Override
+    public ReviewResponseDTO.ReviewOffsetResponseDTO getReviewOffset(Integer offset, Integer size){
+        Pageable pageable = PageRequest.of(offset-1, size);
+        Page<Review> reviews = reviewRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return ReviewConverter.toReviewOffsetResponseDTO(reviews);
     }
 }

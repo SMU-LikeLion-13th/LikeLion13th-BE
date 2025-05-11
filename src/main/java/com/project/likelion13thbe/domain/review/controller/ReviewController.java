@@ -61,8 +61,12 @@ public class ReviewController {
     })
     @Parameter(name="productId", description = "상품 아이디", example = "1")
     @GetMapping("/products/{productId}/reviews")
-    public ResponseEntity<ReviewResponseDTO.ReviewListResponseDTO> getReviews(@PathVariable Long productId) {
-        return ResponseEntity.ok(reviewQueryService.getReviewList());
+    public CustomResponse<ReviewResponseDTO.ReviewOffsetResponseDTO> getReviewOffset(
+            @PathVariable Long productId,
+            @RequestParam Integer offset,
+            @RequestParam Integer size
+    ) {
+        return CustomResponse.onSuccess(reviewQueryService.getReviewOffset(offset, size));
     }
 
     @Operation(summary = "리뷰 수정 API", description = "리뷰 수정")
