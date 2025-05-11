@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.domain.comment.dto.response;
 
+import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,16 @@ public class CommentResponseDTO {
     public static class CommentListResponseDTO {
         @Schema(description = "댓글 목록")
         private List<CommentResDTO> comments;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommentOffsetResponseDTO {
+        private List<CommentPreviewResDTO> comments;
+        private Long totalElements;
+        private Integer totalPages;
     }
 
     @Builder

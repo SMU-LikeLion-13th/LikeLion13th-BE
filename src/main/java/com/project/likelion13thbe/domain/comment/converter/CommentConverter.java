@@ -4,8 +4,11 @@ import com.project.likelion13thbe.domain.comment.dto.request.CommentRequestDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResponseDTO;
 import com.project.likelion13thbe.domain.comment.entity.Comment;
 
+import com.project.likelion13thbe.domain.member.converter.MemberConverter;
+import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,6 +55,18 @@ public class CommentConverter {
 
         return CommentResponseDTO.CommentListResponseDTO.builder()
                 .comments(commentResDTOs)
+                .build();
+    }
+
+    public static CommentResponseDTO.CommentOffsetResponseDTO toCommentOffsetResponseDTO(Page<Comment> page) {
+        List<CommentResponseDTO.CommentPreviewResDTO> comments = page.getContent().stream()
+                .map(CommentConverter::toCommentPreviewResDTO)
+                .toList();
+
+        return CommentResponseDTO.CommentOffsetResponseDTO.builder()
+                .comments(comments)
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
                 .build();
     }
 

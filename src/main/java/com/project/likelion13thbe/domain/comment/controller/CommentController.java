@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,8 +43,12 @@ public class CommentController {
     })
     @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
     @GetMapping("/reviews/{reviewId}/comments")
-    public ResponseEntity<CommentResponseDTO.CommentListResponseDTO> getComments() {
-        return ResponseEntity.ok(commentQueryService.getCommentList());
+    public CustomResponse<CommentResponseDTO.CommentOffsetResponseDTO> getComments(
+            @PathVariable Long reviewId,
+            @RequestParam(defaultValue = "0") Integer offset,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        return CustomResponse.onSuccess(commentQueryService.getCommentOffset(offset,size));
     }
 
     @Operation(summary = "댓글 수정 API", description = "댓글 수정")
