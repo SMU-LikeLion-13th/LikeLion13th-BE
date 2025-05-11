@@ -28,8 +28,8 @@ public class MemberController {
 
     @Operation(description = "유저 조회")
     @GetMapping
-    public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
-        return ResponseEntity.ok(memberQueryService.getMember());
+    public CustomResponse<MemberResDTO.MemberPreviewResDTO> getMember() {
+        return CustomResponse.onSuccess(memberQueryService.getMember());
     }
 
 
