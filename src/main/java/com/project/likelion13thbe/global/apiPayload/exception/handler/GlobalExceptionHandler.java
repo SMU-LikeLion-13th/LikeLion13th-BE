@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
             errors.put(error.getField(), error.getDefaultMessage());
         });
 
-        BaseErrorCode errorCode = GeneralErrorCode.BAD_REQUEST_400;
+        BaseErrorCode errorCode = GeneralErrorCode.VALIDATION_FAILED_DTO;
         CustomResponse<Map<String, String>> errorResponse = CustomResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), errors);
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
             errors.put(field, violation.getMessage());
         });
 
-        BaseErrorCode errorCode = GeneralErrorCode.BAD_REQUEST_400;
+        BaseErrorCode errorCode = GeneralErrorCode.VALIDATION_FAILED_PARAM;
         CustomResponse<Map<String, String>> errorResponse = CustomResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), errors);
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
