@@ -23,7 +23,7 @@ public class MemberController {
     @Operation(description = "회원가입")
     @PostMapping
     public CustomResponse<MemberResDTO.MemberCreateResDTO> createMember(
-            @RequestBody MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+            @RequestBody @Valid MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
         return CustomResponse.onSuccess(memberCommandService.createMember(memberCreateReqDTO));
     }
 
@@ -44,6 +44,7 @@ public class MemberController {
         return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
+    // 로그인은 반환값으로 토큰을 발급해야해서 일단 커스텀적용 안했습니다
     @Operation(description = "로그인")
     @PostMapping("/login")
     public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> login(
