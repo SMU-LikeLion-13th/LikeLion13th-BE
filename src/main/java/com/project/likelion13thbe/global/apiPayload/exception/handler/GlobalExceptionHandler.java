@@ -4,6 +4,7 @@ import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import com.project.likelion13thbe.global.apiPayload.code.BaseErrorCode;
 import com.project.likelion13thbe.global.apiPayload.code.GeneralErrorCode;
 import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,6 +44,23 @@ public class GlobalExceptionHandler {
                 .body(errorResponse);
     }
 
+    // ConstraintViolationException
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<CustomResponse<Map<String, String>>> handleConstraintViolation(ConstraintViolationException ex) {
+        log.warn("[ Validation Error - ConstraintViolationException ]: {}", ex.getMessage());
+
+        Map<String, String> errors = new HashMap<>();
+        ex.getConstraintViolations().forEach(violation -> {
+            String field = violation.getPropertyPath().toString();
+            errors.put(field, violation.getMessage());
+        });
+
+        BaseErrorCode errorCode = GeneralErrorCode.BAD_REQUEST_400;
+        CustomResponse<Map<String, String>> errorResponse = CustomResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), errors);
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(errorResponse);
+    }
 
     // 그 외의 정의되지 않은 모든 예외 처리
     @ExceptionHandler({Exception.class})
