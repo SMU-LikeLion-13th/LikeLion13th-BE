@@ -30,4 +30,11 @@ public class MemberConverter {
                 .email(member.getEmail())
                 .build();
     }
+
+    public static MemberResDTO.ResetPasswordResDTO toMemberResetPasswordResponseDTO(Member member, String currentPassword) {
+        return MemberResDTO.ResetPasswordResDTO.builder()
+                .currentPassword(currentPassword)
+                .newPassword(member.getPassword())
+                .build();
+    }
 }

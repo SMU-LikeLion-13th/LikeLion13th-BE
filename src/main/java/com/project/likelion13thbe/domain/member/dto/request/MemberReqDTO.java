@@ -24,6 +24,9 @@ public class MemberReqDTO {
 
     @Builder
     public record ResetPasswordReqDTO(
+            @NotBlank(message = "현재 비밀번호는 필수 입력값입니다.")
+            @Size(min=8, max = 20, message = "비밀번호는 8~20자 사이여야 합니다.")
+            String currentPassword,
             @Schema(description = "새로운 비밀번호", example = "newpassword123")
             @NotBlank(message = "새 비밀번호는 필수 입력값입니다.")
             @Size(min=8, max = 20, message = "비밀번호는 8~20자 사이여야 합니다.")

@@ -8,13 +8,16 @@ import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/members")
+@Validated
 @Tag(name="Member", description = "Member 관련 API")
 public class MemberController {
 
@@ -36,12 +39,11 @@ public class MemberController {
 
     @Operation(description = "비밀번호 수정")
     @PatchMapping("/{memberId}/reset-password")
-    public CustomResponse<String> resetPassword(
+    public CustomResponse<MemberResDTO.ResetPasswordResDTO> resetPassword(
             @RequestBody @Valid MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO,
-            @PathVariable("memberId") Long memberId
+            @PathVariable("memberId") @NotNull Long memberId
     ) {
-        memberCommandService.updatePassword(memberId, resetPasswordReqDTO);
-        return CustomResponse.onSuccess("비밀번호 변경 성공");
+        return CustomResponse.onSuccess(memberCommandService.updatePassword(memberId, resetPasswordReqDTO));
     }
 
     // 로그인은 반환값으로 토큰을 발급해야해서 일단 커스텀적용 안했습니다
@@ -62,7 +64,7 @@ public class MemberController {
     }
     @Operation(description = "회원 탈퇴")
     @DeleteMapping("/{memberId}")
-    public CustomResponse<String> deleteMember(@PathVariable("memberId") Long memberId) {
+    public CustomResponse<String> deleteMember(@PathVariable("memberId") @NotNull Long memberId) {
         memberCommandService.deleteMember((memberId));
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }

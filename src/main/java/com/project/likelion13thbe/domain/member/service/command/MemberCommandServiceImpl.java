@@ -34,11 +34,16 @@ public class MemberCommandServiceImpl implements MemberCommandService{
         return MemberConverter.toMemberResponseDTO(member);
     }
     @Override
-    public void updatePassword(Long memberId, MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO) {
+    public MemberResDTO.ResetPasswordResDTO updatePassword(Long memberId, MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO) {
         Member member = memberRepository.findByIdAndNotDeleted(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
+        if (!member.getPassword().equals(resetPasswordReqDTO.currentPassword())) {
+            throw new CustomException(MemberErrorCode.MEMBER_WRONG_PASSWORD);
+        }
+
         member.updatePassword(resetPasswordReqDTO.password());
+        return MemberConverter.toMemberResetPasswordResponseDTO(member, resetPasswordReqDTO.currentPassword());
     }
 
     @Override
