@@ -40,6 +40,9 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     public ProductResDTO.ProductListResDTO getProductList() {
         List<ProductReviewDTO> productReviewDTOs = productRepository.findAllProductsWithReviewStats();
 
+        if (productReviewDTOs.isEmpty()) {
+            throw new ProductException(ProductErrorCode.PRODUCT_ERROR_CODE);
+        }
         List<ProductResDTO.ProductPreviewResDTO> productPreviewResDTOList = productReviewDTOs.stream()
                 .map(dto -> ProductConverter.toProductPreviewResDTO(
                         dto.getProduct(), dto.getRatingAvg(), dto.getReviewCount()))

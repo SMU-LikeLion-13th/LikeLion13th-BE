@@ -36,8 +36,8 @@ public class ProductController {
 
     @Operation(description = "상품 목록 조회")
     @GetMapping
-    public ResponseEntity<ProductResDTO.ProductListResDTO> getProducts(){
-        return ResponseEntity.ok(productQueryService.getProductList());
+    public CustomResponse<ProductResDTO.ProductListResDTO> getProducts(){
+        return CustomResponse.onSuccess(productQueryService.getProductList());
     }
 
     @Operation(description = "상품 생성")
