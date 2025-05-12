@@ -64,7 +64,7 @@ public class ReviewController {
     }
 
     @GetMapping("/api/v1/reviews/my")
-    public ResponseEntity<ReviewResDTO.ReviewListDTO> getMyReview() {
-        return ResponseEntity.ok(reviewQueryService.getMyReview());
+    public CustomResponse<ReviewResDTO.ReviewListDTO> getMyReview() {
+        return CustomResponse.onSuccess(reviewQueryService.getMyReview());
     }
 }

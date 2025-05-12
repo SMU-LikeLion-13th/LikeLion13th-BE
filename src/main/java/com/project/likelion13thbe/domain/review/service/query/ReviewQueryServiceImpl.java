@@ -43,6 +43,10 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
         //토큰 추출 말고 따로 맴버 아이디를 가져올 수 없는거 같아서 1L로 두었습니다!
         List<Review> reviews = reviewRepository.findAllByMemberId(1L);
 
+        if (reviews.isEmpty()){
+            throw new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND);
+        }
+
         return ReviewConverter.toReviewPreviewResponseDTOList(reviews);
     }
 }
