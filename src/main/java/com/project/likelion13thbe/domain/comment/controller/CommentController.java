@@ -53,4 +53,14 @@ public class CommentController {
 
         return CustomResponse.onSuccess(HttpStatus.NO_CONTENT, "댓글 삭제 완료");
     }
+
+    @Operation(summary = "댓글 목록 조회 (커서 방식)")
+    @GetMapping("/reviews/{reviewId}/comments-cursor/")
+    public CustomResponse<CommentResDTO.CommentCursorResDTO> getCommentCursor(
+            @PathVariable Long reviewId,
+            @RequestParam Long cursor,
+            @RequestParam Integer size
+    ) {
+        return CustomResponse.onSuccess(commentQueryService.getCommentCursor(reviewId, cursor, size));
+    }
 }

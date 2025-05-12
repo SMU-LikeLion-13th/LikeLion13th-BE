@@ -4,4 +4,6 @@ import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
 
 public interface CommentQueryService {
     public CommentResDTO.CommentListResDTO getCommentList(Long reviewId);
+
+    public CommentResDTO.CommentCursorResDTO getCommentCursor(Long reviewId, Long cursor, Integer size);
 }

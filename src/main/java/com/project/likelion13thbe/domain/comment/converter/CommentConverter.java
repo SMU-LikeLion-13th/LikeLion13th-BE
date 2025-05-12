@@ -7,6 +7,7 @@ import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.review.entity.Review;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -44,6 +45,24 @@ public class CommentConverter {
     public static CommentResDTO.CommentListResDTO toCommentListResDTO(List<CommentResDTO.CommentDetailResDTO> commentList) {
         return CommentResDTO.CommentListResDTO.builder()
                 .commentList(commentList)
+                .build();
+    }
+
+    public static CommentResDTO.CommentCursorResDTO toCommentCursorResDTO(Slice<Comment> comments) {
+        List<CommentResDTO.CommentDetailResDTO> commentList = comments.stream()
+                .map(CommentConverter::toCommentDetailResDTO)
+                .toList();
+
+        // 다음 cursor 지정
+        Long nextCursor = null;
+        if (!comments.isEmpty() && comments.hasNext()) {
+            nextCursor = comments.getContent().get(comments.getNumberOfElements() - 1).getCommentId();
+        }
+
+        return CommentResDTO.CommentCursorResDTO.builder()
+                .comments(commentList)
+                .hasNext(comments.hasNext())
+                .nextCursor(nextCursor)
                 .build();
     }
 }

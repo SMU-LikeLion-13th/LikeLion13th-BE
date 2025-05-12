@@ -7,6 +7,9 @@ import com.project.likelion13thbe.domain.comment.exception.CommentErrorCode;
 import com.project.likelion13thbe.domain.comment.exception.CommentException;
 import com.project.likelion13thbe.domain.comment.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,5 +33,19 @@ public class CommentQueryServiceImpl implements CommentQueryService {
                         .toList();
 
         return CommentConverter.toCommentListResDTO(filteredCommentDetailResDTOList);
+    }
+
+    @Override
+    public CommentResDTO.CommentCursorResDTO getCommentCursor(Long reviewId, Long cursor, Integer size) {
+        Pageable pageable = PageRequest.of(0, size);
+
+        // cursor가 0일 경우(첫페이지) cursor 최대값
+        if (cursor == 0) {
+            cursor = Long.MAX_VALUE;
+        }
+
+        Slice<Comment> comments = commentRepository.findAllCommentByReivewIdLessThanOrderByCommentIdDesc(reviewId, cursor, pageable);
+
+        return CommentConverter.toCommentCursorResDTO(comments);
     }
 }
