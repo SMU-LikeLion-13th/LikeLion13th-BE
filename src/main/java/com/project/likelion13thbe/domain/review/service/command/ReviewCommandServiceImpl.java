@@ -43,7 +43,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
 
     @Override
     public void updateReview(ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO, Long reviewId) {
-        Review review = reviewRepository.findById(reviewId)
+        Review review = reviewRepository.findByReviewIdAndNotDeleted(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
 
         review.updateReview(reviewUpdateReqDTO.rating(), reviewUpdateReqDTO.content());
