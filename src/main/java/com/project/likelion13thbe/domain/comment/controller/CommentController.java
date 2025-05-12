@@ -11,8 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,15 +36,13 @@ public class CommentController {
     @Operation(description = "댓글 작성")
     @Parameter(name = "productId", description = "product PK", example = "1")
     @Parameter(name = "reviewId", description = "review PK", example = "1")
-    @PostMapping("/api/v1/products/{productId}/reviews/{reviewId}/commits")
-    public ResponseEntity<CommentResDTO.CommentCreateResDTO> createCommit(
-            @PathVariable Long productId,
-            @PathVariable Long reviewId,
-            @RequestBody CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO
+    @PostMapping("/api/v1/products/{productId}/reviews/{reviewId}/comments")
+    public CustomResponse<CommentResDTO.CommentCreateResDTO> createComment(
+            @PathVariable("productId") @NotNull Long productId,
+            @PathVariable("reviewId") @NotNull Long reviewId,
+            @RequestBody @Valid CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO
     ) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(commentCommandService.createComment(productId, reviewId, commentCreateReqDTO));
+        return CustomResponse.onSuccess(commentCommandService.createComment(productId, reviewId, commentCreateReqDTO));
     }
 
     @Operation(description = "댓글 수정")
