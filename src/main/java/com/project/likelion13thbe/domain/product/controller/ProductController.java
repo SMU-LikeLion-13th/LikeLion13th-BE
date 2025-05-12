@@ -55,11 +55,10 @@ public class ProductController {
 //                    content = @Content(mediaType = "application/json"))
 //    })
     @PostMapping
-    public ResponseEntity<ProductResDTO.ProductCreateResDTO> addProduct(
+    public CustomResponse<ProductResDTO.ProductCreateResDTO> addProduct(
             @RequestBody ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(productCommandService.createProduct(productCreateReqDTO));
+        return CustomResponse
+                .onSuccess(productCommandService.createProduct(productCreateReqDTO));
     }
 
     @Operation(summary = "상품 삭제")
