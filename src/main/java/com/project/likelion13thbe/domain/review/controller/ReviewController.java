@@ -48,6 +48,13 @@ public class ReviewController {
         return CustomResponse.onSuccess(reviewQueryService.getReviews());
     }
 
+    @GetMapping("/products/{productId}/reviews/cursor")
+    public CustomResponse<ReviewResponseDTO.ReviewCursorResponseDTO> getReviewCursor(
+            @PathVariable Long productId,
+            @RequestParam Long cursor, @RequestParam Integer size) {
+        return CustomResponse.onSuccess(reviewQueryService.getReviewCursor(productId, cursor, size));
+    }
+
     @Operation(summary = "리뷰 생성")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Created",

@@ -7,6 +7,9 @@ import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import com.project.likelion13thbe.domain.review.entity.Review;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Slice;
+
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReviewConverter {
@@ -38,6 +41,23 @@ public class ReviewConverter {
                 .updatedAt(review.getUpdatedAt())
                 .nickname(review.getMember().getName())
                 .profileImage(review.getMember().getProfileImage())
+                .build();
+    }
+
+    public static ReviewResponseDTO.ReviewCursorResponseDTO toReviewCursorResponseDTO(Slice<Review> reviews) {
+        List<ReviewResponseDTO.ReviewDetailResponseDTO> reviewList = reviews.stream()
+                .map(ReviewConverter::toReviewDetailResponseDTO)
+                .toList();
+
+        Long nextCursor = null;
+        if (!reviews.isEmpty() && reviews.hasNext()) {
+            nextCursor = reviews.getContent().get(reviews.getNumberOfElements() - 1).getId();
+        }
+
+        return ReviewResponseDTO.ReviewCursorResponseDTO.builder()
+                .reviews(reviewList)
+                .hasNext(reviews.hasNext())
+                .nextCursor(nextCursor)
                 .build();
     }
 }
