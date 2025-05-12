@@ -4,6 +4,7 @@ import com.project.likelion13thbe.domain.comment.dto.request.CommentReqDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.comment.service.command.CommentCommandService;
 import com.project.likelion13thbe.domain.comment.service.query.CommentQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -45,7 +46,10 @@ public class CommentController {
 
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("comment/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
-        return null;
+    public CustomResponse<String> deleteComment(@PathVariable Long commentId) {
+
+        commentCommandService.deleteComment(commentId);
+
+        return CustomResponse.onSuccess(HttpStatus.NO_CONTENT, "댓글 삭제 완료");
     }
 }
