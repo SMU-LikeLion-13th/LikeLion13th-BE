@@ -3,6 +3,8 @@ package com.project.likelion13thbe.domain.review.service.query;
 import com.project.likelion13thbe.domain.review.converter.ReviewConverter;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.entity.Review;
+import com.project.likelion13thbe.domain.review.exception.ReviewErrorCode;
+import com.project.likelion13thbe.domain.review.exception.ReviewException;
 import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
     @Override
     public ReviewResDTO.ReviewDetailResDTO getReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new RuntimeException("Review가 존재하지 않음"));
+                .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
         return ReviewConverter.toReviewDetailResDTO(review);
     }
 
@@ -27,7 +29,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
     public ReviewResDTO.ReviewListResDTO getReviewList(Long productId) {
         List<Review> reviewList = reviewRepository.findAllReviewsByProductId(productId);
         if (reviewList.isEmpty()) {
-            throw new RuntimeException("review가 존재하지 않음");
+            throw new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND);
         }
 
         List<ReviewResDTO.ReviewDetailResDTO> filteredReviewsDetailResDTOList =
@@ -44,7 +46,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
         // 이게 상품별 리뷰 조회는 Path Variable로 받아왔는데,
         // 내 리뷰는 아직 토큰 구별 기능 불가능 이슈로 상수 넣었습니다
         if (reviewList.isEmpty()) {
-            throw new RuntimeException("review가 존재하지 않음");
+            throw new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND);
         }
 
         List<ReviewResDTO.ReviewDetailResDTO> filteredReviewsDetailResDTOList =

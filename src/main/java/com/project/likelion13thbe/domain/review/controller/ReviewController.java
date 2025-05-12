@@ -4,6 +4,7 @@ import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
 import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,14 +26,14 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 세부 조회")
     @GetMapping("reviews/{reviewId}")
-    public ResponseEntity<ReviewResDTO.ReviewDetailResDTO> getReview(@PathVariable Long reviewId) {
-        return ResponseEntity.ok(reviewQueryService.getReview(reviewId));
+    public CustomResponse<ReviewResDTO.ReviewDetailResDTO> getReview(@PathVariable Long reviewId) {
+        return CustomResponse.onSuccess(reviewQueryService.getReview(reviewId));
     }
 
     @Operation(summary = "리뷰 목록 조회")
     @GetMapping("products/{productId}/reviews")
-    public ResponseEntity<ReviewResDTO.ReviewListResDTO> getReviewList(@PathVariable Long productId) {
-        return ResponseEntity.ok(reviewQueryService.getReviewList(productId));
+    public CustomResponse<ReviewResDTO.ReviewListResDTO> getReviewList(@PathVariable Long productId) {
+        return CustomResponse.onSuccess(reviewQueryService.getReviewList(productId));
     }
 
     @Operation(summary = "리뷰 작성")
@@ -58,7 +59,7 @@ public class ReviewController {
 
     @Operation(summary = "내 리뷰 조회")
     @GetMapping("/reviews/my")
-    public ResponseEntity<ReviewResDTO.ReviewListResDTO> getMyReviews() {
-        return ResponseEntity.ok(reviewQueryService.getMyReviewList());
+    public CustomResponse<ReviewResDTO.ReviewListResDTO> getMyReviews() {
+        return CustomResponse.onSuccess(reviewQueryService.getMyReviewList());
     }
 }
