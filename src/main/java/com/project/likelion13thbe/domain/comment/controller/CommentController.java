@@ -4,16 +4,21 @@ import com.project.likelion13thbe.domain.comment.dto.request.CommentReqDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.comment.service.command.CommentCommandService;
 import com.project.likelion13thbe.domain.comment.service.query.CommentQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 @Tag(name="Comment", description = "댓글 관련 API")
 public class CommentController {
 
@@ -23,9 +28,11 @@ public class CommentController {
     @Operation(description = "댓글 목록 조회")
     @Parameter(name = "productId", description = "product PK", example = "1")
     @Parameter(name = "reviewId", description = "review PK", example = "1")
-    @GetMapping("/api/v1/products/{productId}/reviews/{reviewId}/commits")
-    public ResponseEntity<CommentResDTO.CommentListResDTO> getCommits(@PathVariable Long productId, @PathVariable Long reviewId) {
-        return ResponseEntity.ok(commentQueryService.getCommentList(productId, reviewId));
+    @GetMapping("/api/v1/products/{productId}/reviews/{reviewId}/comments")
+    public CustomResponse<CommentResDTO.CommentListResDTO> getComments(
+            @PathVariable("productId") @NotNull Long productId,
+            @PathVariable("reviewId") @NotNull Long reviewId) {
+        return CustomResponse.onSuccess(commentQueryService.getCommentList(productId, reviewId));
     }
 
     @Operation(description = "댓글 작성")
