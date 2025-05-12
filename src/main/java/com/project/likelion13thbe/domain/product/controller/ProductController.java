@@ -46,4 +46,13 @@ public class ProductController {
         productCommandService.deleteProduct(productId);
         return CustomResponse.onSuccess(HttpStatus.NO_CONTENT, "상품 삭제 완료");
     }
+
+    @Operation(summary = "상품 목록 조회 (커서 방식)")
+    @GetMapping("/cursor")
+    public CustomResponse<ProductResDTO.ProductCursorResDTO> getProductCursor(
+            @RequestParam Long cursor,
+            @RequestParam Integer size
+    ) {
+        return CustomResponse.onSuccess(productQueryService.getProductCursor(cursor, size));
+    }
 }

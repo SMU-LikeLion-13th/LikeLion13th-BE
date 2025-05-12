@@ -7,6 +7,9 @@ import com.project.likelion13thbe.domain.product.exception.ProductErrorCode;
 import com.project.likelion13thbe.domain.product.exception.ProductException;
 import com.project.likelion13thbe.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +45,20 @@ public class ProductQueryServiceImpl implements ProductQueryService {
                         .toList();
 
         return ProductConverter.toProductListResDTO(productDetailResDTOList);
+    }
+
+    @Override
+    public ProductResDTO.ProductCursorResDTO getProductCursor(Long cursor, Integer size) {
+        Pageable pageable = PageRequest.of(0, size);
+
+        // cursor가 0일 경우(첫페이지) cursor 최대값
+        if (cursor == 0) {
+            cursor = Long.MAX_VALUE;
+        }
+
+        Slice<ProductDetailDTO> productDetailDTOSlice = productRepository.findAllByProductIdLessThanOrderByProductIdDesc(cursor, pageable);
+
+        return ProductConverter.toProductCursorResDTO(productDetailDTOSlice);
     }
 
 }

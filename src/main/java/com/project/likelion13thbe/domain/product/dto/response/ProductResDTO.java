@@ -35,4 +35,11 @@ public class ProductResDTO {
     ) {
     }
 
+    @Builder
+    public record ProductCursorResDTO(
+            List<ProductDetailResDTO> products,
+            Long nextCursor,
+            Boolean hasNext
+    ) {
+    }
 }
