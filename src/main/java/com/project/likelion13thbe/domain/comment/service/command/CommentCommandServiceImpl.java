@@ -49,4 +49,15 @@ public class CommentCommandServiceImpl implements CommentCommandService {
         commentRepository.save(comment);
         return CommentConverter.toCommentResponseDTO(comment);
     }
+
+    @Override
+    public CommentResDTO.CommentPreviewResDTO updateComment(Long commentId, CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        comment.setContent(commentUpdateReqDTO.content());
+
+        return CommentConverter.toCommentPreviewResponseDTO(comment);
+    }
+
 }

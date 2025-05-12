@@ -46,13 +46,13 @@ public class CommentController {
     }
 
     @Operation(description = "댓글 수정")
-    @Parameter(name = "commitId", description = "commit PK", example = "1")
-    @PatchMapping("/api/v1/commits/{commitId}")
-    public ResponseEntity<CommentResDTO.CommentPreviewResDTO> updateCommit(
-            @PathVariable Long commitId,
-            @RequestBody CommentReqDTO.CommentUpdateReqDTO UpdateCommitDTO
+    @Parameter(name = "commentId", description = "comment PK", example = "1")
+    @PatchMapping("/api/v1/comments/{commentId}")
+    public CustomResponse<CommentResDTO.CommentPreviewResDTO> updateCommit(
+            @PathVariable("commentId") @NotNull Long commentId,
+            @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO
     ) {
-        return ResponseEntity.ok(null);
+        return CustomResponse.onSuccess(commentCommandService.updateComment(commentId, commentUpdateReqDTO));
     }
 
     @Operation(description = "댓글 삭제")

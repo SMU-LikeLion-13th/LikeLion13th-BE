@@ -47,9 +47,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
 
-        if (reviewUpdateReqDTO.content() != null)
-            review.setContent(reviewUpdateReqDTO.content());
-
+        review.setContent(reviewUpdateReqDTO.content());
         review.setRate(reviewUpdateReqDTO.rate());
 
         return ReviewConverter.toReviewPreviewResponseDTO(review);
