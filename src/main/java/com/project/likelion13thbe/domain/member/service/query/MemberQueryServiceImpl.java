@@ -45,6 +45,8 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         Pageable pageable = PageRequest.of(0, size);
 
         // cursor가 0일 경우(첫페이지) cursor 최대값
+        if (cursor == 0) cursor = Long.MAX_VALUE;
+
         Slice<Member> members = memberRepository.findAllByIdLessThanOrderByIdDesc(cursor, pageable);
 
         return MemberConverter.toMemberCursorResponseDTO(members);
