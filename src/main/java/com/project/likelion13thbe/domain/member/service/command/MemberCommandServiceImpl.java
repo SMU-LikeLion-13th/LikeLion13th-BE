@@ -79,8 +79,6 @@ public class MemberCommandServiceImpl implements MemberCommandService{
                 log.error("Error deleting member with ID: {}", member.getId(), e);
             }
         }
-
-        memberRepository.deleteAll(membersToDelete);
         log.info("Completed delete of deleted members.");
     }
 
