@@ -36,6 +36,14 @@ public class CommentController {
         return CustomResponse.onSuccess(commentQueryService.getComments());
     }
 
+    @GetMapping("/reviews/{reviewId}/comments/cursor")
+    public CustomResponse<CommentResponseDTO.CommentCursorResponseDTO> getCommentCursor(
+            @PathVariable Long reviewId,
+            @RequestParam Long cursor, @RequestParam Integer size) {
+        return CustomResponse.onSuccess(commentQueryService.getCommentCursor(reviewId, cursor, size));
+    }
+
+
     @Operation(summary = "댓글 작성")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Created",
