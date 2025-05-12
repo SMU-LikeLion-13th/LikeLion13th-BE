@@ -7,6 +7,7 @@ import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -63,7 +64,24 @@ public class GlobalExceptionHandler {
                 .body(errorResponse);
     }
 
-    public ResponseEntity<?> MethodArgumentNotValidException() {
-        return null;
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<CustomResponse<Map<String, String>>> MethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        log.error("[ MethodArgumentNotValidException ]: {}", ex.getMessage());
+
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach(e ->
+                errors.put(e.getDefaultMessage(), e.getDefaultMessage())
+        );
+
+        BaseErrorCode errorCode = GeneralErrorCode.BAD_REQUEST_400;
+        CustomResponse<Map<String, String>> errorResponse = CustomResponse.onFailure(
+                errorCode.getCode(),
+                errorCode.getMessage(),
+                errors
+        );
+
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(errorResponse);
     }
 }
