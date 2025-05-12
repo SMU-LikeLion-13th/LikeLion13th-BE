@@ -34,6 +34,11 @@ public class Comment extends BaseEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    // comment update 메서드
+    public void updateComment(String content) {
+        this.content = content;
+    }
+
     // soft delete 메서드
     public void delete() {
         this.deletedAt = LocalDateTime.now();

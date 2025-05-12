@@ -43,6 +43,14 @@ public class CommentCommandServiceImpl implements CommentCommandService {
     }
 
     @Override
+    public void updateComment(CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO, Long commentId) {
+        Comment comment = commentRepository.findByCommentIdAndNotDeleted(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        comment.updateComment(commentUpdateReqDTO.content());
+    }
+
+    @Override
     public void deleteComment(Long commentId) {
         Comment comment = commentRepository.findByCommentIdAndNotDeleted(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));

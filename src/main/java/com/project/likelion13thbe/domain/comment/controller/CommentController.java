@@ -38,8 +38,13 @@ public class CommentController {
 
     @Operation(summary = "댓글 수정")
     @PatchMapping("comment/{commentId}")
-    public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
-        return null;
+    public CustomResponse<String> updateComment(
+            @PathVariable Long commentId,
+            @RequestBody CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
+
+        commentCommandService.updateComment(commentUpdateReqDTO, commentId);
+
+        return CustomResponse.onSuccess("댓글 수정 완료");
     }
 
     @Operation(summary = "댓글 삭제")
