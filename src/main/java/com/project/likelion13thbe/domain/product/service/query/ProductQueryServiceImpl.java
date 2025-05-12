@@ -3,6 +3,8 @@ package com.project.likelion13thbe.domain.product.service.query;
 import com.project.likelion13thbe.domain.product.converter.ProductConverter;
 import com.project.likelion13thbe.domain.product.dto.ProductDetailDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
+import com.project.likelion13thbe.domain.product.exception.ProductErrorCode;
+import com.project.likelion13thbe.domain.product.exception.ProductException;
 import com.project.likelion13thbe.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     @Override
     public ProductResDTO.ProductDetailResDTO getProduct(Long productId) {
         ProductDetailDTO productDetailDTO = productRepository.findProductWithReviewStats(productId)
-                .orElseThrow(() -> new RuntimeException("Product가 존재하지 않음"));
+                .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
 
         return ProductConverter.toProductDetailResDTO(
                 productDetailDTO.product(), productDetailDTO.ratingAvg(), productDetailDTO.reviewCount().intValue());
@@ -30,7 +32,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
         List<ProductDetailDTO> productDetailDTOList = productRepository.findAllProductsWithReviewStats();
 
         if (productDetailDTOList.isEmpty()) {
-            throw new RuntimeException("Product가 존재하지 않음");
+            throw new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND);
         }
 
         List<ProductResDTO.ProductDetailResDTO> productDetailResDTOList =

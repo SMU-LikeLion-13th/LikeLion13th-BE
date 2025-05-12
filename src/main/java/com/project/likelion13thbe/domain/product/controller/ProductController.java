@@ -4,6 +4,7 @@ import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.domain.product.service.command.ProductCommandService;
 import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,8 +32,8 @@ public class ProductController {
 //                    content = @Content(mediaType = "application/json"))
 //    })
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductResDTO.ProductDetailResDTO> getProduct(@PathVariable Long productId) {
-        return ResponseEntity.ok(productQueryService.getProduct(productId));
+    public CustomResponse<ProductResDTO.ProductDetailResDTO> getProduct(@PathVariable Long productId) {
+        return CustomResponse.onSuccess(productQueryService.getProduct(productId));
     }
 
     @Operation(summary = "상품 목록 조회")
@@ -42,8 +43,8 @@ public class ProductController {
 //                            schema = @Schema(implementation = ProductResDTO.ProductListResDTO.class)))
 //    })
     @GetMapping
-    public ResponseEntity<ProductResDTO.ProductListResDTO> getProductList() {
-        return ResponseEntity.ok(productQueryService.getProductList());
+    public CustomResponse<ProductResDTO.ProductListResDTO> getProductList() {
+        return CustomResponse.onSuccess(productQueryService.getProductList());
     }
 
     @Operation(summary = "상품 추가")
