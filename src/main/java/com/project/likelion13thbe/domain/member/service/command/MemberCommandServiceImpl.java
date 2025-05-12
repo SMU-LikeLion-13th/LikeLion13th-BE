@@ -8,9 +8,15 @@ import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
 import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -44,4 +50,24 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         member.delete();
     }
+
+    @Scheduled(cron = "0 0 3 * * *")
+    public void cleanupDeletedMembers() {
+        log.info("Starting scheduled cleanup deleted Members");
+
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
+
+        List<Member> membersToDelete = memberRepository.findDeletedMembersBefore(oneMonthAgo);
+
+        if (membersToDelete.isEmpty()) {
+            log.info("No members to delete");
+            return;
+        }
+
+        memberRepository.deleteAll(membersToDelete);
+
+        log.info("Deleted {} members", membersToDelete.size());
+
+    }
+
 }
