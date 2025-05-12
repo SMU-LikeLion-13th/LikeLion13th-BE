@@ -28,8 +28,8 @@ public class CommentController {
     @Parameter(name = "reviewId", description = "review PK", example = "1")
     @GetMapping("/api/v1/products/{productId}/reviews/{reviewId}/comments")
     public CustomResponse<CommentResDTO.CommentListResDTO> getComments(
-            @PathVariable("productId") @NotNull Long productId,
-            @PathVariable("reviewId") @NotNull Long reviewId) {
+            @PathVariable("productId")  Long productId,
+            @PathVariable("reviewId")  Long reviewId) {
         return CustomResponse.onSuccess(commentQueryService.getCommentList(productId, reviewId));
     }
 
@@ -38,8 +38,8 @@ public class CommentController {
     @Parameter(name = "reviewId", description = "review PK", example = "1")
     @PostMapping("/api/v1/products/{productId}/reviews/{reviewId}/comments")
     public CustomResponse<CommentResDTO.CommentCreateResDTO> createComment(
-            @PathVariable("productId") @NotNull Long productId,
-            @PathVariable("reviewId") @NotNull Long reviewId,
+            @PathVariable("productId")  Long productId,
+            @PathVariable("reviewId") Long reviewId,
             @RequestBody @Valid CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO
     ) {
         return CustomResponse.onSuccess(commentCommandService.createComment(productId, reviewId, commentCreateReqDTO));
@@ -49,7 +49,7 @@ public class CommentController {
     @Parameter(name = "commentId", description = "comment PK", example = "1")
     @PatchMapping("/api/v1/comments/{commentId}")
     public CustomResponse<CommentResDTO.CommentPreviewResDTO> updateCommit(
-            @PathVariable("commentId") @NotNull Long commentId,
+            @PathVariable("commentId") Long commentId,
             @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO
     ) {
         return CustomResponse.onSuccess(commentCommandService.updateComment(commentId, commentUpdateReqDTO));
@@ -58,7 +58,7 @@ public class CommentController {
     @Operation(description = "댓글 삭제")
     @Parameter(name = "commentId", description = "comment PK", example = "1")
     @DeleteMapping("/api/v1/comments/{commentId}")
-    public CustomResponse<String> deleteCommit(@PathVariable("commentId") @NotNull Long commentId) {
+    public CustomResponse<String> deleteCommit(@PathVariable("commentId") Long commentId) {
         commentCommandService.deleteComment(commentId);
         return CustomResponse.onSuccess("댓글 삭제 성공");
     }

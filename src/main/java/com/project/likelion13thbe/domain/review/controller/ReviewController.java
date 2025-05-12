@@ -41,7 +41,7 @@ public class ReviewController {
     @Parameter(name = "productId", description = "product PK", example = "1")
     @PostMapping("/api/v1/products/{productId}/reviews")
     public CustomResponse<ReviewResDTO.ReviewCreateResDTO> createReview(
-            @PathVariable("productId") @NotNull Long productId,
+            @PathVariable("productId") Long productId,
             @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO dto
     ) {
         return CustomResponse.onSuccess(reviewCommandService.createReview(productId, dto));
@@ -50,7 +50,7 @@ public class ReviewController {
     @Parameter(name = "reviewId", description = "review PK", example = "2")
     @PatchMapping("/api/v1/reviews/{reviewId}")
     public CustomResponse<ReviewResDTO.ReviewPreviewResDTO> updateReview(
-        @PathVariable("reviewId") @NotNull Long reviewId,
+        @PathVariable("reviewId") Long reviewId,
         @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO updateReviewDTO
     ) {
         return CustomResponse.onSuccess(reviewCommandService.updateReview(reviewId, updateReviewDTO));
@@ -58,7 +58,7 @@ public class ReviewController {
     @Operation(description = "리뷰 삭제")
     @Parameter(name = "reviewId", description = "review PK", example = "1")
     @DeleteMapping("/api/v1/reviews/{reviewId}")
-    public CustomResponse<String> deleteReview(@PathVariable("reviewId") @NotNull Long reviewId) {
+    public CustomResponse<String> deleteReview(@PathVariable("reviewId") Long reviewId) {
         reviewCommandService.deleteReview(reviewId);
         return CustomResponse.onSuccess("리뷰 삭제 성공");
     }

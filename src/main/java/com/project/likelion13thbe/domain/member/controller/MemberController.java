@@ -41,7 +41,7 @@ public class MemberController {
     @PatchMapping("/{memberId}/reset-password")
     public CustomResponse<MemberResDTO.ResetPasswordResDTO> resetPassword(
             @RequestBody @Valid MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO,
-            @PathVariable("memberId") @NotNull Long memberId
+            @PathVariable("memberId") Long memberId
     ) {
         return CustomResponse.onSuccess(memberCommandService.updatePassword(memberId, resetPasswordReqDTO));
     }
@@ -64,7 +64,7 @@ public class MemberController {
     }
     @Operation(description = "회원 탈퇴")
     @DeleteMapping("/{memberId}")
-    public CustomResponse<String> deleteMember(@PathVariable("memberId") @NotNull Long memberId) {
+    public CustomResponse<String> deleteMember(@PathVariable("memberId") Long memberId) {
         memberCommandService.deleteMember((memberId));
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }

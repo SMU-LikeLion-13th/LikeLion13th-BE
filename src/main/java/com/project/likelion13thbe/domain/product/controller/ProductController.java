@@ -28,7 +28,7 @@ public class ProductController {
     @Parameter(name = "productId", description = "product PK", example = "1")
     @GetMapping("/{productId}")
     public CustomResponse<ProductResDTO.ProductPreviewResDTO> getProduct(
-            @PathVariable("productId") @NotNull Long productId
+            @PathVariable("productId") Long productId
     ) {
         return CustomResponse.onSuccess(productQueryService.getProduct(productId));
     }
@@ -50,7 +50,7 @@ public class ProductController {
     @Operation(description = "상품 삭제")
     @Parameter(name = "productId", description = "product PK", example = "1")
     @DeleteMapping("/{productId}")
-    public CustomResponse<String> deleteProduct(@PathVariable("productId") @NotNull Long productId) {
+    public CustomResponse<String> deleteProduct(@PathVariable("productId") Long productId) {
         productCommandService.deleteProduct(productId);
         return CustomResponse.onSuccess("상품 삭제 성공");
     }
