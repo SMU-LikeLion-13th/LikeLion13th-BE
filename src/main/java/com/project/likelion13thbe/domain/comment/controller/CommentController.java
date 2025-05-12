@@ -23,27 +23,12 @@ public class CommentController {
     private final CommentQueryService commentQueryService;
 
     @Operation(summary = "댓글 목록 조회")
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "200", description = "OK",
-//                    content = @Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = CommentResDTO.CommentListResDTO.class))),
-//            @ApiResponse(responseCode = "404", description = "Not Found",
-//                    content = @Content(mediaType = "application/json"))
-//    })
     @GetMapping("reviews/{reviewId}/comments")
     public ResponseEntity<CommentResDTO.CommentListResDTO> getComment(@PathVariable Long reviewId) {
         return ResponseEntity.ok(commentQueryService.getCommentList(reviewId));
     }
 
     @Operation(summary = "댓글 작성")
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "201", description = "Created",
-//                    content = @Content(mediaType = "application/json")),
-//            @ApiResponse(responseCode = "400", description = "Bad Request",
-//                    content = @Content(mediaType = "application/json")),
-//            @ApiResponse(responseCode = "404", description = "Not Found",
-//                    content = @Content(mediaType = "application/json"))
-//    })
     @PostMapping("reviews/{reviewId}/comments")
     public ResponseEntity<CommentResDTO.CommentCreateResDTO> createComment(
             @PathVariable Long reviewId, @RequestBody CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO) {
@@ -53,26 +38,12 @@ public class CommentController {
     }
 
     @Operation(summary = "댓글 수정")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "Bad Request",
-                    content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = @Content(mediaType = "application/json"))
-    })
     @PatchMapping("comment/{commentId}")
     public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
         return null;
     }
 
     @Operation(summary = "댓글 삭제")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "No Content",
-                    content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = @Content(mediaType = "application/json"))
-    })
     @DeleteMapping("comment/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
         return null;
