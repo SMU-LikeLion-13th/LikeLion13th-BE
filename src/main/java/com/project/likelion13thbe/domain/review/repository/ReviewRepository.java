@@ -1,6 +1,5 @@
 package com.project.likelion13thbe.domain.review.repository;
 
-import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.review.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
