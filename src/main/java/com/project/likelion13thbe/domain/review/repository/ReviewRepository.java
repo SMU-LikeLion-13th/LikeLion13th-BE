@@ -1,6 +1,5 @@
 package com.project.likelion13thbe.domain.review.repository;
 
-import com.project.likelion13thbe.domain.comment.entity.Comment;
 import com.project.likelion13thbe.domain.review.entity.Review;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
