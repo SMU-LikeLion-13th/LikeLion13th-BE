@@ -38,7 +38,7 @@ public class CommentController {
     @PatchMapping("comment/{commentId}")
     public CustomResponse<String> updateComment(
             @PathVariable Long commentId,
-            @RequestBody CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
+            @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
 
         commentCommandService.updateComment(commentUpdateReqDTO, commentId);
 
