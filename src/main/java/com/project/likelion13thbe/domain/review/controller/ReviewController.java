@@ -8,6 +8,7 @@ import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -39,13 +40,11 @@ public class ReviewController {
     @Operation(description = "리뷰 생성")
     @Parameter(name = "productId", description = "product PK", example = "1")
     @PostMapping("/api/v1/products/{productId}/reviews")
-    public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> createReview(
-            @PathVariable Long productId,
-            @RequestBody ReviewReqDTO.ReviewCreateReqDTO dto
+    public CustomResponse<ReviewResDTO.ReviewCreateResDTO> createReview(
+            @PathVariable("productId") @NotNull Long productId,
+            @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO dto
     ) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(reviewCommandService.createReview(productId, dto));
+        return CustomResponse.onSuccess(reviewCommandService.createReview(productId, dto));
     }
     @Operation(description = "리뷰 수정")
     @Parameter(name = "reviewId", description = "review PK", example = "2")
