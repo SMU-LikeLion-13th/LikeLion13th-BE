@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class MemberController {
     @PatchMapping("/{memberId}/password")
     public CustomResponse<String> resetPassword(
             @PathVariable("memberId") Long memberId,
-            @RequestBody MemberReqDTO.PasswordResetDTO passwordResetDTO
+            @RequestBody @Valid MemberReqDTO.PasswordResetDTO passwordResetDTO
     ) {
         memberCommandService.updatePassword(memberId, passwordResetDTO);
         return CustomResponse.onSuccess("비밀번호 변경 성공");
