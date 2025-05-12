@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ProductResDTO {
     public record ProductResponeseDTO(
-            Long ProductId,
+            Long Id,
             String content
     ){
     }

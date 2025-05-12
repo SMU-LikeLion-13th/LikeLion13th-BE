@@ -38,17 +38,23 @@ public class ProductQueryServiceImpl implements ProductQueryService {
                 reviewCount);
     }
 
+    @Override
     public ProductResDTO.ProductCursorResDTO getProductCursor(Long cursor, Integer size) {
-        Pageable pageable = PageRequest.of(0, size);
 
-        // cursor가 0일 경우(첫 페이지)
         if (cursor == 0) {
             cursor = Long.MAX_VALUE;
         }
 
+        Pageable pageable = PageRequest.of(0,size);
+
         Slice<Product> products = productRepository.findAllByIdLessThanOrderByIdDesc(cursor, pageable);
 
+        if (products.isEmpty()) {
+            throw new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND);
+        }
+
         return ProductConverter.toProductCursorResDTO(products);
+
     }
 
 }

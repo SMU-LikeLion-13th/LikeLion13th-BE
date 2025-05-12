@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Slice<Product> findAllByIdLessThanOrderByIdDesc(Long id, Pageable pageable);
+    Slice<Product> findAllByIdLessThanOrderByIdDesc(Long cursor, Pageable pageable);
 }
