@@ -4,11 +4,14 @@ import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.domain.product.service.command.ProductCommandService;
 import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
+import com.project.likelion13thbe.global.apiPayload.exception.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Product", description = "상품 API")
@@ -31,10 +34,11 @@ public class ProductController {
 
     @Operation(summary = "상품 단일 조회")
     @GetMapping("/products/{productId}")
-    public ResponseEntity<ProductResDTO.ProductPreviewResDTO> getProduct(
-            @PathVariable Long productId
+    @Validated //pathVariable 유효성 검사
+    public CustomResponse<ProductResDTO.ProductPreviewResDTO> getProduct(
+            @PathVariable("productId") @NotNull Long productId
     ) {
-        return ResponseEntity.ok(productQueryService.getProduct(productId));
+        return CustomResponse.onSuccess(productQueryService.getProduct(productId));
     }
 
     @Operation(summary = "상품 등록")
