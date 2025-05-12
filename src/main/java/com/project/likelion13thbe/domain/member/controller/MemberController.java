@@ -80,13 +80,13 @@ public class MemberController {
     }
 
     //회원 탈퇴 (JWT 인증 필요)
-    @DeleteMapping("/memvers/{memberID-d}")
+    @DeleteMapping("/members/{memberId}")
     @Operation(summary = "회원 탈퇴", description = "회원 계정을 삭제합니다.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "회원 탈퇴 성공")
     })
-    public CustomResponse<String> deleteMember(@PathVariable Long memberID){
-        memberCommandService.deleteMember(memberID);
+    public CustomResponse<String> deleteMember(@PathVariable Long memberId){
+        memberCommandService.deleteMember(memberId);
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
 
