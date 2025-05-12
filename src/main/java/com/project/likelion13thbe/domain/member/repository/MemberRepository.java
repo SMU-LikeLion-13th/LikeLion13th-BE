@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
@@ -21,4 +23,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "WHERE m.memberId = :memberId AND m.deletedAt IS NULL")
     Optional<Member> findByMemberIdAndNotDeleted(@Param("memberId") Long memberId);
 
+    // 소프트 딜리트된 지 30일 지난 멤버 조회
+    @Query("SELECT m " +
+            "FROM Member m " +
+            "WHERE m.deletedAt IS NOT NULL AND m.deletedAt <= :oneMonthAgo")
+    List<Member> findDeletedMembersBefore(@Param("oneMonthAgo") LocalDateTime oneMonthAgo);
 }
