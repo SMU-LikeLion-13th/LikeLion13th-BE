@@ -20,7 +20,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
     @Override
     public ProductResDTO.ProductDetailResDTO getProduct(Long productId) {
-        ProductDetailDTO productDetailDTO = productRepository.findProductWithReviewStats(productId)
+        ProductDetailDTO productDetailDTO = productRepository.findProductWithReviewStatsAndNotDeleted(productId)
                 .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
 
         return ProductConverter.toProductDetailResDTO(
@@ -29,7 +29,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
     @Override
     public ProductResDTO.ProductListResDTO getProductList() {
-        List<ProductDetailDTO> productDetailDTOList = productRepository.findAllProductsWithReviewStats();
+        List<ProductDetailDTO> productDetailDTOList = productRepository.findAllProductsWithReviewStatsAndNotDeleted();
 
         if (productDetailDTOList.isEmpty()) {
             throw new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND);

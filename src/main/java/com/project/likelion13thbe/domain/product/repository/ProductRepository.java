@@ -18,8 +18,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             ") " +
             "FROM Product p " +
             "LEFT JOIN Review r ON r.product.productId = p.productId " +
+            "WHERE r.deletedAt IS NULL " +
             "GROUP BY p")
-    List<ProductDetailDTO> findAllProductsWithReviewStats();
+    List<ProductDetailDTO> findAllProductsWithReviewStatsAndNotDeleted();
 
     @Query("SELECT new com.project.likelion13thbe.domain.product.dto.ProductDetailDTO(" +
             "p, " +
@@ -28,8 +29,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             ") " +
             "FROM Product p " +
             "LEFT JOIN Review r ON r.product.productId = p.productId " +
-            "WHERE p.productId = :productId " +
+            "WHERE p.productId = :productId AND r.deletedAt IS NULL " +
             "GROUP BY p")
-    Optional<ProductDetailDTO> findProductWithReviewStats(Long productId);
+    Optional<ProductDetailDTO> findProductWithReviewStatsAndNotDeleted(Long productId);
 
 }
