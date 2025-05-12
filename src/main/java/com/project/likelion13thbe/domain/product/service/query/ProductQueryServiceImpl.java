@@ -26,7 +26,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     @Override
     public ProductResDTO.ProductPreviewResDTO getProduct(Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_ERROR_CODE));
+                .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
 
         Double ratingAvg = reviewRepository.findRatingAvgByProductId(productId);
         Long reviewCount = reviewRepository.findReviewCountByProductId(productId);
@@ -41,7 +41,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
         List<ProductReviewDTO> productReviewDTOs = productRepository.findAllProductsWithReviewStats();
 
         if (productReviewDTOs.isEmpty()) {
-            throw new ProductException(ProductErrorCode.PRODUCT_ERROR_CODE);
+            throw new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND);
         }
         List<ProductResDTO.ProductPreviewResDTO> productPreviewResDTOList = productReviewDTOs.stream()
                 .map(dto -> ProductConverter.toProductPreviewResDTO(
