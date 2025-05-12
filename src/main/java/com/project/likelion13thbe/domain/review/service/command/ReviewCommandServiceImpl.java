@@ -1,13 +1,19 @@
 package com.project.likelion13thbe.domain.review.service.command;
 
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
+import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.domain.product.entity.Product;
+import com.project.likelion13thbe.domain.product.exception.ProductErrorCode;
+import com.project.likelion13thbe.domain.product.exception.ProductException;
 import com.project.likelion13thbe.domain.product.repository.ProductRepository;
 import com.project.likelion13thbe.domain.review.converter.ReviewConverter;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.entity.Review;
+import com.project.likelion13thbe.domain.review.exception.ReviewErrorCode;
+import com.project.likelion13thbe.domain.review.exception.ReviewException;
 import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,4 +41,18 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
 
         return ReviewConverter.toReviewResponseDTO(review);
     }
+
+    @Override
+    public ReviewResDTO.ReviewPreviewResDTO updateReview(Long reviewId, ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
+
+        if (reviewUpdateReqDTO.content() != null)
+            review.setContent(reviewUpdateReqDTO.content());
+
+        review.setRate(reviewUpdateReqDTO.rate());
+
+        return ReviewConverter.toReviewPreviewResponseDTO(review);
+    }
+
 }

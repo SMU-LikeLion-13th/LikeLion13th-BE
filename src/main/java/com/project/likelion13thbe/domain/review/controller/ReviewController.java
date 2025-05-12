@@ -49,11 +49,11 @@ public class ReviewController {
     @Operation(description = "리뷰 수정")
     @Parameter(name = "reviewId", description = "review PK", example = "2")
     @PatchMapping("/api/v1/reviews/{reviewId}")
-    public ResponseEntity<ReviewResDTO.ReviewPreviewResDTO> updateReview(
-            @PathVariable Long reviewId,
-            @RequestBody ReviewReqDTO.UpdateReviewDTO dto
+    public CustomResponse<ReviewResDTO.ReviewPreviewResDTO> updateReview(
+        @PathVariable("reviewId") @NotNull Long reviewId,
+        @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO updateReviewDTO
     ) {
-        return ResponseEntity.ok(null);
+        return CustomResponse.onSuccess(reviewCommandService.updateReview(reviewId, updateReviewDTO));
     }
     @Operation(description = "리뷰 삭제")
     @Parameter(name = "reviewId", description = "review PK", example = "1")
