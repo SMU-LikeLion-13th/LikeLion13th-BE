@@ -1,6 +1,6 @@
 package com.project.likelion13thbe.domain.review.dto.response;
 
-import lombok.*;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.List;
