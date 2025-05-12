@@ -6,8 +6,12 @@ import com.project.likelion13thbe.global.apiPayload.code.GeneralErrorCode;
 import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestControllerAdvice
@@ -21,6 +25,23 @@ public class GlobalExceptionHandler {
         //커스텀 예외에 정의된 에러 코드와 메시지를 포함한 응답 제공
         return ResponseEntity.status(ex.getCode().getHttpStatus())
                 .body(ex.getCode().getErrorResponse());
+    }
+
+    // MethodArgumentNotValidException
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<CustomResponse<Map<String, String>>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        log.warn("[ Validation Error - MethodArgumentNotValidException ]: {}", ex.getMessage());
+
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            errors.put(error.getField(), error.getDefaultMessage());
+        });
+
+        BaseErrorCode errorCode = GeneralErrorCode.VALIDATION_FAILED_DTO_FILED;
+        CustomResponse<Map<String, String>> errorResponse = CustomResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), errors);
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(errorResponse);
     }
 
     // 그 외의 정의되지 않은 모든 예외 처리
