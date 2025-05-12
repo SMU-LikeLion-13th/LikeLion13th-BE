@@ -8,6 +8,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -30,8 +31,8 @@ public class GlobalExceptionHandler {
 
     // ConstraintViolationException
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<CustomResponse<Void>> handleConstantException(ConstraintViolationException ex) {
-        log.warn("[ ConstantException ]: {}", ex.getMessage());
+    public ResponseEntity<CustomResponse<String>> handleConstraintViolationException(ConstraintViolationException ex) {
+        log.warn("[ ConstraintViolationException ]: {}", ex.getMessage());
 
 
         BaseErrorCode errorCode = GeneralErrorCode.VALIDATION_FAILED;
@@ -43,9 +44,30 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
-                .body(errorCode.getErrorResponse());
+                .body(CustomResponse.onFailure(errorCode.getCode(), errorMessages, null));
 
     }
+
+    //MethodArgumentNotValidException
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<CustomResponse<String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        log.warn("[ MethodArgumentNotValidException ]: {}", ex.getMessage());
+
+        // DTO 필드별 유효성 오류 메시지 모음
+        // getBindingResult().getFieldErrors():어떤 필드에서 오류가 났는지 확인 가능
+        // fieldError.getField() : 예) "email", "name"
+        String errorMessages = ex.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+
+        BaseErrorCode errorCode = GeneralErrorCode.VALIDATION_FAILED;
+
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(CustomResponse.onFailure(errorCode.getCode(), errorMessages, null));
+
+    }
+
 
     // 그 외의 정의되지 않은 모든 예외 처리
     @ExceptionHandler({Exception.class})
