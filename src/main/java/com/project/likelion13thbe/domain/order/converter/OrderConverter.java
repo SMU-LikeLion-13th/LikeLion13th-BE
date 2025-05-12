@@ -1,6 +1,5 @@
 package com.project.likelion13thbe.domain.order.converter;
 
-import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.domain.order.dto.request.OrderReqDTO;
@@ -37,7 +36,7 @@ public class OrderConverter {
                 order.getOrderId(),
                 order.getTotalPrice(),
                 order.getAmount(),
-                order.getMember().getUserId()
+                order.getMember().getMemberId()
         );
     }
 }

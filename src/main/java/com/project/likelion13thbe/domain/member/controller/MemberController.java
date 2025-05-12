@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping("/api/v1")
 @Tag(name = "멤버관련", description = "멤버 관련 API")
 public class MemberController {
     private final MemberCommandService memberCommandService;
@@ -45,17 +45,17 @@ public class MemberController {
 
     //카카오 로그인
     @Operation(summary = "카카오 로그인 API", description = "카카오 로그인 관련 API")
-    @PostMapping("/api/v1/auth/kakao")
+    @PostMapping("/auth/kakao")
     public MemberResDTO.MemberResponseDTO kakaoLogin() { return null; } //request는 구현하지 않았음.
 
     //일반 로그인
     @Operation(summary = "일반 로그인 API", description = "일반 로그인 API입니다.")
-    @PostMapping("/api/v1/auth/login")
+    @PostMapping("/auth/login")
     public MemberResDTO.MemberResponseDTO login() { return null; } //request는 구현하지 않았음.
 
     //비밀번호 수정
     @Operation(summary = "비밀번호 수정 API", description = "비밀번호 수정 API입니다.")
-    @PatchMapping("/api/v1/users")
+    @PatchMapping("/members")
     public CustomResponse<String> resetPassword(
             @RequestBody MemberReqDTO.PasswordResetDTO passwordResetDTO
     ){
@@ -64,7 +64,7 @@ public class MemberController {
     }
     //회원가입
     @Operation(summary = "회원가입 API", description = "회원가입 API입니다.")
-    @PostMapping("/api/v1/users")
+    @PostMapping("/members")
     public ResponseEntity<MemberResDTO.MemberCreateResDTO> createMember
     (@RequestBody MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
         return ResponseEntity

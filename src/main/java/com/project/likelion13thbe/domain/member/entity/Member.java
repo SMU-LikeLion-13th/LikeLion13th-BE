@@ -1,11 +1,11 @@
 package com.project.likelion13thbe.domain.member.entity;
 
+import com.project.likelion13thbe.global.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Table(name = "member")
 public class Member extends BaseEntity {
     @Id
-    private long userId;
+    private long memberId;
 
     @Column(name = "email")
     private String email;

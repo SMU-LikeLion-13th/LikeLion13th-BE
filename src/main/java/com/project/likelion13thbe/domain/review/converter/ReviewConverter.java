@@ -38,7 +38,7 @@ public class ReviewConverter {
         return new ReviewResDTO.ReviewPreviewResDTO(
                 review.getContent(),
                 review.getDate(),
-                review.getMember().getUserId(),
+                review.getMember().getMemberId(),
                 review.getProduct().getProductId()
         );
     }

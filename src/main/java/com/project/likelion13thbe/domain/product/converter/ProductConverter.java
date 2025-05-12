@@ -1,6 +1,5 @@
 package com.project.likelion13thbe.domain.product.converter;
 
-import com.project.likelion13thbe.domain.order.entity.BaseEntity;
 import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.domain.product.entity.Product;

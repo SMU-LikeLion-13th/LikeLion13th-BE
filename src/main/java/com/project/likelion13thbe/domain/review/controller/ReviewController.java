@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/review")
+@RequestMapping("/api/v1")
 @Tag(name = "리뷰 관련", description = "리뷰 관련 API")
 public class ReviewController {
 
@@ -29,12 +29,12 @@ public class ReviewController {
 
     //내 리뷰 조회
     @Operation(summary = "내 리뷰 조회 API", description = "내 리뷰 조회 API입니다.")
-    @GetMapping("/api/v1/reviews")
+    @GetMapping("/reviews")
     public ReviewResDTO.ReviewResponseDTO getReview() {return null;}
 
     //리뷰 목록 조회
     @Operation(summary = "리뷰 목록 조회 API", description = "리뷰 목록 조회 API입니다.")
-    @GetMapping("/api/vi/reviews/products/offset")
+    @GetMapping("/reviews/products/offset")
     public ResponseEntity<ReviewResDTO.ReviewOffsetResDTO> getReviewOffset(
             @RequestParam Integer offset,
             @RequestParam Integer size
@@ -44,7 +44,7 @@ public class ReviewController {
 
     //리뷰 내용 수정
     @Operation(summary = "리뷰 내용 수정 API", description = "리뷰 내용 수정 API입니다.")
-    @PatchMapping("/api/v1/reviews/{reviewId}")
+    @PatchMapping("/reviews/{reviewId}")
     @Parameters({
             @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
     })
@@ -54,7 +54,7 @@ public class ReviewController {
 
     //리뷰 내용 추가
     @Operation(summary = "리뷰 내용 추가 API", description = "리뷰 내용 수정 API입니다.")
-    @PostMapping("/api/v1/products/reviews")
+    @PostMapping("/products/reviews")
     public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> createReview(
             @RequestBody ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
         return ResponseEntity
@@ -64,7 +64,7 @@ public class ReviewController {
 
     //리뷰 내용 삭제
     @Operation(summary = "리뷰 내용 삭제 API", description = "리뷰 내용 수정 API입니다.")
-    @DeleteMapping("/api/v1/reviews/{reviewId}")
+    @DeleteMapping("/reviews/{reviewId}")
     @Parameters({
             @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
     })
@@ -74,7 +74,7 @@ public class ReviewController {
 
     //리뷰 상세 조회
     @Operation(summary = "리뷰 상세 조회 API", description = "리뷰 상세 조회 API입니다.")
-    @GetMapping("/api/v1/users/reviews/{reviewId}")
+    @GetMapping("/users/reviews/{reviewId}")
     @Parameters({
             @Parameter(name = "reviewId", description = "리뷰 아이디", example = "1")
     })

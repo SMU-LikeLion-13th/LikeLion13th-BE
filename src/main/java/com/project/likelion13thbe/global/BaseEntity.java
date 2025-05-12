@@ -1,4 +1,4 @@
-package com.project.likelion13thbe.domain.product.entity;
+package com.project.likelion13thbe.global;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

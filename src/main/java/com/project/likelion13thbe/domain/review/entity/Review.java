@@ -2,6 +2,7 @@ package com.project.likelion13thbe.domain.review.entity;
 
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.product.entity.Product;
+import com.project.likelion13thbe.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "review")
-public class Review extends BaseEntity{
+public class Review extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +30,7 @@ public class Review extends BaseEntity{
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "memberId", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)

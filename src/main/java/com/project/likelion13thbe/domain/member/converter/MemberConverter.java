@@ -23,14 +23,14 @@ public class MemberConverter {
 
     public static MemberResDTO.MemberCreateResDTO toMemberResponseDTO(Member member) {
         return new MemberResDTO.MemberCreateResDTO(
-                member.getUserId(),
+                member.getMemberId(),
                 member.getCreatedAt()
         );
     }
 
     public static MemberResDTO.MemberPreviewResDTO toMemberPreviewResponseDTO(Member member) {
         return new MemberResDTO.MemberPreviewResDTO(
-                member.getUserId(),
+                member.getMemberId(),
                 member.getEmail(),
                 member.getName()
         );
@@ -60,7 +60,7 @@ public class MemberConverter {
 
         Long nextCursor = null;
         if (!members.isEmpty() && members.hasNext()) {
-            nextCursor = members.getContent().get(members.getNumberOfElements() - 1).getUserId();
+            nextCursor = members.getContent().get(members.getNumberOfElements() - 1).getMemberId();
         }
 
         boolean hasNext = members.hasNext();
@@ -74,7 +74,7 @@ public class MemberConverter {
 
     public static MemberResDTO.MemberPatchPasswordResDTO toMemberPatchResDTO(Member member) {
         return  new MemberResDTO.MemberPatchPasswordResDTO(
-                member.getUserId(),
+                member.getMemberId(),
                 member.getUpdatedAt()
         );
     }

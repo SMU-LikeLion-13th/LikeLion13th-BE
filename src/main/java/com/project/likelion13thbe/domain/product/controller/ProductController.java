@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "상품 관련", description = "상품 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/Products")
+@RequestMapping("/api/v1")
 public class ProductController {
 
     private final ProductCommandService productCommandService;
@@ -29,7 +29,7 @@ public class ProductController {
 
     //상품 목록 조회
     @Operation(summary = "상품 목록 조회 API", description = "offset 기반 상품 목록 조회 API입니다.")
-    @GetMapping("/api/v1/users/products/offset")
+    @GetMapping("/users/products/offset")
     public ResponseEntity<ProductResDTO.ProductOffsetResDTO> getProductList(
             @RequestParam Integer offset,
             @RequestParam Integer size
@@ -39,7 +39,7 @@ public class ProductController {
 
     //상품 상세 조회
     @Operation(summary = "상품 상세 조회 API", description = "상품 상세 조회 API입니다.")
-    @GetMapping("/api/v1/products/{productId}")
+    @GetMapping("/products/{productId}")
     @Parameters({
             @Parameter(name = "productId", description = "상품 아이디", example = "1")
     })
@@ -49,7 +49,7 @@ public class ProductController {
 
     //상품 추가
     @Operation(summary = "상품 추가 API", description = "상품 추가 API입니다.")
-    @PostMapping("/api/v1/products")
+    @PostMapping("/products")
     public ResponseEntity<ProductResDTO.ProductCreateResDTO> createProduct(
             @RequestBody ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
         return ResponseEntity
@@ -59,7 +59,7 @@ public class ProductController {
 
     //상품 삭제
     @Operation(summary = "상품 삭제 API", description = "상품 삭제 API")
-    @DeleteMapping("/api/v1/products/{productId}")
+    @DeleteMapping("/products/{productId}")
     @Parameters({
             @Parameter(name = "productId", description = "상품 아이디", example = "1")
     })

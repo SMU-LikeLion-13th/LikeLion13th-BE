@@ -1,6 +1,7 @@
 package com.project.likelion13thbe.domain.order.entity;
 
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,6 @@ public class Order extends BaseEntity {
     private Long amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "memberId")
     private Member member;
 }
