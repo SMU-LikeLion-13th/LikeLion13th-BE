@@ -58,8 +58,9 @@ public class ReviewController {
     @Operation(description = "리뷰 삭제")
     @Parameter(name = "reviewId", description = "review PK", example = "1")
     @DeleteMapping("/api/v1/reviews/{reviewId}")
-    public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
-        return ResponseEntity.ok(null);
+    public CustomResponse<String> deleteReview(@PathVariable("reviewId") @NotNull Long reviewId) {
+        reviewCommandService.deleteReview(reviewId);
+        return CustomResponse.onSuccess("리뷰 삭제 성공");
     }
 
     @GetMapping("/api/v1/reviews/my")
