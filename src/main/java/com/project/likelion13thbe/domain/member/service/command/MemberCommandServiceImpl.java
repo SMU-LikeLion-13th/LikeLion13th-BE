@@ -45,7 +45,7 @@ public class MemberCommandServiceImpl implements MemberCommandService{
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         if (!member.getPassword().equals(resetPasswordReqDTO.currentPassword())) {
-            throw new CustomException(MemberErrorCode.MEMBER_WRONG_PASSWORD);
+            throw new MemberException(MemberErrorCode.MEMBER_WRONG_PASSWORD);
         }
 
         member.updatePassword(resetPasswordReqDTO.password());
