@@ -8,6 +8,7 @@ import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -40,12 +41,10 @@ public class ProductController {
 
     @Operation(description = "상품 생성")
     @PostMapping
-    public ResponseEntity<ProductResDTO.ProductCreateResDTO> createProduct(
-            @RequestBody ProductReqDTO.ProductCreateReqDTO dto
+    public CustomResponse<ProductResDTO.ProductCreateResDTO> createProduct(
+            @RequestBody @Valid ProductReqDTO.ProductCreateReqDTO productCreateReqDTO
     ) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(productCommandService.createProduct(dto));
+        return CustomResponse.onSuccess(productCommandService.createProduct(productCreateReqDTO));
     }
 
     @Operation(description = "상품 삭제")
