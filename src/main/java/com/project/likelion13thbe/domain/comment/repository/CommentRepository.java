@@ -11,8 +11,10 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    @Query("SELECT c FROM Comment c WHERE c.review.reviewId = :reviewId")
-    List<Comment> findCommentByReviewId(Long reviewId);
+    @Query("SELECT c " +
+            "FROM Comment c " +
+            "WHERE c.review.reviewId = :reviewId AND c.deletedAt IS NULL")
+    List<Comment> findCommentByReviewIdAndNotDeleted(Long reviewId);
 
     @Query("SELECT c " +
             "FROM Comment c " +

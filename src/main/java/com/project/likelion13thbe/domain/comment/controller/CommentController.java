@@ -25,8 +25,8 @@ public class CommentController {
 
     @Operation(summary = "댓글 목록 조회")
     @GetMapping("reviews/{reviewId}/comments")
-    public ResponseEntity<CommentResDTO.CommentListResDTO> getComment(@PathVariable Long reviewId) {
-        return ResponseEntity.ok(commentQueryService.getCommentList(reviewId));
+    public CustomResponse<CommentResDTO.CommentListResDTO> getComment(@PathVariable Long reviewId) {
+        return CustomResponse.onSuccess(commentQueryService.getCommentList(reviewId));
     }
 
     @Operation(summary = "댓글 작성")

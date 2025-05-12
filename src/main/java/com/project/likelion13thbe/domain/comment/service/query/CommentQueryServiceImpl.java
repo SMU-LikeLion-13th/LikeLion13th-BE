@@ -3,6 +3,8 @@ package com.project.likelion13thbe.domain.comment.service.query;
 import com.project.likelion13thbe.domain.comment.converter.CommentConverter;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.comment.entity.Comment;
+import com.project.likelion13thbe.domain.comment.exception.CommentErrorCode;
+import com.project.likelion13thbe.domain.comment.exception.CommentException;
 import com.project.likelion13thbe.domain.comment.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,9 @@ public class CommentQueryServiceImpl implements CommentQueryService {
 
     @Override
     public CommentResDTO.CommentListResDTO getCommentList(Long reviewId) {
-        List<Comment> commentList = commentRepository.findCommentByReviewId(reviewId);
+        List<Comment> commentList = commentRepository.findCommentByReviewIdAndNotDeleted(reviewId);
         if (commentList.isEmpty()) {
-            throw new RuntimeException("Comment가 존재하지 않음");
+            throw new CommentException(CommentErrorCode.COMMENT_NOT_FOUND);
         }
         List<CommentResDTO.CommentDetailResDTO> filteredCommentDetailResDTOList =
                 commentList.stream()
