@@ -4,10 +4,14 @@ import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import com.project.likelion13thbe.global.apiPayload.code.BaseErrorCode;
 import com.project.likelion13thbe.global.apiPayload.code.GeneralErrorCode;
 import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestControllerAdvice
@@ -38,8 +42,25 @@ public class GlobalExceptionHandler {
                 .body(errorResponse);
     }
 
-    public ResponseEntity<?> ConstraintViolationException() {
-        return null;
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<CustomResponse<Map<String, String>>> ConstraintViolationException(ConstraintViolationException ex) {
+        log.error("[ ConstraintViolationException ]: {}", ex.getMessage());
+
+        Map<String, String> errors = new HashMap<>();
+        ex.getConstraintViolations().forEach(v ->
+                errors.put(v.getPropertyPath().toString(), v.getMessage()));
+
+        BaseErrorCode errorCode = GeneralErrorCode.BAD_REQUEST_400;
+
+        CustomResponse<Map<String, String>> errorResponse = CustomResponse.onFailure(
+                errorCode.getCode(),
+                errorCode.getMessage(),
+                errors
+        );
+
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(errorResponse);
     }
 
     public ResponseEntity<?> MethodArgumentNotValidException() {
