@@ -66,4 +66,14 @@ public class ReviewController {
     public CustomResponse<ReviewResDTO.ReviewListResDTO> getMyReviews() {
         return CustomResponse.onSuccess(reviewQueryService.getMyReviewList());
     }
+
+    @Operation(summary = "리뷰 목록 조회 (커서 방식)")
+    @GetMapping("products/{productId}/reviews-cursor/")
+    public CustomResponse<ReviewResDTO.ReviewCursorResDTO> getReviewCursor(
+            @PathVariable Long productId,
+            @RequestParam Long cursor,
+            @RequestParam Integer size
+    ) {
+        return CustomResponse.onSuccess(reviewQueryService.getReviewCursor(productId, cursor, size));
+    }
 }

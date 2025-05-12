@@ -7,6 +7,7 @@ import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.entity.Review;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -47,4 +48,23 @@ public class ReviewConverter {
                 .reviewList(reviewList)
                 .build();
     }
+
+    public static ReviewResDTO.ReviewCursorResDTO toReviewCursorResDTO(Slice<Review> reviews) {
+        List<ReviewResDTO.ReviewDetailResDTO> reviewList = reviews.stream()
+                .map(ReviewConverter::toReviewDetailResDTO)
+                .toList();
+
+        // 다음 cursor 지정
+        Long nextCursor = null;
+        if (!reviews.isEmpty() && reviews.hasNext()) {
+            nextCursor = reviews.getContent().get(reviews.getNumberOfElements() - 1).getReviewId();
+        }
+
+        return ReviewResDTO.ReviewCursorResDTO.builder()
+                .reviews(reviewList)
+                .hasNext(reviews.hasNext())
+                .nextCursor(nextCursor)
+                .build();
+    }
+
 }

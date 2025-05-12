@@ -34,4 +34,12 @@ public class ReviewResDTO {
     ) {
     }
 
+    @Builder
+    public record ReviewCursorResDTO(
+            List<ReviewResDTO.ReviewDetailResDTO> reviews,
+            Long nextCursor,
+            Boolean hasNext
+    ) {
+    }
+
 }

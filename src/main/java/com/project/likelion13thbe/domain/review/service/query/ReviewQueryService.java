@@ -8,4 +8,6 @@ public interface ReviewQueryService {
     public ReviewResDTO.ReviewListResDTO getReviewList(Long productId);
 
     public ReviewResDTO.ReviewListResDTO getMyReviewList();
+
+    public ReviewResDTO.ReviewCursorResDTO getReviewCursor(Long productId, Long cursor, Integer size);
 }

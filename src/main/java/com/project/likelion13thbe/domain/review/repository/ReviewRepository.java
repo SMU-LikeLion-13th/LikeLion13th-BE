@@ -1,6 +1,8 @@
 package com.project.likelion13thbe.domain.review.repository;
 
 import com.project.likelion13thbe.domain.review.entity.Review;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -34,5 +36,13 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "FROM Review r " +
             "WHERE r.deletedAt IS NOT NULL AND r.deletedAt <= :oneWeekAgo")
     List<Review> findDeletedReviewsBefore(@Param("oneWeekAgo") LocalDateTime oneWeekAgo);
+
+    // cursor
+    @Query("SELECT r " +
+            "FROM Review r " +
+            "WHERE r.product.productId = :reviewId AND r.reviewId < :cursor AND r.deletedAt IS NULL " +
+            "ORDER BY r.reviewId DESC")
+    Slice<Review> findAllReviewByProductIdLessThanOrderByReviewIdDesc(
+            @Param("reviewId") Long reviewId, @Param("cursor") Long cursor, Pageable pageable);
 
 }

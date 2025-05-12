@@ -7,6 +7,9 @@ import com.project.likelion13thbe.domain.review.exception.ReviewErrorCode;
 import com.project.likelion13thbe.domain.review.exception.ReviewException;
 import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,4 +60,17 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
         return ReviewConverter.toReviewListResDTO(filteredReviewsDetailResDTOList);
     }
 
+    @Override
+    public ReviewResDTO.ReviewCursorResDTO getReviewCursor(Long productId, Long cursor, Integer size) {
+        Pageable pageable = PageRequest.of(0, size);
+
+        // cursor가 0일 경우(첫페이지) cursor 최대값
+        if (cursor == 0) {
+            cursor = Long.MAX_VALUE;
+        }
+
+        Slice<Review> reviews = reviewRepository.findAllReviewByProductIdLessThanOrderByReviewIdDesc(productId, cursor, pageable);
+
+        return ReviewConverter.toReviewCursorResDTO(reviews);
+    }
 }
