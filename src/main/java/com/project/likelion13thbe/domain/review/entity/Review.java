@@ -30,4 +30,10 @@ public class Review extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    // 리뷰 변경 메소드
+    public void updateReview(Double rating, String content) {
+        this.rating = rating;
+        this.content = content;
+    }
 }

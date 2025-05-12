@@ -6,9 +6,6 @@ import com.project.likelion13thbe.domain.review.service.command.ReviewCommandSer
 import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,8 +42,13 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 수정")
     @PatchMapping("reviews/{reviewId}")
-    public ResponseEntity<?> patchReview(@PathVariable Long reviewId, @RequestBody ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
-        return null;
+    public CustomResponse<String> updateReview(
+            @PathVariable Long reviewId,
+            @RequestBody ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
+
+        reviewCommandService.updateReview(reviewUpdateReqDTO, reviewId);
+
+        return CustomResponse.onSuccess("리뷰 수정 완료");
     }
 
     @Operation(summary = "리뷰 삭제")
