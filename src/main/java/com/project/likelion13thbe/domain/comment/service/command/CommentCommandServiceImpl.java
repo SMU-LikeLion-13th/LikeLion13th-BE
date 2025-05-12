@@ -60,4 +60,10 @@ public class CommentCommandServiceImpl implements CommentCommandService {
         return CommentConverter.toCommentPreviewResponseDTO(comment);
     }
 
+    @Override
+    public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+        comment.delete();
+    }
 }

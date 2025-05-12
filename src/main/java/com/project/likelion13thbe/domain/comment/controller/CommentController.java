@@ -56,10 +56,11 @@ public class CommentController {
     }
 
     @Operation(description = "댓글 삭제")
-    @Parameter(name = "commitId", description = "commit PK", example = "1")
-    @DeleteMapping("/api/v1/commits/{commitId}")
-    public ResponseEntity<Void> deleteCommit() {
-        return ResponseEntity.ok(null);
+    @Parameter(name = "commentId", description = "comment PK", example = "1")
+    @DeleteMapping("/api/v1/comments/{commentId}")
+    public CustomResponse<String> deleteCommit(@PathVariable("commentId") @NotNull Long commentId) {
+        commentCommandService.deleteComment(commentId);
+        return CustomResponse.onSuccess("댓글 삭제 성공");
     }
 }
 
