@@ -1,6 +1,8 @@
 package com.project.likelion13thbe.domain.product.service.command;
 
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
+import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.domain.product.converter.ProductConverter;
 import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
@@ -29,5 +31,13 @@ public class ProductCommandServiceImpl implements ProductCommandService {
         productRepository.save(product);
 
         return ProductConverter.toProductResponseDTO(product);
+    }
+
+    @Override
+    public void deleteProduct(Long productId){
+        if (!productRepository.existsById(productId)) {
+            throw  new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND);
+        }
+        productRepository.deleteById(productId);
     }
 }
