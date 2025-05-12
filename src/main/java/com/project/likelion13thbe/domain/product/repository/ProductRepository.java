@@ -1,6 +1,8 @@
 package com.project.likelion13thbe.domain.product.repository;
 
 import com.project.likelion13thbe.domain.product.entity.Product;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,4 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p WHERE p.id = :id AND p.deletedAt IS NULL")
     Optional<Product> findByIdAndNotDeleted(@Param("id") Long productId);
+
+    @Query("SELECT p FROM Product p WHERE p.id < :id AND p.deletedAt IS NULL ORDER BY p.id DESC")
+    Slice<Product> findAllByIdLessThanOrderByIdDescAndNotDeleted(@Param("id") Long productId, Pageable pageable);
 }

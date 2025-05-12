@@ -48,6 +48,14 @@ public class ProductController {
         return CustomResponse.onSuccess(productQueryService.getProducts());
     }
 
+    @GetMapping("/cursor")
+    public CustomResponse<ProductResponseDTO.ProductCursorResponseDTO> getProductCursor(
+            @RequestParam Long cursor,
+            @RequestParam Integer size
+    ) {
+        return CustomResponse.onSuccess(productQueryService.getProductCursor(cursor, size));
+    }
+
     @Operation(summary = "상품 추가")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Created",

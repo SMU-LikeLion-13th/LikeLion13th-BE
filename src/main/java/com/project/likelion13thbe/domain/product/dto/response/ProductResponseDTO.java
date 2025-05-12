@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.domain.product.dto.response;
 
+import com.project.likelion13thbe.domain.product.entity.Product;
 import com.project.likelion13thbe.domain.product.entity.ProductType;
 import lombok.Builder;
 
@@ -33,4 +34,11 @@ public class ProductResponseDTO {
     ) {
     }
 
+    @Builder
+    public record ProductCursorResponseDTO(
+            List<ProductDetailResponseDTO> products,
+            Long nextCursor,
+            Boolean hasNext
+    ) {
+    }
 }
