@@ -53,8 +53,11 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 삭제")
     @DeleteMapping("reviews/{reviewId}")
-    public ResponseEntity<?> deleteReview(@PathVariable Long reviewId) {
-        return null;
+    public CustomResponse<String> deleteReview(@PathVariable Long reviewId) {
+
+        reviewCommandService.deleteReview(reviewId);
+
+        return CustomResponse.onSuccess(HttpStatus.NO_CONTENT, "리뷰 삭제 완료");
     }
 
     @Operation(summary = "내 리뷰 조회")
