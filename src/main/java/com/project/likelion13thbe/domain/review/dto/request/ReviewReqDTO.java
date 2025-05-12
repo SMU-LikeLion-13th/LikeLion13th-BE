@@ -14,6 +14,7 @@ public class ReviewReqDTO {
     }
 
     public record ReviewUpdateReqDTO(
+            @NotNull(message = "별점은 필수 입력값입니다.")
             Double rating,
             String content
     ) {

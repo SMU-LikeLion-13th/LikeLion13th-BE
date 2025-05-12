@@ -45,7 +45,7 @@ public class ReviewController {
     @PatchMapping("reviews/{reviewId}")
     public CustomResponse<String> updateReview(
             @PathVariable Long reviewId,
-            @RequestBody ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
+            @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
 
         reviewCommandService.updateReview(reviewUpdateReqDTO, reviewId);
 
