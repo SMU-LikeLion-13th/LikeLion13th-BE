@@ -1,11 +1,13 @@
 package com.project.likelion13thbe.domain.review.repository;
 
+import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.review.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +29,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "FROM Review r " +
             "WHERE r.reviewId = :reviewId AND r.deletedAt IS NULL")
     Optional<Review> findByReviewIdAndNotDeleted(@Param("reviewId") Long reviewId);
+
+    // 소프트 딜리트된 지 7일 지난 리뷰 조회
+    @Query("SELECT r " +
+            "FROM Review r " +
+            "WHERE r.deletedAt IS NOT NULL AND r.deletedAt <= :oneWeekAgo")
+    List<Review> findDeletedReviewsBefore(@Param("oneWeekAgo") LocalDateTime oneWeekAgo);
+
 }
