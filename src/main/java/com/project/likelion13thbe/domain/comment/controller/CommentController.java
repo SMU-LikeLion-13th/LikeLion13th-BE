@@ -31,11 +31,9 @@ public class CommentController {
 
     @Operation(summary = "댓글 작성")
     @PostMapping("reviews/{reviewId}/comments")
-    public ResponseEntity<CommentResDTO.CommentCreateResDTO> createComment(
+    public CustomResponse<CommentResDTO.CommentCreateResDTO> createComment(
             @PathVariable Long reviewId, @RequestBody CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(commentCommandService.createComment(commentCreateReqDTO, reviewId));
+        return CustomResponse.onSuccess(HttpStatus.CREATED, commentCommandService.createComment(commentCreateReqDTO, reviewId));
     }
 
     @Operation(summary = "댓글 수정")
