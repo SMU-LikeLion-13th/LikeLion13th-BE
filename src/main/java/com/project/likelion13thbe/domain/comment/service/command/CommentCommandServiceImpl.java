@@ -45,7 +45,7 @@ public class CommentCommandServiceImpl implements CommentCommandService {
 
     @Override
     public void updateComment(Long commentId, CommentRequestDTO.CommentUpdateRequestDTO commentUpdateRequestDTO) {
-        Comment comment = commentRepository.findByIdAndNotDelete(commentId)
+        Comment comment = commentRepository.findByIdAndNotDeleted(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         comment.update(commentUpdateRequestDTO.content());
@@ -53,7 +53,7 @@ public class CommentCommandServiceImpl implements CommentCommandService {
 
     @Override
     public void deleteComment(Long commentId) {
-        Comment comment = commentRepository.findByIdAndNotDelete(commentId)
+        Comment comment = commentRepository.findByIdAndNotDeleted(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         comment.delete();
