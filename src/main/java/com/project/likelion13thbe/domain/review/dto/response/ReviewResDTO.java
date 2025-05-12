@@ -19,7 +19,7 @@ public class ReviewResDTO {
             String username,
             String profileImg,
             String content,
-            double rate,
+            Double rate,
             LocalDateTime createdAt
     ){
     }
