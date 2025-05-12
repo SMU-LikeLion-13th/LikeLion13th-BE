@@ -7,6 +7,7 @@ import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,8 @@ public class ReviewController {
     @Operation(summary = "리뷰 작성")
     @PostMapping("products/{productId}/reviews")
     public CustomResponse<ReviewResDTO.ReviewCreateResDTO> createReview(
-            @PathVariable Long productId, @RequestBody ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
+            @PathVariable Long productId,
+            @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
         return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(reviewCreateReqDTO, productId));
     }
 
