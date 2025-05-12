@@ -7,6 +7,7 @@ import com.project.likelion13thbe.domain.comment.service.query.CommentQueryServi
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,8 @@ public class CommentController {
     @Operation(summary = "댓글 작성")
     @PostMapping("reviews/{reviewId}/comments")
     public CustomResponse<CommentResDTO.CommentCreateResDTO> createComment(
-            @PathVariable Long reviewId, @RequestBody CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO) {
+            @PathVariable Long reviewId,
+            @RequestBody @Valid CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO) {
         return CustomResponse.onSuccess(HttpStatus.CREATED, commentCommandService.createComment(commentCreateReqDTO, reviewId));
     }
 
