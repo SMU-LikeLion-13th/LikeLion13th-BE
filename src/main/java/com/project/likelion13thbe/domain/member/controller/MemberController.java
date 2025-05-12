@@ -27,7 +27,7 @@ public class MemberController {
     @Operation(summary = "createMember")
     @PostMapping
     public CustomResponse<MemberResDTO.MemberCreateResDTO> createMember(
-            @RequestBody MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+            @RequestBody @Valid MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
         return CustomResponse.onSuccess(memberCommandService.createMember(memberCreateReqDTO));
     }
 
@@ -132,5 +132,4 @@ public class MemberController {
         // 능력 부족 이슈로 카카오는 뭔가 이해가 어렵네요
         return null;
     }
-
 }
