@@ -38,11 +38,9 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 작성")
     @PostMapping("products/{productId}/reviews")
-    public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> createReview(
+    public CustomResponse<ReviewResDTO.ReviewCreateResDTO> createReview(
             @PathVariable Long productId, @RequestBody ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(reviewCommandService.createReview(reviewCreateReqDTO, productId));
+        return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(reviewCreateReqDTO, productId));
     }
 
     @Operation(summary = "리뷰 수정")
