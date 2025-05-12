@@ -36,7 +36,7 @@ public class ReviewController {
             @PathVariable Long productId,
             @RequestParam Long cursor,
             @RequestParam Integer size) {
-        return ResponseEntity.ok(reviewQueryService.getMyReviewsCursor(cursor, size));
+        return ResponseEntity.ok(reviewQueryService.getMyReviewsCursor(productId,cursor, size));
     }
 
     @Operation(summary = "내 리뷰목록 조회")
@@ -45,7 +45,7 @@ public class ReviewController {
             @PathVariable Long userId,
             @RequestParam Long cursor,
             @RequestParam Integer size) {
-        return ResponseEntity.ok(reviewQueryService.getMyReviewsCursor(cursor, size));
+        return ResponseEntity.ok(reviewQueryService.getMyReviewsCursor(userId,cursor, size));
     }
 
 

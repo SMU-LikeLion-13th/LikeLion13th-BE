@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "comment")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,11 +21,11 @@ public class Comment extends BaseEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "like")
+    @Column(name = "like_count")
     private Integer likeCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -18,8 +18,8 @@ public interface ReviewRepository  extends JpaRepository<Review, Long> {
     Integer findReviewCountByProductId(@Param("productId") Long productId);
 
 
-    Slice<Review> findByMemberIdAndIdLessThanOrderByCreatedAtDesc(Long memberId, Pageable pageable);//내 리뷰 조회 최신순 정렬
-    Slice<Review> findByProductIdAndIdLessThanOrderByCreatedAtDesc(Long productId, Pageable pageable); // 상품 리뷰 목록 조회
+    Slice<Review> findByMemberIdAndIdLessThanOrderByCreatedAtDesc(Long memberId, Long id,Pageable pageable);//내 리뷰 조회 최신순 정렬
+    Slice<Review> findByProductIdAndIdLessThanOrderByCreatedAtDesc(Long productId, Long id,Pageable pageable); // 상품 리뷰 목록 조회
 
 }
 

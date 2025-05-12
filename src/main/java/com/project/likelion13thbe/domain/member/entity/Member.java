@@ -5,6 +5,8 @@ import com.project.likelion13thbe.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 @Getter
@@ -33,5 +35,16 @@ public class Member extends BaseEntity {
 
     @Column(name = "age")
     private Integer age;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    //비밀번호 변경 메서드
+    public void updatePassword(String newPassword){this.password = newPassword;}
+
+    // soft delete 메서드
+    public void delete(){this.deletedAt = LocalDateTime.now();}
+
+
 
 }

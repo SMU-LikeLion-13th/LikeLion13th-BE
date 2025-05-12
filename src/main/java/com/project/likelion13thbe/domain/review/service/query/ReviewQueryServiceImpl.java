@@ -27,28 +27,28 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
 
     @Override
-    public ReviewResDTO.ReviewCursorResDTO getMyReviewsCursor(Long cursor, Integer size) {
+    public ReviewResDTO.ReviewCursorResDTO getMyReviewsCursor(Long memberId, Long cursor, Integer size) {
         Pageable pageable = PageRequest.of(0, size);
 
         if (cursor == 0) {
             cursor = Long.MAX_VALUE;
         }
 
-        Slice<Review> reviews = reviewRepository.findByMemberIdAndIdLessThanOrderByCreatedAtDesc(cursor, pageable);
+        Slice<Review> reviews = reviewRepository.findByMemberIdAndIdLessThanOrderByCreatedAtDesc(memberId, cursor, pageable);
 
         return ReviewConverter.toReviewCursorResDTO(reviews);
     }
 
 
     @Override
-    public ReviewResDTO.ReviewCursorResDTO getReviewsCursor(Long cursor, Integer size) {
+    public ReviewResDTO.ReviewCursorResDTO getReviewsCursor(Long productId, Long cursor, Integer size) {
         Pageable pageable = PageRequest.of(0, size);
 
         if (cursor == 0) {
             cursor = Long.MAX_VALUE;
         }
 
-        Slice<Review> reviews = reviewRepository.findByProductIdAndIdLessThanOrderByCreatedAtDesc(cursor, pageable);
+        Slice<Review> reviews = reviewRepository.findByProductIdAndIdLessThanOrderByCreatedAtDesc(productId, cursor, pageable);
 
         return ReviewConverter.toReviewCursorResDTO(reviews);
     }
