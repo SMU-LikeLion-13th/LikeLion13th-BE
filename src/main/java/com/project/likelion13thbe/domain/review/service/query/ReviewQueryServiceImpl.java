@@ -32,6 +32,9 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
     public ReviewResDTO.ReviewListDTO getReviewList(Long productId) {
         List<Review> reviews = reviewRepository.findAllByProductId(productId);
 
+        if (reviews.isEmpty())
+            throw new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND);
+
         return ReviewConverter.toReviewPreviewResponseDTOList(reviews);
     }
 

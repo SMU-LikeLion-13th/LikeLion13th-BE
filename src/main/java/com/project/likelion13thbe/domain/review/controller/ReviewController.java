@@ -30,18 +30,10 @@ public class ReviewController {
     }
 
     @Operation(description = "리뷰 목록 조회")
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "COMMON200", description = "Ok, 성공",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ReviewResDTO.ReviewListDTO.class)
-                    )
-            )
-    })
     @Parameter(name = "productId", description = "product PK", example = "1")
     @GetMapping("/api/v1/products/{productId}/reviews")
-    public ResponseEntity<ReviewResDTO.ReviewListDTO> getReviews(@PathVariable Long productId) {
-        return ResponseEntity.ok(reviewQueryService.getReviewList(productId));
+    public CustomResponse<ReviewResDTO.ReviewListDTO> getReviews(@PathVariable("productId") @NotNull Long productId) {
+        return CustomResponse.onSuccess(reviewQueryService.getReviewList(productId));
     }
 
     @Operation(description = "리뷰 생성")
