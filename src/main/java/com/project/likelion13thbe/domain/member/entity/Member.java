@@ -9,6 +9,7 @@ import java.rmi.AccessException;
 import java.time.LocalDateTime;
 
 @Entity
+@
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

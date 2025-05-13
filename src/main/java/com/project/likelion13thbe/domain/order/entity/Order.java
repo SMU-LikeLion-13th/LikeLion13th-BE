@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.domain.order.entity;
 
+import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,6 +16,10 @@ public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Column(name = "name", nullable = false)
     private String name;
