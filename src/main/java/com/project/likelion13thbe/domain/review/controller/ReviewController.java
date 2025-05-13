@@ -46,11 +46,11 @@ public class ReviewController {
 
     @Operation(summary = "내 리뷰목록 조회")
     @GetMapping("/users/{userId}/reviews")
-    public ResponseEntity<ReviewResDTO.ReviewCursorResDTO> getMyReviewsCursor(
+    public CustomResponse<ReviewResDTO.ReviewCursorResDTO> getMyReviewsCursor(
             @PathVariable Long userId,
             @RequestParam Long cursor,
             @RequestParam Integer size) {
-        return ResponseEntity.ok(reviewQueryService.getMyReviewsCursor(userId,cursor, size));
+        return CustomResponse.onSuccess(reviewQueryService.getMyReviewsCursor(userId,cursor, size));
     }
 
 
