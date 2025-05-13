@@ -23,7 +23,9 @@ public class ReviewReqDTO {
             String content
     ){}
 
-    public record ReviewDeleteDTO(
+    public record ReviewDeleteReqDTO(
             Long reviewId
     ) {}
+
+
 }

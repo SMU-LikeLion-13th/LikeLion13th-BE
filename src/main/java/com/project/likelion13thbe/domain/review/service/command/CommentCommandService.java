@@ -8,6 +8,8 @@ import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.review.entity.Comment;
 import com.project.likelion13thbe.domain.review.entity.Review;
+import com.project.likelion13thbe.domain.review.exception.CommentErrorCode;
+import com.project.likelion13thbe.domain.review.exception.CommentException;
 import com.project.likelion13thbe.domain.review.exception.ReviewErrorCode;
 import com.project.likelion13thbe.domain.review.exception.ReviewException;
 import com.project.likelion13thbe.domain.review.repository.CommentRepository;
@@ -37,6 +39,27 @@ public class CommentCommandService {
         commentRepository.save(comment);
 
         return CommentConverter.toCommentCreateResDTO(comment);
+    }
+
+    public void updateComment(Long commentId, CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
+        Comment comment = commentRepository.findByCommentIdAndNotDeleted(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        comment.updateComment(commentUpdateReqDTO.content());
+    }
+
+    public void updateCommentLikes(Long commentId) {
+        Comment comment = commentRepository.findByCommentIdAndNotDeleted(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        comment.updateCommentLikes();
+    }
+
+    public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findByCommentIdAndNotDeleted(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        comment.delete();
     }
 
 

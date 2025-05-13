@@ -40,11 +40,15 @@ public class ReviewCommandService {
             Long reviewId, ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
         Review review = reviewRepository.findByReviewIdAndNotDeleted(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
+
+        review.updateReview(reviewUpdateReqDTO.content());
     }
 
     public void deleteReview(Long reviewId) {
         Review review = reviewRepository.findByReviewIdAndNotDeleted(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
+
+        review.delete();
     }
 
 

@@ -1,10 +1,15 @@
 package com.project.likelion13thbe.domain.review.controller;
 
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
+import com.project.likelion13thbe.domain.review.dto.request.CommentReqDTO;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
+import com.project.likelion13thbe.domain.review.entity.Comment;
+import com.project.likelion13thbe.domain.review.repository.CommentRepository;
+import com.project.likelion13thbe.domain.review.service.command.CommentCommandService;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -26,6 +31,8 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
 
     private final ReviewCommandService reviewCommandService;
+    private final CommentRepository commentRepository;
+    private final CommentCommandService commentCommandService;
 
     //댓글 목록 조회
     @Operation(summary = "댓글 목록 조회 API", description = "댓글 목록 조회 API입니다.")
@@ -44,18 +51,40 @@ public class CommentController {
 
     //댓글 좋아요
     @Operation(summary = "댓글 좋아요 API", description = "댓글 좋아요 API입니다.")
-    @PostMapping("/users/comments/likes")
-    public CommentResDTO.CommentResponseDTO postCommentLike() { return null; }
+    @PatchMapping("/users/comments/{commentId}/likes")
+    @ApiResponses ({
+            @ApiResponse(responseCode = "200", description = "댓글 좋아요 성공")
+    })
+    public CustomResponse<String> updateCommentLikes(@PathVariable Long commentId) {
+        commentCommandService.updateCommentLikes(commentId);
+        return CustomResponse.onSuccess("댓글 좋아요 성공");
+    }
 
     //댓글 수정
     @Operation(summary = "댓글 수정 API", description = "댓글 수정 API입니다.")
-    @PatchMapping("/users/comments")
-    public CommentResDTO.CommentResponseDTO patchComment() { return null; }
+    //commentId를 파라미터로 받아야 조회가 가능하여 임시로 id를 받도록 수정하였습니다.
+    @PatchMapping("/users/comments/{commentId}")
+    @ApiResponses ({
+            @ApiResponse(responseCode = "200", description = "댓글 수정 성공")
+    })
+    public CustomResponse<String> updateComment(
+            @PathVariable Long commentId,
+            @RequestBody CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO
+            ) {
+        commentCommandService.updateComment(commentId, commentUpdateReqDTO);
+
+        return CustomResponse.onSuccess("댓글 수정 성공");
+    }
 
     //댓글 삭제
     @Operation(summary = "댓글 삭제 API", description = "댓글 삭제 API입니다.")
-    @DeleteMapping("/users/comments")
-    public CommentResDTO.CommentResponseDTO deleteComment() { return null;}
+    @DeleteMapping("/users/comments/{commentId}")
+    @ApiResponses ({
+            @ApiResponse(responseCode = "200", description = "댓글 삭제 성공")
+    })
+    public CustomResponse<String> deleteComment(@PathVariable Long commentId) {
+        commentCommandService.deleteComment(commentId);
 
-
+        return CustomResponse.onSuccess("댓글 삭제 성공");
+    }
 }

@@ -29,5 +29,7 @@ public class ProductCommandService {
     public void deleteProduct(Long productId) {
         Product product = productRepository.findByProductIdAndNotDeleted(productId)
                 .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
+
+        product.delete();
     }
 }

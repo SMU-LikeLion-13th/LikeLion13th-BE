@@ -25,6 +25,9 @@ public class Comment extends BaseEntity {
     @Column(name = "date", nullable = false)
     private LocalDateTime date;
 
+    @Column(name = "likes")
+    private Long likes;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId")
     private Member member;
@@ -32,6 +35,21 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewId")
     private Review review;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    public void updateComment(String content) {
+        this.content = content;
+    }
+
+    public void updateCommentLikes(){
+        this.likes += 1;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 
 
 }
