@@ -3,6 +3,8 @@ package com.project.likelion13thbe.domain.review.service.query;
 import com.project.likelion13thbe.domain.review.converter.ReviewConverter;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.entity.Review;
+import com.project.likelion13thbe.domain.review.exception.ReviewEception;
+import com.project.likelion13thbe.domain.review.exception.ReviewErrorCode;
 import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +21,8 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
     @Override
     public ReviewResDTO.ReviewPreviewResDTO getReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow();
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewEception(ReviewErrorCode.REVIEW_NOT_FOUND));
 
         return ReviewConverter.toReviewPreviewResponseDTO(review);
     }
