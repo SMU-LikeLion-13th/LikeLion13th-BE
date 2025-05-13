@@ -14,7 +14,7 @@ public class OrderConverter {
     public static Order toOrder(OrderReqDTO.OrderCreateReqDTO orderCreateReqDTO,
                                 MemberRepository memberRepository) {
 
-        Member member = memberRepository.findById(orderCreateReqDTO.userId())
+        Member member = memberRepository.findById(orderCreateReqDTO.memberId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
 
         return Order.builder()

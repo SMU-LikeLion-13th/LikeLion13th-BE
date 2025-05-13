@@ -11,7 +11,7 @@ public class ReviewReqDTO {
     public record ReviewCreateReqDTO(
             String content,
             LocalDateTime date,
-            Long userId,
+            Long memberId,
             Long productId
     ) {}
 }

@@ -6,11 +6,13 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+//모든 파라미터가 들어가는 생성자를 만들어 주는 어노테이션
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+//Json으로 전달할 파라미터의 순서를 정해주는 어노테이션
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
 public class CustomResponse<T> {
 
-    @JsonProperty("isSuccess") // isSuccess라는 변수라는 것을 명시하는 Annotation
+    @JsonProperty("isSuccess") // isSuccess라는 변수라는 것을 명시하는 어노테이션
     private boolean isSuccess;
 
     @JsonProperty("code")

@@ -8,8 +8,10 @@ import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 @Service
 @RequiredArgsConstructor
@@ -27,10 +29,10 @@ public class MemberCommandService {
 
         return MemberConverter.toMemberResponseDTO(member);
     }
-
     //@Override
-    public void updatePassword(MemberReqDTO.PasswordResetDTO passwordResetDTO) {
-        Member member = memberRepository.findByUserIdAndNotDeleted(passwordResetDTO.userId()).orElseThrow(
+    @Validated
+    public void updatePassword(@NotNull MemberReqDTO.PasswordResetDTO passwordResetDTO) {
+        Member member = memberRepository.findByMemberIdAndNotDeleted(passwordResetDTO.memberId()).orElseThrow(
                 () -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         //member.updatePassword(passwordEncoder.encode(passwordResetDTO.password()));
@@ -38,7 +40,7 @@ public class MemberCommandService {
     }
 
     public void deleteMember(MemberReqDTO.MemberDeleteDTO memberDeleteDTO) {
-        Member member = memberRepository.findByUserIdAndNotDeleted(memberDeleteDTO.userId()).orElseThrow(
+        Member member = memberRepository.findByMemberIdAndNotDeleted(memberDeleteDTO.memberId()).orElseThrow(
                 () -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         member.delete();

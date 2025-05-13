@@ -22,7 +22,7 @@ public class ReviewCommandService {
     private final ProductRepository productRepository;
 
     public ReviewResDTO.ReviewCreateResDTO createReview(ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
-        Member member = memberRepository.findById(reviewCreateReqDTO.userId())
+        Member member = memberRepository.findById(reviewCreateReqDTO.memberId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
 
         Product product = productRepository.findById(reviewCreateReqDTO.productId())

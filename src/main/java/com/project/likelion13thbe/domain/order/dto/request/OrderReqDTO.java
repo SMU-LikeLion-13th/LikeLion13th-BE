@@ -6,7 +6,7 @@ public class OrderReqDTO {
     public record OrderCreateReqDTO (
             Long totalPrice,
             Long amount,
-            Long userId
+            Long memberId
     ) {}
 
 

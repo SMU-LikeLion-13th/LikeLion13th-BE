@@ -15,8 +15,8 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long>{
     Page<Member> findAllByOrderByCreatedAtDesc(Pageable pageable);
-    Slice<Member> findAllByUserIdLessThanOrderByUserIdDesc(Long userId, Pageable pageable);
+    Slice<Member> findAllByMemberIdLessThanOrderByMemberIdDesc(Long memberId, Pageable pageable);
     @Query("SELECT m FROM Member m WHERE m.email = :email AND m.deletedAt IS NULL")
-    Optional<Member> findByUserIdAndNotDeleted(@Param("userId") Long userId);
+    Optional<Member> findByMemberIdAndNotDeleted(@Param("memberId") Long memberId);
 }
 

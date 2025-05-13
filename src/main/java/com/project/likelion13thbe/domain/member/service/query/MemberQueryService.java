@@ -42,7 +42,7 @@ public class MemberQueryService {
             cursor = Long.MAX_VALUE;
         }
 
-        Slice<Member> members = memberRepository.findAllByUserIdLessThanOrderByUserIdDesc(cursor, pageable);
+        Slice<Member> members = memberRepository.findAllByMemberIdLessThanOrderByMemberIdDesc(cursor, pageable);
 
         return MemberConverter.toMemberCursorResDTO(members);
     }

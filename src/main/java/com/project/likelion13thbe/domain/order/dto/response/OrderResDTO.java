@@ -19,7 +19,7 @@ public class OrderResDTO {
             Long orderId,
             Long totalPrice,
             Long amount,
-            Long userId
+            Long memberId
     ) {}
 
 }

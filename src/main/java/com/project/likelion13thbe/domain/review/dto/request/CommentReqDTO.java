@@ -7,7 +7,7 @@ public class CommentReqDTO {
     public record CommentCreateReqDTO(
             String content,
             LocalDateTime date,
-            Long userId,
+            Long memberId,
             Long reviewId
     ) {}
 

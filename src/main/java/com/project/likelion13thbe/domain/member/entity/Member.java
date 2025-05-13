@@ -1,10 +1,7 @@
 package com.project.likelion13thbe.domain.member.entity;
 
 import com.project.likelion13thbe.global.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,6 +14,8 @@ import java.time.LocalDateTime;
 @Table(name = "member")
 public class Member extends BaseEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private long memberId;
 
     @Column(name = "email")

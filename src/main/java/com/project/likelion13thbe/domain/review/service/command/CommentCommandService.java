@@ -23,7 +23,7 @@ public class CommentCommandService {
 
     public CommentResDTO.CommentCreateResDTO createComment(CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO) {
 
-        Member member = memberRepository.findById(commentCreateReqDTO.userId())
+        Member member = memberRepository.findById(commentCreateReqDTO.memberId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
 
         Review review = reviewRepository.findById(commentCreateReqDTO.reviewId())
