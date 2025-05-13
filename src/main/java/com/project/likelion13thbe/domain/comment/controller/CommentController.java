@@ -4,6 +4,7 @@ import com.project.likelion13thbe.domain.comment.dto.request.CommentReqDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.comment.service.command.CommentCommandServiceImpl;
 import com.project.likelion13thbe.domain.comment.service.query.CommentQueryServiceImpl;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -60,8 +61,12 @@ public class CommentController {
                     content = @Content(mediaType = "application/json"))
     })
     @PatchMapping("/comments/{commentId}")
-    public ResponseEntity<Void> editComment(@PathVariable String commentId) {
-        return null;
+    public CustomResponse<String> editComment(
+            @PathVariable Long commentId,
+            @RequestBody CommentReqDTO.CommentUpdateDTO commentUpdateDTO
+    ) {
+        commentCommandService.updateComment(commentId, commentUpdateDTO);
+        return CustomResponse.onSuccess("댓글 수정 성공");
     }
 
     @Operation(description = "댓글 삭제")
@@ -72,7 +77,9 @@ public class CommentController {
                     content = @Content(mediaType = "application/json"))
     })
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
-        return null;
+    public CustomResponse<String> deleteComment(
+            @PathVariable Long commentId) {
+        commentCommandService.deleteComment(commentId);
+        return CustomResponse.onSuccess("댓글 삭제 성공");
     }
 }
