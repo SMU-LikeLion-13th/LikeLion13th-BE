@@ -26,10 +26,10 @@ public class MemberCommandServiceImpl implements MemberCommandService{
         return MemberConvert.toMemberResDTO(member);
     }
     @Override
-    public void updatePassword(String email,MemberReqDTO.PasswordResetDTO dto){
+    public void updatePassword(String email,MemberReqDTO.PasswordResetDTO passwordResetDTO){
         Member member=memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(()-> new MemberException(MemberErrorCode.MEMBER_ERROR_CODE));
-        member.updatePassword(dto.getPassword());
+        member.updatePassword(passwordResetDTO.getPassword());
     }
     @Override
     public void deleteMember(String email){

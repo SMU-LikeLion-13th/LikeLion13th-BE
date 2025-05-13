@@ -2,6 +2,7 @@ package com.project.likelion13thbe.domain.member.controller;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
+import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandServiceImpl;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryServiceImpl;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
@@ -25,6 +26,7 @@ public class MemberController {
 
     private final MemberCommandServiceImpl memberCommandServiceImpl;
     private final MemberQueryServiceImpl memberQueryServiceImpl;
+    private final MemberCommandService memberCommandService;
 
     @Operation(description = "일반 로그인")
     @ApiResponses({
@@ -89,9 +91,10 @@ public class MemberController {
     })
     @PatchMapping("/users/{userId}/password")
     public CustomResponse<String> resetPassword(
-            @PathVariable Long userId,
-            @RequestBody MemberReqDTO.ResetPasswordRequest resetPasswordRequest) {
-        return null;
+            @PathVariable String email,
+            @RequestBody MemberReqDTO.PasswordResetDTO passwordResetDTO) {
+        memberCommandService.updatePassword(email, passwordResetDTO);
+        return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
     @GetMapping
