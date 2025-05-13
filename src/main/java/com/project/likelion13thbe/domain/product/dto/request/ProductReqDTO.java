@@ -12,6 +12,7 @@ public class ProductReqDTO {
             String image,
             Integer price,
             Integer quantity,
+            double rating,
             LocalDateTime createdAt
     ) {
     }
