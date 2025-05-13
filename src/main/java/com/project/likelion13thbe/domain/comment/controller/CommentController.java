@@ -68,15 +68,11 @@ public class CommentController {
 
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("/comments/{commentId}")
-    public CommentResDTO.CommentResponseDTO deleteComment(@PathVariable Long commentId) {
-        return null;
+    public CustomResponse<String> deleteComment(@PathVariable Long commentId) {
+        CommentCommendService.deleteComment(commentId);
+
+        return CustomResponse.onSuccess("댓글 삭제 성공");
     }
-
-
-
-
-
-
 
 
 }

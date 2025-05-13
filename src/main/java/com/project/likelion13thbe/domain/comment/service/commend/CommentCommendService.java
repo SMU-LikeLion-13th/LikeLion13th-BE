@@ -7,4 +7,6 @@ public interface CommentCommendService {
     CommentResDTO.CommentCreateResponseDTO createComment(CommentReqDTO.CommentCreateRequestDTO commentCreateRequestDTO);
 
     CommentResDTO.CommentPreviewResDTO updateComment(Long commentId, CommentReqDTO.CommentUpdateReqDTO dto);
+
+    void deleteComment(Long commentId);
 }

@@ -7,6 +7,8 @@ import com.project.likelion13thbe.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "comment")
 @Getter
@@ -24,6 +26,9 @@ public class Comment extends BaseEntity {
     @Column(name = "like_count")
     private Integer likeCount;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -37,5 +42,8 @@ public class Comment extends BaseEntity {
     private Review review;
 
 
-    public void updateContent(String newContent){this.content = newContent;}
+    public void updateContent(String newContent){this.content = newContent;}//좋아요 갯수도 update 구현해야 할거같은데
+
+    public void delete(){this.deletedAt = LocalDateTime.now();}
+
 }
