@@ -2,12 +2,17 @@ package com.project.likelion13thbe.domain.comment.controller;
 
 import com.project.likelion13thbe.domain.comment.dto.request.CommentReqDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
+import com.project.likelion13thbe.domain.comment.entity.Comment;
+import com.project.likelion13thbe.domain.comment.exception.CommentErrorCode;
+import com.project.likelion13thbe.domain.comment.exception.CommentException;
 import com.project.likelion13thbe.domain.comment.service.commend.CommentCommendService;
 import com.project.likelion13thbe.domain.comment.service.commend.CommentCommendServiceImpl;
 import com.project.likelion13thbe.domain.comment.service.query.CommentQueryService;
 import com.project.likelion13thbe.global.apiPayload.exception.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,10 +57,14 @@ public class CommentController {
     }
 
     @Operation(summary = "댓글 수정")
-    @PatchMapping("comments/{commentId}")
-    public CommentResDTO.CommentResponseDTO patchComment(@PathVariable Long commentId) {
-        return null;
-    }// 단일 수정이니까 Id만 있으면 되나?
+    @PatchMapping("/comments/{commentId}")
+    public CustomResponse<CommentResDTO.CommentPreviewResDTO> updateComment(
+            @PathVariable Long commentId,
+            @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO
+    ) {
+        return CustomResponse.onSuccess(CommentCommendService.updateComment(commentId, commentUpdateReqDTO));
+    }
+
 
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("/comments/{commentId}")

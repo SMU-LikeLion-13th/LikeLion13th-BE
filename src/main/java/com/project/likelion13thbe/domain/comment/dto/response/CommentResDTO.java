@@ -43,12 +43,4 @@ public class CommentResDTO {
             Boolean hasNext
     ) {}
 
-    @Builder
-    public record CommentListResponseDTO(
-            List<CommentResponseDTO> commentList
-    ) {
-    }
-
-
-
 }
