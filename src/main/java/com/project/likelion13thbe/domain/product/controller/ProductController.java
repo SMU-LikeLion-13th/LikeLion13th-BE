@@ -12,6 +12,8 @@ import com.project.likelion13thbe.domain.product.service.query.ProductQueryServi
 import com.project.likelion13thbe.domain.product.service.query.ProductQueryServiceImpl;
 import com.project.likelion13thbe.global.apiPayload.exception.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -64,8 +66,12 @@ public class ProductController {
 
     @Operation(summary = "상품 삭제")
     @DeleteMapping("products/{productId}")
-    public ProductResDTO.ProductResponeseDTO deleteProduct(@PathVariable Long ProductId){
-        return null;
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "상품 삭제 성공")
+    })
+    public CustomResponse<String> deleteProduct(@PathVariable Long ProductId){
+        productCommandService.deleteProduct(ProductId);
+        return CustomResponse.onSuccess("상품 삭제 성공");
     }
 
 }
