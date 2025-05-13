@@ -4,6 +4,8 @@ import com.project.likelion13thbe.domain.comment.dto.request.CommentReqDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.comment.service.commend.CommentCommendService;
 import com.project.likelion13thbe.domain.comment.service.commend.CommentCommendServiceImpl;
+import com.project.likelion13thbe.domain.comment.service.query.CommentQueryService;
+import com.project.likelion13thbe.global.apiPayload.exception.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +19,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CommentController {
 
-    private  final CommentCommendServiceImpl CommentCommendServiceImpl;
+    private final CommentCommendService CommentCommendService;
+    private final CommentQueryService commentQueryService;
 
     @Operation(summary = "댓글 조회")
     @GetMapping("/reviews/{reviewId}/comments")
-    public CommentResDTO.CommentResponseDTO getComment(@PathVariable Long reviewId) {
-        return null;
+    public ResponseEntity<CommentResDTO.CommentCursorResDTO> getCommentsByReview(
+            @RequestParam Long reviewId,
+            @RequestParam(required = false, defaultValue = "0") Long cursor,
+            @RequestParam(required = false, defaultValue = "10") int size
+    ) {
+        CommentResDTO.CommentCursorResDTO response = commentQueryService.getCommentsByReview(reviewId, cursor, size);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "댓글 좋아요")
@@ -40,7 +48,7 @@ public class CommentController {
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(CommentCommendServiceImpl.createComment(commentCreateRequestDTO));
+                .body(CommentCommendService.createComment(commentCreateRequestDTO));
     }
 
     @Operation(summary = "댓글 수정")

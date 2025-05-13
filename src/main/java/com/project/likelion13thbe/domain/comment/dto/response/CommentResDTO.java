@@ -28,6 +28,22 @@ public class CommentResDTO {
     }
 
     @Builder
+    public record CommentPreviewResDTO(
+            Long id,
+            String content,
+            String name,
+            Integer likeCount,
+            LocalDateTime createdAt
+    ) {}
+
+    @Builder
+    public record CommentCursorResDTO(
+            List<CommentPreviewResDTO> comments,
+            Long nextCursor,
+            Boolean hasNext
+    ) {}
+
+    @Builder
     public record CommentListResponseDTO(
             List<CommentResponseDTO> commentList
     ) {

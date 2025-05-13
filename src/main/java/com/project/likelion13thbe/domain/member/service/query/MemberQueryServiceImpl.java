@@ -42,8 +42,8 @@ public class MemberQueryServiceImpl implements MemberQueryService{
 
 
     //커서기반 사용자 조회
-    public MemberResDTO.MemberCursorResDTO getMemberCursor(Long cursor,Integer size)
-    {
+    public MemberResDTO.MemberCursorResDTO getMemberCursor(Long cursor,Integer size) {
+
         Pageable pageable = PageRequest.of(0,size);
 
         // cursor가 0일 경우(첫 페이지)
