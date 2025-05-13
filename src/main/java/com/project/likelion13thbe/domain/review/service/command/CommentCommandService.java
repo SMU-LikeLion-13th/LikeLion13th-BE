@@ -4,9 +4,12 @@ import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.domain.review.converter.CommentConverter;
 import com.project.likelion13thbe.domain.review.dto.request.CommentReqDTO;
+import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.review.entity.Comment;
 import com.project.likelion13thbe.domain.review.entity.Review;
+import com.project.likelion13thbe.domain.review.exception.ReviewErrorCode;
+import com.project.likelion13thbe.domain.review.exception.ReviewException;
 import com.project.likelion13thbe.domain.review.repository.CommentRepository;
 import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
 import jakarta.transaction.Transactional;
@@ -35,4 +38,7 @@ public class CommentCommandService {
 
         return CommentConverter.toCommentCreateResDTO(comment);
     }
+
+
+
 }

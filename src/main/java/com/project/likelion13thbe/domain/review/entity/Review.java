@@ -29,6 +29,9 @@ public class Review extends BaseEntity {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId", nullable = false)
     private Member member;
@@ -36,4 +39,15 @@ public class Review extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId", nullable = false)
     private Product product;
+
+    public void updateReview(String content) {
+        this.content = content;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
+
+
 }
