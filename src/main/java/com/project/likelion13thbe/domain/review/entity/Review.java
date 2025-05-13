@@ -6,6 +6,8 @@ import com.project.likelion13thbe.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -25,12 +27,18 @@ public class Review extends BaseEntity {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     //리뷰 업데이트 매서드
     public void updateReview(String content, Double score, String image ) {
         this.content = content;
         this.score = score;
         this.image = image;
     }
+
+    //리뷰 softdelete 매서드
+    public void delete(){this.deletedAt = LocalDateTime.now();}
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)

@@ -3,7 +3,7 @@ package com.project.likelion13thbe.domain.review.service.query;
 import com.project.likelion13thbe.domain.review.converter.ReviewConverter;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.entity.Review;
-import com.project.likelion13thbe.domain.review.exception.ReviewEception;
+import com.project.likelion13thbe.domain.review.exception.ReviewException;
 import com.project.likelion13thbe.domain.review.exception.ReviewErrorCode;
 import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
     @Override
     public ReviewResDTO.ReviewPreviewResDTO getReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ReviewEception(ReviewErrorCode.REVIEW_NOT_FOUND));
+                .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
 
         return ReviewConverter.toReviewPreviewResponseDTO(review);
     }
@@ -39,7 +39,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
         Slice<Review> reviews = reviewRepository.findByMemberIdAndIdLessThanOrderByCreatedAtDesc(memberId, cursor, pageable);
         if (reviews.isEmpty()) {
-            throw new ReviewEception(ReviewErrorCode.REVIEW_NOT_FOUND);
+            throw new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND);
         }
 
         return ReviewConverter.toReviewCursorResDTO(reviews);
@@ -57,7 +57,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
         Slice<Review> reviews = reviewRepository.findByProductIdAndIdLessThanOrderByCreatedAtDesc(productId, cursor, pageable);
 
         if (reviews.isEmpty()) {
-            throw new ReviewEception(ReviewErrorCode.REVIEW_NOT_FOUND);
+            throw new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND);
         }
 
         return ReviewConverter.toReviewCursorResDTO(reviews);

@@ -64,8 +64,9 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 삭제")
     @DeleteMapping("/reviews/{reviewId}")
-    public ReviewResDTO.ReviewResponseDTO getReviews(@PathVariable Long reviewId) {
-        return null;
+    public CustomResponse<String> deleteReview(@PathVariable("reviewId") @NotNull Long reviewId) {
+        reviewCommandService.deleteReview(reviewId);
+        return CustomResponse.onSuccess("리뷰 삭제 성공");
     }
 
     @Operation(summary = "리뷰 수정")
