@@ -53,6 +53,10 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
         Slice<Review> reviews = reviewRepository.findByProductIdAndIdLessThanOrderByCreatedAtDesc(productId, cursor, pageable);
 
+        if (reviews.isEmpty()) {
+            throw new ReviewEception(ReviewErrorCode.REVIEW_NOT_FOUND);
+        }
+
         return ReviewConverter.toReviewCursorResDTO(reviews);
     }
 
