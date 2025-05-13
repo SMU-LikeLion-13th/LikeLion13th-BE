@@ -3,6 +3,8 @@ package com.project.likelion13thbe.domain.comment.service.query;
 import com.project.likelion13thbe.domain.comment.converter.CommentConverter;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.comment.entity.Comment;
+import com.project.likelion13thbe.domain.comment.exception.CommentErrorCode;
+import com.project.likelion13thbe.domain.comment.exception.CommentException;
 import com.project.likelion13thbe.domain.comment.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +29,10 @@ public class CommentQueryServiceImpl implements CommentQueryService {
         }
 
         Slice<Comment> comments = commentRepository.findByReviewIdAndIdLessThanOrderByIdDesc(reviewId, cursor, pageable);
+
+        if (comments.isEmpty()) {
+            throw new CommentException(CommentErrorCode.COMMENT_NOT_FOUND);
+        }
 
         return CommentConverter.toCursorResDTO(comments);
     }

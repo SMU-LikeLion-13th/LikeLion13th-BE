@@ -22,15 +22,15 @@ public class CommentController {
     private final CommentCommendService CommentCommendService;
     private final CommentQueryService commentQueryService;
 
-    @Operation(summary = "댓글 조회")
+    @Operation(summary = "댓글 조회",description = "커시기반 페이지네이션")
     @GetMapping("/reviews/{reviewId}/comments")
-    public ResponseEntity<CommentResDTO.CommentCursorResDTO> getCommentsByReview(
+    public CustomResponse<CommentResDTO.CommentCursorResDTO> getCommentsByReview(
             @RequestParam Long reviewId,
             @RequestParam(required = false, defaultValue = "0") Long cursor,
             @RequestParam(required = false, defaultValue = "10") int size
     ) {
         CommentResDTO.CommentCursorResDTO response = commentQueryService.getCommentsByReview(reviewId, cursor, size);
-        return ResponseEntity.ok(response);
+        return CustomResponse.onSuccess(response);
     }
 
     @Operation(summary = "댓글 좋아요")
