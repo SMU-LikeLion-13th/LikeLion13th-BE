@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -27,5 +29,16 @@ public class Member extends BaseEntity {
 
     @Column(name="image")
     private String image;
+
+    // 비밀번호 변경 메서드
+    public void updatePassword(String newPassword){
+        this.password = newPassword;
+    }
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    public void delete(){
+        this.deletedAt = LocalDateTime.now();
+    }
 
 }
