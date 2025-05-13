@@ -7,7 +7,9 @@ import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService
 import com.project.likelion13thbe.global.apiPayload.exception.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,12 +55,10 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 생성")
     @PostMapping("/product/{productId}/reviews")
-    public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> createReview(
-            @PathVariable Long productId,
-            @RequestBody ReviewReqDTO.ReviewCreateReqDTO dto){
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(reviewCommandService.createReview(productId, dto));
+    public CustomResponse<ReviewResDTO.ReviewCreateResDTO> createReview(
+            @PathVariable("productId")@NotNull @Positive Long productId,
+            @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO dto){
+        return CustomResponse.onSuccess(reviewCommandService.createReview(productId, dto));
     }
 
     @Operation(summary = "리뷰 삭제")
