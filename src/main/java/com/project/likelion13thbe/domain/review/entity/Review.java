@@ -25,6 +25,13 @@ public class Review extends BaseEntity {
     @Column(name = "image")
     private String image;
 
+    //리뷰 업데이트 매서드
+    public void updateReview(String content, Double score, String image ) {
+        this.content = content;
+        this.score = score;
+        this.image = image;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product; //리뷰 작성한 상품

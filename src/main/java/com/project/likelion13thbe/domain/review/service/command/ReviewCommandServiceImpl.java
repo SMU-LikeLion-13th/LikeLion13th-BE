@@ -4,7 +4,6 @@ import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
 import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
-import com.project.likelion13thbe.domain.product.converter.ProductConverter;
 import com.project.likelion13thbe.domain.product.entity.Product;
 import com.project.likelion13thbe.domain.product.exception.ProductErrorCode;
 import com.project.likelion13thbe.domain.product.exception.ProductException;
@@ -13,6 +12,8 @@ import com.project.likelion13thbe.domain.review.converter.ReviewConverter;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.entity.Review;
+import com.project.likelion13thbe.domain.review.exception.ReviewEception;
+import com.project.likelion13thbe.domain.review.exception.ReviewErrorCode;
 import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,5 +40,16 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
         reviewRepository.save(review);
 
         return ReviewConverter.toReviewResponseDTO(review);
+    }
+
+    @Override
+    public ReviewResDTO.ReviewPreviewResDTO  updateReview(Long reviewId, ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO){
+
+        Review review = reviewRepository.findById(reviewId).
+                orElseThrow(()-> new ReviewEception(ReviewErrorCode.REVIEW_NOT_FOUND));
+
+        review.updateReview(reviewUpdateReqDTO.content(),reviewUpdateReqDTO.score(),reviewUpdateReqDTO.image());
+
+        return ReviewConverter.toReviewPreviewResponseDTO(review);
     }
 }

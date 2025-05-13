@@ -4,6 +4,7 @@ import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
 import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
+import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
 import com.project.likelion13thbe.global.apiPayload.exception.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -69,8 +70,11 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 수정")
     @PatchMapping("/reviews/{reviewId}")
-    public ReviewResDTO.ReviewUpdateDTO patchReviewUpdate(@PathVariable Long reviewId) {
-        return null;
+    public CustomResponse<ReviewResDTO.ReviewPreviewResDTO> updateReview(
+            @PathVariable Long reviewId,
+            @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO dto //클라이언트로부터 리뷰 수정 요청 데이터를 받기 위한 DTO.
+    ) {
+        return CustomResponse.onSuccess(reviewCommandService.updateReview(reviewId, dto)); //서비스 계층에서 리뷰 수정 로직을 수행.
     }
 
 

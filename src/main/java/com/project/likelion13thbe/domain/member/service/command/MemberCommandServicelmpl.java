@@ -35,6 +35,8 @@ public class MemberCommandServicelmpl implements MemberCommandService{
         //회원정보 조회
         Member member = memberRepository.findByIdAndNotDeleted(userId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        //member.updatePassword(passwordEncoder.encode(dto.getPassword()));
     }
 
     @Override
