@@ -31,7 +31,7 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 단일 조회")
     @GetMapping("/reviews/{reviewId}")
-    public CustomResponse<ReviewResDTO.ReviewPreviewResDTO> getReview(@PathVariable("reviewId")@NotNull Long reviewId) {
+    public CustomResponse<ReviewResDTO.ReviewPreviewResDTO> getReview(@PathVariable Long reviewId) {
         return CustomResponse.onSuccess(reviewQueryService.getReview(reviewId));
     }
 
@@ -57,14 +57,14 @@ public class ReviewController {
     @Operation(summary = "리뷰 생성")
     @PostMapping("/product/{productId}/reviews")
     public CustomResponse<ReviewResDTO.ReviewCreateResDTO> createReview(
-            @PathVariable("productId")@NotNull @Positive Long productId,
+            @PathVariable Long productId,
             @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO dto){
         return CustomResponse.onSuccess(reviewCommandService.createReview(productId, dto));
     }
 
     @Operation(summary = "리뷰 삭제")
     @DeleteMapping("/reviews/{reviewId}")
-    public CustomResponse<String> deleteReview(@PathVariable("reviewId") @NotNull Long reviewId) {
+    public CustomResponse<String> deleteReview(@PathVariable Long reviewId) {
         reviewCommandService.deleteReview(reviewId);
         return CustomResponse.onSuccess("리뷰 삭제 성공");
     }

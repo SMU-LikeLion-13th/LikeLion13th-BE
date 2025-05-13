@@ -49,7 +49,7 @@ public class ProductController {
     @GetMapping("/products/{productId}")
     @Validated //pathVariable 유효성 검사
     public CustomResponse<ProductResDTO.ProductPreviewResDTO> getProduct(
-            @PathVariable("productId") @NotNull Long productId
+            @PathVariable Long productId
     ) {
         return CustomResponse.onSuccess(productQueryService.getProduct(productId));
     }
