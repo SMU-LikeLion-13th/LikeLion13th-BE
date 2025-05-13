@@ -4,7 +4,7 @@ import com.project.likelion13thbe.domain.comment.convert.CommentConvert;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.comment.entity.Comment;
 import com.project.likelion13thbe.domain.comment.repository.CommentRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class CommentQueryServiceImpl implements CommentQueryService {
     private final CommentRepository commentRepository;
 
