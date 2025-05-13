@@ -14,6 +14,7 @@ public class ReviewConvert {
         return Review.builder()
                 .description(reviewCreateReqDTO.description())
                 .rating(reviewCreateReqDTO.rating())
+                .profileImage(member.getImage())
                 .member(member)
                 .build();
     }
