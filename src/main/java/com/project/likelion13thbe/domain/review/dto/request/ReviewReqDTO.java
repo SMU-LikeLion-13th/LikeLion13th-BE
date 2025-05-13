@@ -7,7 +7,7 @@ public class ReviewReqDTO {
     @Getter
     public static class ReviewCreateReqDTO {
         private String content;
-        private String star_rating;
-        private String like_count;
+        private String starRating;
+        private String likeCount;
     }
 }

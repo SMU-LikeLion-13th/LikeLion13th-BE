@@ -12,8 +12,8 @@ public class ReviewConverter {
     public static Review toReview(ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
         return Review.builder()
                 .content(reviewCreateReqDTO.getContent())
-                .star_rating(reviewCreateReqDTO.getStar_Rating())
-                .like_count(reviewCreateReqDTO.getLike_Count())
+                .starRating(reviewCreateReqDTO.getStarRating())
+                .likeCount(reviewCreateReqDTO.getLikeCount())
                 .build();
     }
 

@@ -18,9 +18,9 @@ public class Review extends BaseEntity {
     @Column(name="content", nullable = false)
     private String content;
 
-    @Column(name = "star_rating", nullable = false)
-    private String star_rating;
+    @Column(name = "starRating", nullable = false)
+    private String starRating;
 
-    @Column(name = "like_count", nullable = false)
-    private String like_count;
+    @Column(name = "likeCount", nullable = false)
+    private String likeCount;
 }

@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.rmi.AccessException;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,4 +27,14 @@ public class Member extends BaseEntity {
 
     @Column(name = "nickname")
     private String nickname;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }
