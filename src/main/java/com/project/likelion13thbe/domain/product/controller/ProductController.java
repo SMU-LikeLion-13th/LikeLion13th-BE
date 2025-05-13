@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -55,13 +56,11 @@ public class ProductController {
 
     @Operation(summary = "상품 등록")
     @PostMapping("/products")
-    public ResponseEntity<ProductResDTO.ProductCreateResDTO> createProduct(
-            @RequestBody ProductReqDTO.ProductCreateReqDTO dto
+    public CustomResponse<ProductResDTO.ProductCreateResDTO> createProduct(
+            @Valid @RequestBody ProductReqDTO.ProductCreateReqDTO productCreateReqDTO
     )
     {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(productCommandService.createProduct(dto));
+        return CustomResponse.onSuccess(productCommandService.createProduct(productCreateReqDTO));
     }
 
     @Operation(summary = "상품 삭제")
