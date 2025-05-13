@@ -6,9 +6,12 @@ import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.domain.product.repository.ProductRepository;
 import com.project.likelion13thbe.domain.product.service.command.ProductCommandService;
 import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -63,5 +66,11 @@ public class ProductController {
     @Parameters({
             @Parameter(name = "productId", description = "상품 아이디", example = "1")
     })
-    public ProductResDTO.ProductResponseDTO deleteProduct(@PathVariable long productId) { return null;}
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "상품 삭제 성공")
+    })
+    public CustomResponse<String> deleteProduct(@PathVariable long productId) {
+        productCommandService.deleteProduct(productId);
+        return CustomResponse.onSuccess("상품 삭제 성공");
+    }
 }

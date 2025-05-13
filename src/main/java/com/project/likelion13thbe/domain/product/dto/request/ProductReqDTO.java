@@ -8,6 +8,10 @@ public class ProductReqDTO {
           Long stars
     ) {}
 
+    public record ProductDeleteDTO(
+            Long productId
+    ) {}
+
 
 
 }

@@ -1,7 +1,7 @@
 package com.project.likelion13thbe.domain.member.service.command;
 
-import com.project.likelion13thbe.domain.member.Exception.MemberErrorCode;
-import com.project.likelion13thbe.domain.member.Exception.MemberException;
+import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
+import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.converter.MemberConverter;
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;

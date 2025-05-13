@@ -37,5 +37,4 @@ public class Member extends BaseEntity {
     public void delete() {
         this.deletedAt = LocalDateTime.now();
     }
-
 }

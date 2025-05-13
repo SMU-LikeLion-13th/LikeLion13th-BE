@@ -1,4 +1,4 @@
-package com.project.likelion13thbe.domain.member.Exception;
+package com.project.likelion13thbe.domain.member.exception;
 
 import com.project.likelion13thbe.global.apiPayload.code.BaseErrorCode;
 import lombok.AllArgsConstructor;
