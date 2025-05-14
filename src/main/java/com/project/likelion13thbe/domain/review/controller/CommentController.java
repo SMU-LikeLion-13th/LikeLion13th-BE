@@ -42,11 +42,13 @@ public class CommentController {
     //댓글 작성
     @Operation(summary = "댓글 작성 API", description = "댓글 작성 API입니다.")
     @PostMapping("/users/comments")
-    public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> createComment(
-            @RequestBody ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(reviewCommandService.createReview(reviewCreateReqDTO));
+    public CustomResponse<String> createComment(
+            @RequestBody CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO) {
+
+        commentCommandService.createComment(commentCreateReqDTO);
+
+        return CustomResponse.onSuccess("댓글 작성 성공");
+
     }
 
     //댓글 좋아요

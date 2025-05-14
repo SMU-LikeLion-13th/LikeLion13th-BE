@@ -30,8 +30,7 @@ public class MemberCommandService {
         return MemberConverter.toMemberResponseDTO(member);
     }
     //@Override
-    @Validated
-    public void updatePassword(@NotNull MemberReqDTO.PasswordResetDTO passwordResetDTO) {
+    public void updatePassword(MemberReqDTO.PasswordResetDTO passwordResetDTO) {
         Member member = memberRepository.findByMemberIdAndNotDeleted(passwordResetDTO.memberId()).orElseThrow(
                 () -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 

@@ -53,11 +53,12 @@ public class ProductController {
     //상품 추가
     @Operation(summary = "상품 추가 API", description = "상품 추가 API입니다.")
     @PostMapping("/products")
-    public ResponseEntity<ProductResDTO.ProductCreateResDTO> createProduct(
+    public CustomResponse<String> createProduct(
             @RequestBody ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(productCommandService.createProduct(productCreateReqDTO));
+
+        productCommandService.createProduct(productCreateReqDTO);
+
+        return CustomResponse.onSuccess("상품 추가 성공");
     }
 
     //상품 삭제

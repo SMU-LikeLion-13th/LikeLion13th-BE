@@ -15,9 +15,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -46,18 +48,20 @@ public class MemberController {
     //카카오 로그인
     @Operation(summary = "카카오 로그인 API", description = "카카오 로그인 관련 API")
     @PostMapping("/auth/kakao")
-    public MemberResDTO.MemberResponseDTO kakaoLogin() { return null; } //request는 구현하지 않았음.
+    public CustomResponse<String> kakaoLogin() { return null; } //request는 구현하지 않았음.
 
     //일반 로그인
     @Operation(summary = "일반 로그인 API", description = "일반 로그인 API입니다.")
     @PostMapping("/auth/login")
-    public MemberResDTO.MemberResponseDTO login() { return null; } //request는 구현하지 않았음.
+    public CustomResponse<String> login() { return null; } //request는 구현하지 않았음.
 
     //비밀번호 수정
     @Operation(summary = "비밀번호 수정 API", description = "비밀번호 수정 API입니다.")
     @PatchMapping("/members")
+    @Validated
     public CustomResponse<String> resetPassword(
-            @RequestBody MemberReqDTO.PasswordResetDTO passwordResetDTO
+            @RequestBody @NotNull MemberReqDTO.PasswordResetDTO passwordResetDTO
+
     ){
         memberCommandService.updatePassword(passwordResetDTO);
         return CustomResponse.onSuccess("비밀번호 변경 성공");
@@ -65,11 +69,12 @@ public class MemberController {
     //회원가입
     @Operation(summary = "회원가입 API", description = "회원가입 API입니다.")
     @PostMapping("/members")
-    public ResponseEntity<MemberResDTO.MemberCreateResDTO> createMember
+    public CustomResponse<String> createMember
     (@RequestBody MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(memberCommandService.createMember(memberCreateReqDTO));
+
+        memberCommandService.createMember(memberCreateReqDTO);
+
+        return CustomResponse.onSuccess("회원가입 성공");
     }
 
     //회원 탈퇴 (JWT 인증 필요)
