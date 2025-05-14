@@ -17,7 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         COUNT(r)
     )
     FROM Product p
-    LEFT JOIN Review r ON r.product.id = p.id
+    LEFT JOIN Review r ON r.product.id = p.id AND r.deletedAt IS NULL
     GROUP BY p
 """)
     List<ProductReviewDTO> findAllProductsWithReviewStats();

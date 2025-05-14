@@ -7,8 +7,11 @@ import com.project.likelion13thbe.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -19,6 +22,9 @@ public class Comment extends BaseEntity {
 
     @Column(name = "content", nullable = false)
     private String content;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -31,5 +37,7 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
     private Review review;
+
+    public void delete() {this.deletedAt = LocalDateTime.now();}
 
 }

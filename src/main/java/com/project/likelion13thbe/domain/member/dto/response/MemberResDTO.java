@@ -21,7 +21,7 @@ public class MemberResDTO {
     }
 
     @Builder
-    public record ResetPasswordReqDTO(
+    public record ResetPasswordResDTO(
             String currentPassword,
             String newPassword
     ) {

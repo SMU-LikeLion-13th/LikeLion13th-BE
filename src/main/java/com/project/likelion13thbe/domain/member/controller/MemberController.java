@@ -4,10 +4,11 @@ import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,28 +22,28 @@ public class MemberController {
     private final MemberQueryService memberQueryService;
     @Operation(description = "회원가입")
     @PostMapping
-    public ResponseEntity<MemberResDTO.MemberCreateResDTO> createMember(
-            @RequestBody MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(memberCommandService.createMember(memberCreateReqDTO));
+    public CustomResponse<MemberResDTO.MemberCreateResDTO> createMember(
+            @RequestBody @Valid MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+        return CustomResponse.onSuccess(memberCommandService.createMember(memberCreateReqDTO));
     }
 
     @Operation(description = "유저 조회")
     @GetMapping
-    public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
-        return ResponseEntity.ok(memberQueryService.getMember());
+    public CustomResponse<MemberResDTO.MemberPreviewResDTO> getMember() {
+        return CustomResponse.onSuccess(memberQueryService.getMember());
     }
 
 
     @Operation(description = "비밀번호 수정")
-    @PatchMapping("/users/reset-password")
-    public ResponseEntity<MemberResDTO.ResetPasswordReqDTO> updatePassword(
-            @RequestBody MemberReqDTO.ResetPasswordReqDTO dto
+    @PatchMapping("/{memberId}/reset-password")
+    public CustomResponse<MemberResDTO.ResetPasswordResDTO> resetPassword(
+            @RequestBody @Valid MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO,
+            @PathVariable("memberId") Long memberId
     ) {
-        return ResponseEntity.ok(null);
+        return CustomResponse.onSuccess(memberCommandService.updatePassword(memberId, resetPasswordReqDTO));
     }
 
+    // 로그인은 반환값으로 토큰을 발급해야해서 일단 커스텀적용 안했습니다
     @Operation(description = "로그인")
     @PostMapping("/login")
     public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> login(
@@ -57,5 +58,11 @@ public class MemberController {
             @RequestBody MemberReqDTO.KakaoLoginRequestDTO dto
     ) {
         return ResponseEntity.ok(null);
+    }
+    @Operation(description = "회원 탈퇴")
+    @DeleteMapping("/{memberId}")
+    public CustomResponse<String> deleteMember(@PathVariable("memberId") Long memberId) {
+        memberCommandService.deleteMember((memberId));
+        return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
 }

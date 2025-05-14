@@ -3,8 +3,12 @@ package com.project.likelion13thbe.domain.comment.service.query;
 import com.project.likelion13thbe.domain.comment.converter.CommentConverter;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.comment.entity.Comment;
+import com.project.likelion13thbe.domain.comment.exception.CommentErrorCode;
+import com.project.likelion13thbe.domain.comment.exception.CommentException;
 import com.project.likelion13thbe.domain.comment.repository.CommentRepository;
 import com.project.likelion13thbe.domain.review.entity.Review;
+import com.project.likelion13thbe.domain.review.exception.ReviewErrorCode;
+import com.project.likelion13thbe.domain.review.exception.ReviewException;
 import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,12 +26,16 @@ public class CommentQueryServiceImpl implements CommentQueryService {
     @Override
     public CommentResDTO.CommentListResDTO getCommentList(Long productId, Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new RuntimeException("reviewId에 해당하는 review가 존재하지 않습니다."));
+                .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
 
         if (!review.getProduct().getId().equals(productId)) {
-            throw new IllegalArgumentException("리뷰가 해당 상품에 속하지 않습니다.");
+            throw new ReviewException(ReviewErrorCode.REVIEW_PRODUCT_MISMATCH);
         }
+
         List<Comment> comments = commentRepository.findAllByReviewId(reviewId);
+
+        if (comments.isEmpty())
+            throw new CommentException(CommentErrorCode.COMMENT_NOT_FOUND);
 
         return CommentConverter.toCommentPreviewResponseDTOList(comments);
     }

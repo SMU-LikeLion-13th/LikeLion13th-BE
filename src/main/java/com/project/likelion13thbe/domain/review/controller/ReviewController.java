@@ -4,16 +4,13 @@ import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
 import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,64 +22,47 @@ public class ReviewController {
     private final ReviewCommandService reviewCommandService;
 
     @Operation(description = "리뷰 단건 조회")
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "COMMON200", description = "Ok, 성공",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ReviewResDTO.ReviewPreviewResDTO.class)
-                    )
-            )
-    })
     @Parameter(name = "reviewId", description = "review PK", example = "1")
     @GetMapping("/api/v1/reviews/{reviewId}")
-    public ResponseEntity<ReviewResDTO.ReviewPreviewResDTO> getReview(@PathVariable Long reviewId) {
-        return ResponseEntity.ok(reviewQueryService.getReview(reviewId));
+    public CustomResponse<ReviewResDTO.ReviewPreviewResDTO> getReview(@PathVariable("reviewId") @NotNull Long reviewId) {
+        return CustomResponse.onSuccess(reviewQueryService.getReview(reviewId));
     }
 
     @Operation(description = "리뷰 목록 조회")
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "COMMON200", description = "Ok, 성공",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ReviewResDTO.ReviewListDTO.class)
-                    )
-            )
-    })
     @Parameter(name = "productId", description = "product PK", example = "1")
     @GetMapping("/api/v1/products/{productId}/reviews")
-    public ResponseEntity<ReviewResDTO.ReviewListDTO> getReviews(@PathVariable Long productId) {
-        return ResponseEntity.ok(reviewQueryService.getReviewList(productId));
+    public CustomResponse<ReviewResDTO.ReviewListDTO> getReviews(@PathVariable("productId") @NotNull Long productId) {
+        return CustomResponse.onSuccess(reviewQueryService.getReviewList(productId));
     }
 
     @Operation(description = "리뷰 생성")
     @Parameter(name = "productId", description = "product PK", example = "1")
     @PostMapping("/api/v1/products/{productId}/reviews")
-    public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> createReview(
-            @PathVariable Long productId,
-            @RequestBody ReviewReqDTO.ReviewCreateReqDTO dto
+    public CustomResponse<ReviewResDTO.ReviewCreateResDTO> createReview(
+            @PathVariable("productId") Long productId,
+            @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO dto
     ) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(reviewCommandService.createReview(productId, dto));
+        return CustomResponse.onSuccess(reviewCommandService.createReview(productId, dto));
     }
     @Operation(description = "리뷰 수정")
     @Parameter(name = "reviewId", description = "review PK", example = "2")
     @PatchMapping("/api/v1/reviews/{reviewId}")
-    public ResponseEntity<ReviewResDTO.ReviewPreviewResDTO> updateReview(
-            @PathVariable Long reviewId,
-            @RequestBody ReviewReqDTO.UpdateReviewDTO dto
+    public CustomResponse<ReviewResDTO.ReviewPreviewResDTO> updateReview(
+        @PathVariable("reviewId") Long reviewId,
+        @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO updateReviewDTO
     ) {
-        return ResponseEntity.ok(null);
+        return CustomResponse.onSuccess(reviewCommandService.updateReview(reviewId, updateReviewDTO));
     }
     @Operation(description = "리뷰 삭제")
     @Parameter(name = "reviewId", description = "review PK", example = "1")
     @DeleteMapping("/api/v1/reviews/{reviewId}")
-    public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
-        return ResponseEntity.ok(null);
+    public CustomResponse<String> deleteReview(@PathVariable("reviewId") Long reviewId) {
+        reviewCommandService.deleteReview(reviewId);
+        return CustomResponse.onSuccess("리뷰 삭제 성공");
     }
 
     @GetMapping("/api/v1/reviews/my")
-    public ResponseEntity<ReviewResDTO.ReviewListDTO> getMyReview() {
-        return ResponseEntity.ok(reviewQueryService.getMyReview());
+    public CustomResponse<ReviewResDTO.ReviewListDTO> getMyReview() {
+        return CustomResponse.onSuccess(reviewQueryService.getMyReview());
     }
 }
