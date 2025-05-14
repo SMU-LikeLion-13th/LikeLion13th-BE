@@ -4,8 +4,8 @@ import com.project.likelion13thbe.domain.product.dto.request.ProductRequestDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResponseDTO;
 import com.project.likelion13thbe.domain.product.service.command.ProductCommandServiceImpl;
 import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
-import com.project.likelion13thbe.domain.product.service.query.ProductQueryServiceImpl;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -21,13 +21,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1")
 @Tag(name = "Product", description = "상품 관련 API")
 public class ProductController {
 
     private final ProductCommandServiceImpl productCommandService;
-    private final ProductCommandServiceImpl productCommandServiceImpl;
     private final ProductQueryService productQueryService;
-    private final ProductQueryServiceImpl productQueryServiceImpl;
 
     @Operation(summary = "상품 상세 조회 API", description = "상품 상세 조회")
     @ApiResponses({
@@ -45,7 +44,7 @@ public class ProductController {
     @Parameter(name = "productId", description = "상품 아이디", example = "1")
     @GetMapping("/api/v1/products/{productId}")
     public ResponseEntity<ProductResponseDTO.ProductPreviewResDTO> getProduct(@PathVariable Long productId) {
-        return ResponseEntity.ok(productQueryServiceImpl.getProduct());
+        return ResponseEntity.ok(productQueryService.getProduct());
     }
 
     @Operation(summary = "상품 목록 조회 API", description = "상품 목록 조회")
@@ -62,8 +61,11 @@ public class ProductController {
             )
     })
     @GetMapping("/api/v1/products")
-    public ResponseEntity<ProductResponseDTO.ProductListResponseDTO> getProducts() {
-        return ResponseEntity.ok(productQueryServiceImpl.getProductList());
+    public CustomResponse<ProductResponseDTO.ProductOffsetResponseDTO> getProducts(
+            @RequestParam Integer offset,
+            @RequestParam Integer size
+    ) {
+        return CustomResponse.onSuccess(productQueryService.getProductOffset(offset,size));
     }
 
 
@@ -104,7 +106,8 @@ public class ProductController {
             @Parameter(name = "productId", description = "상품 아이디", example = "1")
     })
     @DeleteMapping("api/v1/products/{productId}")
-    public ProductResponseDTO.ProductCreateResponseDTO deleteProduct(@PathVariable Long productId) {
-        return null;
+    public CustomResponse<String> deleteProduct(@PathVariable Long productId) {
+        productCommandService.deleteProduct(productId);
+        return CustomResponse.onSuccess("상품 삭제 성공");
     }
 }

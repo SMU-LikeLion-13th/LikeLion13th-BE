@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.domain.review.dto.request;
 
+import com.project.likelion13thbe.domain.product.entity.Product;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import lombok.Getter;
@@ -23,7 +24,14 @@ public class ReviewRequestDTO {
     public record ReviewCreateRequestDTO(
             String content,
             Long rating,
-            String image
+            String image,
+
+            Long memberId,
+            Long productId
     ) {}
 
+    public record ReviewUpdateRequestDTO(
+            Long reviewId,
+            String content
+    ){}
 }

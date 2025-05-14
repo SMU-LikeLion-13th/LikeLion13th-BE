@@ -1,8 +1,13 @@
 package com.project.likelion13thbe.domain.comment.entity;
 
+import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.product.entity.Product;
+import com.project.likelion13thbe.domain.review.entity.Review;
 import com.project.likelion13thbe.global.BaseEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,4 +26,26 @@ public class Comment extends BaseEntity {
 
     @Column(name = "nickname", nullable = false)
     private String nickname;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id")
+    private Review review;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    // 댓글 변경 메서드
+    public void updateComment(String content) { this.content = content; }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

@@ -1,10 +1,13 @@
 package com.project.likelion13thbe.domain.product.converter;
 
+import com.project.likelion13thbe.domain.member.converter.MemberConverter;
+import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import com.project.likelion13thbe.domain.product.dto.request.ProductRequestDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResponseDTO;
 import com.project.likelion13thbe.domain.product.entity.Product;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,9 +17,10 @@ public class ProductConverter {
     public static Product toProduct(ProductRequestDTO.ProductCreateRequestDTO productCreateRequestDTO) {
         return Product.builder()
                 .name(productCreateRequestDTO.name())
-                .content(productCreateRequestDTO.description())
+                .content(productCreateRequestDTO.content())
                 .price(productCreateRequestDTO.price())
                 .image(productCreateRequestDTO.image())
+                .quantity(productCreateRequestDTO.quantity())
                 .build();
     }
 
@@ -52,4 +56,15 @@ public class ProductConverter {
                 .build();
     }
 
+    public static ProductResponseDTO.ProductOffsetResponseDTO toProductOffsetResponseDTO(Page<Product> page) {
+        List<ProductResponseDTO.ProductPreviewResDTO> products = page.getContent().stream()
+                .map(ProductConverter::toProductPreviewResponseDTO)
+                .toList();
+
+        return ProductResponseDTO.ProductOffsetResponseDTO.builder()
+                .products(products)
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .build();
+    }
 }

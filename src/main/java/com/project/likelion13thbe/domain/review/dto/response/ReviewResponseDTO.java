@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.domain.review.dto.response;
 
+import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,16 @@ public class ReviewResponseDTO {
     public static class ReviewListResponseDTO {
         @Schema(description = "리뷰 목록")
         private List<ReviewResDTO> reviews;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ReviewOffsetResponseDTO {
+        private List<ReviewResponseDTO.ReviewPreviewResDTO> reviews;
+        private Long totalElements;
+        private Integer totalPages;
     }
 
     @Builder
@@ -42,4 +53,6 @@ public class ReviewResponseDTO {
             String content,
             Long rating
     ){}
+
+
 }

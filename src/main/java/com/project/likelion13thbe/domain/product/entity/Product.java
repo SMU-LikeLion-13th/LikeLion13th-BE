@@ -1,8 +1,11 @@
 package com.project.likelion13thbe.domain.product.entity;
 
+import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.global.BaseEntity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -33,4 +36,16 @@ public class Product extends BaseEntity {
 
     @Column(name = "image")
     private String image;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    // soft delete를 위한 필드 추가
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

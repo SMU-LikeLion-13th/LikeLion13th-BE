@@ -51,5 +51,13 @@ public class ProductResponseDTO {
         private String content;
     }
 
-
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProductOffsetResponseDTO {
+        private List<ProductPreviewResDTO> products;
+        private Long totalElements;
+        private Integer totalPages;
+    }
 }
