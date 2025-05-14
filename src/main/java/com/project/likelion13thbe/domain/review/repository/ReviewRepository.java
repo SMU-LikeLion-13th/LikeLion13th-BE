@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 
-@Repository
 public interface ReviewRepository  extends JpaRepository<Review, Long> {
 
     @Query("SELECT AVG(r.score) FROM Review r WHERE r.product.id = :productId AND r.deletedAt IS NULL")
