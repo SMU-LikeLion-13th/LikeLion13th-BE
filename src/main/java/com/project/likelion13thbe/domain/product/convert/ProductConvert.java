@@ -15,6 +15,7 @@ public class ProductConvert {
                 .price(productCreateReqDTO.price())
                 .quantity(productCreateReqDTO.quantity())
                 .image(productCreateReqDTO.image())
+                .rating(productCreateReqDTO.rating())
                 .build();
     }
     public static ProductResDTO.ProductDetailResDTO toProductDetailResponse(Product product) {

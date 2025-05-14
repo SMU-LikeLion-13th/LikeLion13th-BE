@@ -1,14 +1,16 @@
 package com.project.likelion13thbe.domain.member.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import lombok.Getter;
 
 
 public class MemberReqDTO {
     @Builder
     public record LoginRequest(String email, String password) {}
 
-    @Builder
-    public record ResetPasswordRequest(String password) {}
 
     @Builder
     public record  SignUpRequest(  //MemberCreateReqDTO
@@ -21,4 +23,8 @@ public class MemberReqDTO {
     @Builder
     public record KakaoLoginRequest(
             String kakaoEmail, String kakaoPassword) {}
+    @Builder
+    public record PasswordResetDTO(
+            String password
+    ){ }
 }

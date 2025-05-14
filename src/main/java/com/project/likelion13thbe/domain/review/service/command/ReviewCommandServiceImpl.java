@@ -1,11 +1,16 @@
 package com.project.likelion13thbe.domain.review.service.command;
 
+import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
+import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.domain.review.convert.ReviewConvert;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.entity.Review;
+import com.project.likelion13thbe.domain.review.exception.ReviewErrorCode;
+import com.project.likelion13thbe.domain.review.exception.ReviewException;
 import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +37,17 @@ public class ReviewCommandServiceImpl implements ReviewCommandService{
         reviewRepository.save(review);
 
         return ReviewConvert.toReviewResDTO(review);
+    }
+    @Override
+    public void updateReview(Long reviewId, ReviewReqDTO.ReviewUpdateDTO reviewUpdateRequestDTO) {
+        Review review=reviewRepository.findByIdAndNotDeleted(reviewId)
+                .orElseThrow(()-> new ReviewException(ReviewErrorCode.REVIEW_ERROR_CODE));
+        review.updateReview(reviewUpdateRequestDTO.getDescription(), reviewUpdateRequestDTO.getRating());
+    }
+    @Override
+    public void deleteReview(Long reviewId){
+        Review review=reviewRepository.findByIdAndNotDeleted(reviewId)
+                .orElseThrow(()-> new ReviewException(ReviewErrorCode.REVIEW_ERROR_CODE));
+        review.delete();
     }
 }

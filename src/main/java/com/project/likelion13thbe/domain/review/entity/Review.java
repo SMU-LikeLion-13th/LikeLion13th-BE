@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
+import java.time.LocalDateTime;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -43,5 +44,16 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    //리뷰 수정 메서드
+    public void updateReview(String description,Integer rating){
+        this.description = description;
+        this.rating = rating;
+    }
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    public void delete(){
+        this.deletedAt = LocalDateTime.now();
+    }
 
 }

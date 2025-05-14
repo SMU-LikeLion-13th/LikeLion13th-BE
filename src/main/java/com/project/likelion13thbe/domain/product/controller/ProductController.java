@@ -5,6 +5,7 @@ import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.domain.product.service.command.ProductCommandServiceImpl;
 import com.project.likelion13thbe.domain.product.service.query.ProductQueryServiceImpl;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -73,7 +74,7 @@ public class ProductController {
                 .status(HttpStatus.CREATED)
                 .body(productCommandServiceImpl.addProduct(productCreateReqDTO));
     }
-
+    @DeleteMapping("/products/{productId}")
     @Operation(description = "상품 삭제")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "ok, 성공",
@@ -81,8 +82,9 @@ public class ProductController {
             @ApiResponse(responseCode = "400", description = "실패",
                     content = @Content(mediaType = "application/json"))
     })
-    @DeleteMapping("/products/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
-        return null;
+    public CustomResponse<String> deleteProduct(@PathVariable Long productId ) {
+        productCommandServiceImpl.deleteProduct(productId);
+        return CustomResponse.onSuccess("상품 삭제 성공");
     }
+
 }

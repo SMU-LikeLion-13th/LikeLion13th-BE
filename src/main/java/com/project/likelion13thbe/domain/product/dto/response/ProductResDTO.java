@@ -14,7 +14,7 @@ public class ProductResDTO {
             Integer price,
             String image,
             String description,
-            Integer rating
+            double rating
     ) {}
 
     @Builder

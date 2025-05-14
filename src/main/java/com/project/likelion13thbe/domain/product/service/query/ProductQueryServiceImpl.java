@@ -4,16 +4,16 @@ import com.project.likelion13thbe.domain.product.convert.ProductConvert;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.domain.product.entity.Product;
 import com.project.likelion13thbe.domain.product.repository.ProductRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class ProductQueryServiceImpl implements ProductQueryService{
     private final ProductRepository productRepository;
 

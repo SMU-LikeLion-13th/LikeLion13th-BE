@@ -2,8 +2,10 @@ package com.project.likelion13thbe.domain.member.controller;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
+import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandServiceImpl;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryServiceImpl;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +26,7 @@ public class MemberController {
 
     private final MemberCommandServiceImpl memberCommandServiceImpl;
     private final MemberQueryServiceImpl memberQueryServiceImpl;
+    private final MemberCommandService memberCommandService;
 
     @Operation(description = "일반 로그인")
     @ApiResponses({
@@ -70,11 +73,10 @@ public class MemberController {
             )
     })
     @PostMapping("/users")
-    public ResponseEntity<MemberResDTO.MemberCreateResDTO> createMember(
+    public CustomResponse<MemberResDTO.MemberCreateResDTO> createMember(
             @RequestBody MemberReqDTO.SignUpRequest signUpRequest) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(memberCommandServiceImpl.createMember(signUpRequest));
+        return CustomResponse.onSuccess(HttpStatus.CREATED, memberCommandServiceImpl.createMember(signUpRequest));
+
     }
 
     @Operation(description = "비밀번호 수정")
@@ -87,9 +89,12 @@ public class MemberController {
                     content = @Content(mediaType = "application/json")
             )
     })
-    @PostMapping("/users/password")
-    public ResponseEntity<Void> localLogin(@RequestBody MemberReqDTO.ResetPasswordRequest resetPasswordRequest) {
-        return null;
+    @PatchMapping("/users/{userId}/password")
+    public CustomResponse<String> resetPassword(
+            @PathVariable String email,
+            @RequestBody MemberReqDTO.PasswordResetDTO passwordResetDTO) {
+        memberCommandService.updatePassword(email, passwordResetDTO);
+        return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
     @GetMapping
@@ -108,5 +113,16 @@ public class MemberController {
     ) {
         return ResponseEntity.ok(memberQueryServiceImpl.getMemberCursor(cursor, size));
     }
+    @DeleteMapping("/members/{memberId}")
+    @Operation(summary = "회원 탈퇴",description = "회원 계정을 삭제합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200",description ="회원 탈퇴 성공" )
+    })
+    public CustomResponse<String> deleteMember(@PathVariable String memberId ) {
+        memberCommandServiceImpl.deleteMember(memberId);
+        return CustomResponse.onSuccess("회원 탈퇴 성공");
+    }
+
+
 
 }
