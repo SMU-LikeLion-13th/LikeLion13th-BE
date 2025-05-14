@@ -2,8 +2,9 @@ package com.project.likelion13thbe.domain.product.controller;
 
 import com.project.likelion13thbe.domain.product.dto.request.ProductRequestDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResponseDTO;
-import com.project.likelion13thbe.domain.product.service.command.ProductCommandServiceImpl;
-import com.project.likelion13thbe.domain.product.service.query.ProductQueryServiceImpl;
+import com.project.likelion13thbe.domain.product.service.command.ProductCommandService;
+import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/products")
 public class ProductController {
 
-    private final ProductCommandServiceImpl productCommandServiceImpl;
-    private final ProductQueryServiceImpl productQueryServiceImpl;
+    private final ProductCommandService productCommandService;
+    private final ProductQueryService productQueryService;
 
     @Operation(summary = "상품 상세 조회")
     @ApiResponses({
@@ -32,8 +32,8 @@ public class ProductController {
                     content = @Content(mediaType = "application/json"))
     })
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponseDTO.ProductDetailResponseDTO> getProductDetail(@PathVariable Long productId) {
-        return ResponseEntity.ok(productQueryServiceImpl.getProduct(productId));
+    public CustomResponse<ProductResponseDTO.ProductDetailResponseDTO> getProductDetail(@PathVariable Long productId) {
+        return CustomResponse.onSuccess(productQueryService.getProduct(productId));
     }
 
     @Operation(summary = "상품 목록 조회")
@@ -44,8 +44,16 @@ public class ProductController {
                     content = @Content(mediaType = "application/json"))
     })
     @GetMapping
-    public ResponseEntity<ProductResponseDTO.ProductListResponseDTO> getProductList() {
-        return ResponseEntity.ok(productQueryServiceImpl.getProducts());
+    public CustomResponse<ProductResponseDTO.ProductListResponseDTO> getProductList() {
+        return CustomResponse.onSuccess(productQueryService.getProducts());
+    }
+
+    @GetMapping("/cursor")
+    public CustomResponse<ProductResponseDTO.ProductCursorResponseDTO> getProductCursor(
+            @RequestParam Long cursor,
+            @RequestParam Integer size
+    ) {
+        return CustomResponse.onSuccess(productQueryService.getProductCursor(cursor, size));
     }
 
     @Operation(summary = "상품 추가")
@@ -58,10 +66,8 @@ public class ProductController {
                     content = @Content(mediaType = "application/json"))
     })
     @PostMapping()
-    public ResponseEntity<ProductResponseDTO.ProductCreateResponseDTO> createProduct(@RequestBody ProductRequestDTO.ProductCreateRequestDTO productCreateRequestDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(productCommandServiceImpl.createProduct(productCreateRequestDTO));
+    public CustomResponse<ProductResponseDTO.ProductCreateResponseDTO> createProduct(@RequestBody ProductRequestDTO.ProductCreateRequestDTO productCreateRequestDTO) {
+        return CustomResponse.onSuccess(HttpStatus.CREATED, productCommandService.createProduct(productCreateRequestDTO));
     }
 
     @Operation(summary = "상품 삭제")
@@ -72,7 +78,8 @@ public class ProductController {
                     content = @Content(mediaType = "application/json"))
     })
     @DeleteMapping("/{productId}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
-        return null;
+    public CustomResponse<String> deleteProduct(@PathVariable Long productId) {
+        productCommandService.deleteProduct(productId);
+        return CustomResponse.onSuccess("상품 삭제 성공");
     }
 }

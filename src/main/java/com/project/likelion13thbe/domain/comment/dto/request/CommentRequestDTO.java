@@ -8,8 +8,13 @@ public class CommentRequestDTO {
     public record CommentCreateRequestDTO(
             String content,
 
-            Long memberId,
-            Long reviewId
+            Long memberId
+    ) {
+    }
+
+    @Builder
+    public record CommentUpdateRequestDTO(
+            String content
     ) {
     }
 

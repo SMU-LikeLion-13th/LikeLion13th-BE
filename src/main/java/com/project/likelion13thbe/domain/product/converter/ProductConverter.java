@@ -6,6 +6,9 @@ import com.project.likelion13thbe.domain.product.dto.response.ProductResponseDTO
 import com.project.likelion13thbe.domain.product.entity.Product;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Slice;
+
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProductConverter {
@@ -38,6 +41,23 @@ public class ProductConverter {
                 .image(product.getImage())
                 .productType(product.getProductType())
                 .ratingAvg(product.getRatingAvg())
+                .build();
+    }
+
+    public static ProductResponseDTO.ProductCursorResponseDTO toProductCursorResponseDTO(Slice<Product> products) {
+        List<ProductResponseDTO.ProductDetailResponseDTO> productList = products.stream()
+                .map(ProductConverter::toProductDetailResponseDTO)
+                .toList();
+
+        Long nextCursor = null;
+        if (!products.isEmpty() && products.hasNext()) {
+            nextCursor = products.getContent().get(products.getNumberOfElements() - 1).getId();
+        }
+
+        return ProductResponseDTO.ProductCursorResponseDTO.builder()
+                .products(productList)
+                .hasNext(products.hasNext())
+                .nextCursor(nextCursor)
                 .build();
     }
 }

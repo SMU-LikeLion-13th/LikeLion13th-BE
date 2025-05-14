@@ -7,4 +7,7 @@ public interface CommentQueryService {
     CommentResponseDTO.CommentDetailResponseDTO getComment(Long commentId);
 
     CommentResponseDTO.CommentListResponseDTO getComments();
+
+    CommentResponseDTO.CommentCursorResponseDTO getCommentCursor(Long reviewId, Long cursor, Integer size);
+
 }

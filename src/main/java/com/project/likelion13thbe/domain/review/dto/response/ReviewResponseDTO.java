@@ -32,4 +32,12 @@ public class ReviewResponseDTO {
             LocalDateTime createdAt
     ) {
     }
+
+    @Builder
+    public record ReviewCursorResponseDTO(
+            List<ReviewDetailResponseDTO> reviews,
+            Long nextCursor,
+            Boolean hasNext
+    ) {
+    }
 }

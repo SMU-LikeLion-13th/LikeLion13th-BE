@@ -7,4 +7,5 @@ public interface ProductCommandService {
 
     ProductResponseDTO.ProductCreateResponseDTO createProduct(ProductRequestDTO.ProductCreateRequestDTO productCreateRequestDTO);
 
+    void deleteProduct(Long productId);
 }

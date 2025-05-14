@@ -33,4 +33,11 @@ public class ProductResponseDTO {
     ) {
     }
 
+    @Builder
+    public record ProductCursorResponseDTO(
+            List<ProductDetailResponseDTO> products,
+            Long nextCursor,
+            Boolean hasNext
+    ) {
+    }
 }

@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,4 +54,11 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product")
     private List<Review> reviews = new ArrayList<>();
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    // soft delete method
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

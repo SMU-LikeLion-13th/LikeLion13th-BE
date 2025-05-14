@@ -3,8 +3,13 @@ package com.project.likelion13thbe.domain.product.service.query;
 import com.project.likelion13thbe.domain.product.converter.ProductConverter;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResponseDTO;
 import com.project.likelion13thbe.domain.product.entity.Product;
+import com.project.likelion13thbe.domain.product.exception.ProductErrorCode;
+import com.project.likelion13thbe.domain.product.exception.ProductException;
 import com.project.likelion13thbe.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +25,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     @Override
     public ProductResponseDTO.ProductDetailResponseDTO getProduct(Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+                .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
 
         return ProductConverter.toProductDetailResponseDTO(product);
     }
@@ -32,6 +37,17 @@ public class ProductQueryServiceImpl implements ProductQueryService {
                 .map(ProductConverter::toProductDetailResponseDTO).toList();
 
         return ProductResponseDTO.ProductListResponseDTO.builder().productList(products).build();
+    }
+
+    @Override
+    public ProductResponseDTO.ProductCursorResponseDTO getProductCursor(Long cursor, Integer size) {
+        Pageable pageable = PageRequest.of(0, size);
+
+        if (cursor == 0) cursor = Long.MAX_VALUE;
+
+        Slice<Product> products = productRepository.findAllByIdLessThanOrderByIdDescAndNotDeleted(cursor, pageable);
+
+        return ProductConverter.toProductCursorResponseDTO(products);
     }
 
 }

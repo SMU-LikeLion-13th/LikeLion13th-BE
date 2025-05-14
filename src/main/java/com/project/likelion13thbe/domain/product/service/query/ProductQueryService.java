@@ -7,4 +7,6 @@ public interface ProductQueryService {
     ProductResponseDTO.ProductDetailResponseDTO getProduct(Long productId);
 
     ProductResponseDTO.ProductListResponseDTO getProducts();
+
+    ProductResponseDTO.ProductCursorResponseDTO getProductCursor(Long cursor, Integer size);
 }

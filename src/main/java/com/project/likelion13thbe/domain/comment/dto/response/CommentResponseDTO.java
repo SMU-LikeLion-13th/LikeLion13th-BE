@@ -30,4 +30,12 @@ public class CommentResponseDTO {
             LocalDateTime createdAt
     ) {
     }
+
+    @Builder
+    public record CommentCursorResponseDTO(
+            List<CommentDetailResponseDTO> comments,
+            Long nextCursor,
+            Boolean hasNext
+    ) {
+    }
 }

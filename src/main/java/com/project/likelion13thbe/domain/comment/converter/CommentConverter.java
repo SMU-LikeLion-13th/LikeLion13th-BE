@@ -7,6 +7,9 @@ import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.review.entity.Review;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Slice;
+
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommentConverter {
@@ -34,6 +37,23 @@ public class CommentConverter {
                 .updatedAt(comment.getUpdatedAt())
                 .likeCount(comment.getLikeCount())
                 .nickname(comment.getMember().getName())
+                .build();
+    }
+
+    public static CommentResponseDTO.CommentCursorResponseDTO toCommentCursorResponseDTO(Slice<Comment> comments) {
+        List<CommentResponseDTO.CommentDetailResponseDTO> commentList = comments.stream()
+                .map(CommentConverter::toCommentDetailResponseDTO)
+                .toList();
+
+        Long nextCursor = null;
+        if (!comments.isEmpty() && comments.hasNext()) {
+            nextCursor = comments.getContent().get(comments.getNumberOfElements() - 1).getId();
+        }
+
+        return CommentResponseDTO.CommentCursorResponseDTO.builder()
+                .comments(commentList)
+                .hasNext(comments.hasNext())
+                .nextCursor(nextCursor)
                 .build();
     }
 }

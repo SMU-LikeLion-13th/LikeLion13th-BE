@@ -2,9 +2,10 @@ package com.project.likelion13thbe.domain.member.controller;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
-import com.project.likelion13thbe.domain.member.service.command.MemberCommandServiceImpl;
-import com.project.likelion13thbe.domain.member.service.query.MemberQueryServiceImpl;
+import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
+import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,8 +23,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/members")
 public class MemberController {
 
-    private final MemberCommandServiceImpl memberCommandServiceImpl;
-    private final MemberQueryServiceImpl memberQueryServiceImpl;
+    private final MemberCommandService memberCommandService;
+    private final MemberQueryService memberQueryService;
 
     @Operation(summary = "일반 로그인")
     @ApiResponses({
@@ -49,9 +50,12 @@ public class MemberController {
             @ApiResponse(responseCode = "401", description = "Unauthorized\t\n 1. jwt 유효하지 않음 \t\n 2. 비밀번호 유형 맞지 않음",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping("/password-reset")
-    public ResponseEntity<?> resetPassword(@RequestBody MemberRequestDTO.ResetPasswordRequestDTO resetPasswordRequestDTO) {
-        return null;
+    @PatchMapping("/password-reset/{email}")
+    public CustomResponse<String> resetPassword(
+            @PathVariable String email,
+            @RequestBody MemberRequestDTO.ResetPasswordRequestDTO resetPasswordRequestDTO) {
+        memberCommandService.updatePassword(email, resetPasswordRequestDTO);
+        return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
     @Operation(summary = "회원가입")
@@ -64,11 +68,9 @@ public class MemberController {
                     content = @Content(mediaType = "application/json"))
     })
     @PostMapping("/signup")
-    public ResponseEntity<MemberResponseDTO.MemberCreateResponseDTO> localSignUp(
+    public CustomResponse<MemberResponseDTO.MemberCreateResponseDTO> localSignUp(
             @RequestBody MemberRequestDTO.MemberCreateRequestDTO memberCreateRequestDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(memberCommandServiceImpl.createMember(memberCreateRequestDTO));
+        return CustomResponse.onSuccess(HttpStatus.CREATED, memberCommandService.createMember(memberCreateRequestDTO));
     }
 
     @Operation(summary = "내 리뷰 조회")
@@ -96,21 +98,31 @@ public class MemberController {
         return null;
     }
 
-    @GetMapping
-    public ResponseEntity<MemberResponseDTO.MemberPreviewResponseDTO> getMember() {
-        return ResponseEntity.ok(memberQueryServiceImpl.getMember());
+    @GetMapping("/{memberId}")
+    public CustomResponse<MemberResponseDTO.MemberPreviewResponseDTO> getMember(@PathVariable Long memberId) {
+        return CustomResponse.onSuccess(memberQueryService.getMember(memberId));
     }
 
     @GetMapping("/offset")
-    public ResponseEntity<MemberResponseDTO.MemberOffsetResponseDTO> getMemberOffset(
+    public CustomResponse<MemberResponseDTO.MemberOffsetResponseDTO> getMemberOffset(
             @RequestParam Integer offset, @RequestParam Integer size) {
-        return ResponseEntity.ok(memberQueryServiceImpl.getMemberOffset(offset, size));
+        return CustomResponse.onSuccess(memberQueryService.getMemberOffset(offset, size));
     }
 
     @GetMapping("/cursor")
-    public ResponseEntity<MemberResponseDTO.MemberCursorResponseDTO> getMemberCursor(
+    public CustomResponse<MemberResponseDTO.MemberCursorResponseDTO> getMemberCursor(
             @RequestParam Long cursor, @RequestParam Integer size
     ) {
-        return ResponseEntity.ok(memberQueryServiceImpl.getMemberCursor(cursor, size));
+        return CustomResponse.onSuccess(memberQueryService.getMemberCursor(cursor, size));
+    }
+
+
+    @DeleteMapping("/{memberId}")
+    @Operation(summary = "회원 탈퇴")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK")})
+    public CustomResponse<String> deleteMember(@PathVariable Long memberId) {
+        memberCommandService.deleteMember(memberId);
+        return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
 }

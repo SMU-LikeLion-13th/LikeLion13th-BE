@@ -7,4 +7,6 @@ public interface ReviewQueryService {
     ReviewResponseDTO.ReviewDetailResponseDTO getReview(Long reviewId);
 
     ReviewResponseDTO.ReviewListResponseDTO getReviews();
+
+    ReviewResponseDTO.ReviewCursorResponseDTO getReviewCursor(Long productId, Long cursor, Integer size);
 }
