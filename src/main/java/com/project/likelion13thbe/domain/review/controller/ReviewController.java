@@ -2,8 +2,10 @@ package com.project.likelion13thbe.domain.review.controller;
 
 import com.project.likelion13thbe.domain.order.dto.response.OrderResDTO;
 import com.project.likelion13thbe.domain.order.service.command.OrderCommandService;
+import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,6 +30,30 @@ public class ReviewController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(reviewCommandService.createReview(CreateReqDTO.reviewCreateReqDTO));
+    }
+
+    // 리뷰 수정 엔드포인트
+    @PatchMapping("/api/v1/reviews/{reviewId}")
+    @Operation(summary = "리뷰 수정", description = "회원의 리뷰를 수정")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "리뷰 수정 성공")
+    })
+    public CustomResponse<String> EditReview(
+            @RequestBody ReviewReqDTO.ReviewEditDTO request
+    ) {
+        return CustomResponse.onSuccess("리뷰 수정 성공");
+    }
+
+    // 리뷰 삭제 엔드포인트
+    @DeleteMapping("/api/v1/reviews/{reviewId}")
+    @Operation(summary = "리뷰 삭제", description = "회원의 리뷰를 삭제")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200",description = "리뷰 삭제 성공")
+    })
+    public CustomResponse<String> DeleteReview(
+            @RequestBody ReviewReqDTO.ReviewDeleteDTO request
+    ) {
+        return CustomResponse.onSuccess("리뷰 삭제 성공");
     }
 
     @Operation(summary = "단건 리뷰 조회 API")
