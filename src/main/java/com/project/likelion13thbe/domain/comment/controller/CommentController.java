@@ -35,7 +35,7 @@ public class CommentController {
     }
 
     @Operation(summary = "댓글 수정")
-    @PatchMapping("comment/{commentId}")
+    @PatchMapping("comments/{commentId}")
     public CustomResponse<String> updateComment(
             @PathVariable Long commentId,
             @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
@@ -46,7 +46,7 @@ public class CommentController {
     }
 
     @Operation(summary = "댓글 삭제")
-    @DeleteMapping("comment/{commentId}")
+    @DeleteMapping("comments/{commentId}")
     public CustomResponse<String> deleteComment(@PathVariable Long commentId) {
 
         commentCommandService.deleteComment(commentId);
