@@ -7,7 +7,10 @@ import com.project.likelion13thbe.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
+@Table(name = "comment")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,11 +23,14 @@ public class Comment extends BaseEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "like")
+    @Column(name = "like_count")
     private Integer likeCount;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,4 +40,10 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
     private Review review;
+
+
+    public void updateContent(String newContent){this.content = newContent;}//좋아요 갯수도 update 구현해야 할거같은데
+
+    public void delete(){this.deletedAt = LocalDateTime.now();}
+
 }

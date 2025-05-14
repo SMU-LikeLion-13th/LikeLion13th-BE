@@ -45,10 +45,5 @@ public class ReviewResDTO {
     ) {
     }
 
-    public record ReviewUpdateDTO(
-            Long id,
-            String content
-    ){
-    }
 
 }

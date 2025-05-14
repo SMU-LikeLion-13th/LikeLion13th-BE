@@ -3,7 +3,9 @@ package com.project.likelion13thbe.domain.member.service.query;
 import com.project.likelion13thbe.domain.member.converter.MemberConverter;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
+import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,10 +23,10 @@ public class MemberQueryServiceImpl implements MemberQueryService{
 
 
     @Override
-    public MemberResDTO.MemberPreviewResDTO getMember() {
+    public MemberResDTO.MemberPreviewResDTO getMember(Long memberId) {
         // DB에서 pk가 1인 Member 조회
-        Member member = memberRepository.findById(1L)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 회원이 존재하지 않습니다."));
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
         return MemberConverter.toMemberPreviewResponseDTO(member);
     }
 
@@ -40,8 +42,8 @@ public class MemberQueryServiceImpl implements MemberQueryService{
 
 
     //커서기반 사용자 조회
-    public MemberResDTO.MemberCursorResDTO getMemberCursor(Long cursor,Integer size)
-    {
+    public MemberResDTO.MemberCursorResDTO getMemberCursor(Long cursor,Integer size) {
+
         Pageable pageable = PageRequest.of(0,size);
 
         // cursor가 0일 경우(첫 페이지)

@@ -2,10 +2,17 @@ package com.project.likelion13thbe.domain.comment.controller;
 
 import com.project.likelion13thbe.domain.comment.dto.request.CommentReqDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
+import com.project.likelion13thbe.domain.comment.entity.Comment;
+import com.project.likelion13thbe.domain.comment.exception.CommentErrorCode;
+import com.project.likelion13thbe.domain.comment.exception.CommentException;
 import com.project.likelion13thbe.domain.comment.service.commend.CommentCommendService;
 import com.project.likelion13thbe.domain.comment.service.commend.CommentCommendServiceImpl;
+import com.project.likelion13thbe.domain.comment.service.query.CommentQueryService;
+import com.project.likelion13thbe.global.apiPayload.exception.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +24,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CommentController {
 
-    private  final CommentCommendServiceImpl CommentCommendServiceImpl;
+    private final CommentCommendService CommentCommendService;
+    private final CommentQueryService commentQueryService;
 
-    @Operation(summary = "댓글 조회")
+    @Operation(summary = "댓글 조회",description = "커시기반 페이지네이션")
     @GetMapping("/reviews/{reviewId}/comments")
-    public CommentResDTO.CommentResponseDTO getComment(@PathVariable Long reviewId) {
-        return null;
+    public CustomResponse<CommentResDTO.CommentCursorResDTO> getCommentsByReview(
+            @RequestParam Long reviewId,
+            @RequestParam(required = false, defaultValue = "0") Long cursor,
+            @RequestParam(required = false, defaultValue = "10") int size
+    ) {
+        CommentResDTO.CommentCursorResDTO response = commentQueryService.getCommentsByReview(reviewId, cursor, size);
+        return CustomResponse.onSuccess(response);
     }
 
     @Operation(summary = "댓글 좋아요")
@@ -40,26 +53,26 @@ public class CommentController {
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(CommentCommendServiceImpl.createComment(commentCreateRequestDTO));
+                .body(CommentCommendService.createComment(commentCreateRequestDTO));
     }
 
     @Operation(summary = "댓글 수정")
-    @PatchMapping("comments/{commentId}")
-    public CommentResDTO.CommentResponseDTO patchComment(@PathVariable Long commentId) {
-        return null;
-    }// 단일 수정이니까 Id만 있으면 되나?
-
-    @Operation(summary = "댓글 삭제")
-    @DeleteMapping("/comments/{commentId}")
-    public CommentResDTO.CommentResponseDTO deleteComment(@PathVariable Long commentId) {
-        return null;
+    @PatchMapping("/comments/{commentId}")
+    public CustomResponse<CommentResDTO.CommentPreviewResDTO> updateComment(
+            @PathVariable Long commentId,
+            @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO
+    ) {
+        return CustomResponse.onSuccess(CommentCommendService.updateComment(commentId, commentUpdateReqDTO));
     }
 
 
+    @Operation(summary = "댓글 삭제")
+    @DeleteMapping("/comments/{commentId}")
+    public CustomResponse<String> deleteComment(@PathVariable Long commentId) {
+        CommentCommendService.deleteComment(commentId);
 
-
-
-
+        return CustomResponse.onSuccess("댓글 삭제 성공");
+    }
 
 
 }
