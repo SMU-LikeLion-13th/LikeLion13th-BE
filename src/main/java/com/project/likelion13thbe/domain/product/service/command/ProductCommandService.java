@@ -4,6 +4,8 @@ import com.project.likelion13thbe.domain.product.converter.ProductConverter;
 import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.domain.product.entity.Product;
+import com.project.likelion13thbe.domain.product.exception.ProductErrorCode;
+import com.project.likelion13thbe.domain.product.exception.ProductException;
 import com.project.likelion13thbe.domain.product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +24,12 @@ public class ProductCommandService {
         productRepository.save(product);
 
         return ProductConverter.toProductCreateResDTO(product);
+    }
+
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findByProductIdAndNotDeleted(productId)
+                .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
+
+        product.delete();
     }
 }

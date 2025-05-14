@@ -23,7 +23,7 @@ public class ReviewResDTO {
     public record ReviewPreviewResDTO (
             String content,
             LocalDateTime date,
-            Long userId,
+            Long memberId,
             Long productId
     ) {}
 

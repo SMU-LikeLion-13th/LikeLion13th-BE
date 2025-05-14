@@ -1,7 +1,8 @@
 package com.project.likelion13thbe.domain.member.service.query;
 
+import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
+import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.converter.MemberConverter;
-import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
@@ -21,7 +22,7 @@ public class MemberQueryService {
     private final MemberRepository memberRepository;
 
     public MemberResDTO.MemberPreviewResDTO getMember() {
-        Member member = memberRepository.findById(1L).get();
+        Member member = memberRepository.findById(1L).orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         return MemberConverter.toMemberPreviewResponseDTO(member);
     }
@@ -40,8 +41,9 @@ public class MemberQueryService {
             cursor = Long.MAX_VALUE;
         }
 
-        Slice<Member> members = memberRepository.findAllByUserIdLessThanOrderByUserIdDesc(cursor, pageable);
+        Slice<Member> members = memberRepository.findAllByMemberIdLessThanOrderByMemberIdDesc(cursor, pageable);
 
         return MemberConverter.toMemberCursorResDTO(members);
-    }  
+    }
+
 }

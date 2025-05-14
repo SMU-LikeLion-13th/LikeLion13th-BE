@@ -8,6 +8,8 @@ import com.project.likelion13thbe.domain.review.converter.ReviewConverter;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.entity.Review;
+import com.project.likelion13thbe.domain.review.exception.ReviewErrorCode;
+import com.project.likelion13thbe.domain.review.exception.ReviewException;
 import com.project.likelion13thbe.domain.review.repository.ReviewRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,7 @@ public class ReviewCommandService {
     private final ProductRepository productRepository;
 
     public ReviewResDTO.ReviewCreateResDTO createReview(ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
-        Member member = memberRepository.findById(reviewCreateReqDTO.userId())
+        Member member = memberRepository.findById(reviewCreateReqDTO.memberId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
 
         Product product = productRepository.findById(reviewCreateReqDTO.productId())
@@ -33,7 +35,21 @@ public class ReviewCommandService {
         reviewRepository.save(review);
 
         return ReviewConverter.toReviewResDTO(review);
-
-
     }
+    public void updateReview(
+            Long reviewId, ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
+        Review review = reviewRepository.findByReviewIdAndNotDeleted(reviewId)
+                .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
+
+        review.updateReview(reviewUpdateReqDTO.content());
+    }
+
+    public void deleteReview(Long reviewId) {
+        Review review = reviewRepository.findByReviewIdAndNotDeleted(reviewId)
+                .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
+
+        review.delete();
+    }
+
+
 }

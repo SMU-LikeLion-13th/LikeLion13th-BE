@@ -1,8 +1,10 @@
 package com.project.likelion13thbe.domain.product.entity;
 
-import com.project.likelion13thbe.domain.order.entity.BaseEntity;
+import com.project.likelion13thbe.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -24,4 +26,13 @@ public class Product extends BaseEntity {
 
     @Column
     private Long stars;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
+
 }
