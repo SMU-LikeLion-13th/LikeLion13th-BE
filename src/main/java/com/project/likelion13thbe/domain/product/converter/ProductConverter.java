@@ -1,11 +1,13 @@
 package com.project.likelion13thbe.domain.product.converter;
 
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.product.dto.ProductDetailDTO;
 import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.domain.product.entity.Product;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -46,6 +48,25 @@ public class ProductConverter {
     public static ProductResDTO.ProductListResDTO toProductListResDTO(List<ProductResDTO.ProductDetailResDTO> productList) {
         return ProductResDTO.ProductListResDTO.builder()
                 .productList(productList)
+                .build();
+    }
+
+    public static ProductResDTO.ProductCursorResDTO toProductCursorResDTO(Slice<ProductDetailDTO> productDetailDTOSlice) {
+        List<ProductResDTO.ProductDetailResDTO> productList = productDetailDTOSlice.stream()
+                .map(productDetailDTO -> toProductDetailResDTO(
+                        productDetailDTO.product(), productDetailDTO.ratingAvg(), productDetailDTO.reviewCount().intValue()))
+                .toList();
+
+        // 다음 cursor 지정
+        Long nextCursor = null;
+        if (!productDetailDTOSlice.isEmpty() && productDetailDTOSlice.hasNext()) {
+            nextCursor = productDetailDTOSlice.getContent().get(productDetailDTOSlice.getNumberOfElements() - 1).product().getProductId();
+        }
+
+        return ProductResDTO.ProductCursorResDTO.builder()
+                .products(productList)
+                .hasNext(productDetailDTOSlice.hasNext())
+                .nextCursor(nextCursor)
                 .build();
     }
 }

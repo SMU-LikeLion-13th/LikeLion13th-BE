@@ -1,6 +1,6 @@
 package com.project.likelion13thbe.domain.review.dto.response;
 
-import lombok.*;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +31,14 @@ public class ReviewResDTO {
     public record ReviewCreateResDTO(
             Long reviewId,
             LocalDateTime createdAt
+    ) {
+    }
+
+    @Builder
+    public record ReviewCursorResDTO(
+            List<ReviewResDTO.ReviewDetailResDTO> reviews,
+            Long nextCursor,
+            Boolean hasNext
     ) {
     }
 

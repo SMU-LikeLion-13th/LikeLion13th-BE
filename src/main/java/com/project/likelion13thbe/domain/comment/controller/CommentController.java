@@ -4,14 +4,12 @@ import com.project.likelion13thbe.domain.comment.dto.request.CommentReqDTO;
 import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.comment.service.command.CommentCommandService;
 import com.project.likelion13thbe.domain.comment.service.query.CommentQueryService;
+import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,58 +21,46 @@ public class CommentController {
     private final CommentQueryService commentQueryService;
 
     @Operation(summary = "댓글 목록 조회")
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "200", description = "OK",
-//                    content = @Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = CommentResDTO.CommentListResDTO.class))),
-//            @ApiResponse(responseCode = "404", description = "Not Found",
-//                    content = @Content(mediaType = "application/json"))
-//    })
     @GetMapping("reviews/{reviewId}/comments")
-    public ResponseEntity<CommentResDTO.CommentListResDTO> getComment(@PathVariable Long reviewId) {
-        return ResponseEntity.ok(commentQueryService.getCommentList(reviewId));
+    public CustomResponse<CommentResDTO.CommentListResDTO> getComment(@PathVariable Long reviewId) {
+        return CustomResponse.onSuccess(commentQueryService.getCommentList(reviewId));
     }
 
     @Operation(summary = "댓글 작성")
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "201", description = "Created",
-//                    content = @Content(mediaType = "application/json")),
-//            @ApiResponse(responseCode = "400", description = "Bad Request",
-//                    content = @Content(mediaType = "application/json")),
-//            @ApiResponse(responseCode = "404", description = "Not Found",
-//                    content = @Content(mediaType = "application/json"))
-//    })
     @PostMapping("reviews/{reviewId}/comments")
-    public ResponseEntity<CommentResDTO.CommentCreateResDTO> createComment(
-            @PathVariable Long reviewId, @RequestBody CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(commentCommandService.createComment(commentCreateReqDTO, reviewId));
+    public CustomResponse<CommentResDTO.CommentCreateResDTO> createComment(
+            @PathVariable Long reviewId,
+            @RequestBody @Valid CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO) {
+        return CustomResponse.onSuccess(HttpStatus.CREATED, commentCommandService.createComment(commentCreateReqDTO, reviewId));
     }
 
     @Operation(summary = "댓글 수정")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "Bad Request",
-                    content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = @Content(mediaType = "application/json"))
-    })
-    @PatchMapping("comment/{commentId}")
-    public ResponseEntity<?> updateComment(@PathVariable Long commentId, @RequestBody CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
-        return null;
+    @PatchMapping("comments/{commentId}")
+    public CustomResponse<String> updateComment(
+            @PathVariable Long commentId,
+            @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
+
+        commentCommandService.updateComment(commentUpdateReqDTO, commentId);
+
+        return CustomResponse.onSuccess("댓글 수정 완료");
     }
 
     @Operation(summary = "댓글 삭제")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "No Content",
-                    content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "404", description = "Not Found",
-                    content = @Content(mediaType = "application/json"))
-    })
-    @DeleteMapping("comment/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
-        return null;
+    @DeleteMapping("comments/{commentId}")
+    public CustomResponse<String> deleteComment(@PathVariable Long commentId) {
+
+        commentCommandService.deleteComment(commentId);
+
+        return CustomResponse.onSuccess(HttpStatus.NO_CONTENT, "댓글 삭제 완료");
+    }
+
+    @Operation(summary = "댓글 목록 조회 (커서 방식)")
+    @GetMapping("/reviews/{reviewId}/comments-cursor/")
+    public CustomResponse<CommentResDTO.CommentCursorResDTO> getCommentCursor(
+            @PathVariable Long reviewId,
+            @RequestParam Long cursor,
+            @RequestParam Integer size
+    ) {
+        return CustomResponse.onSuccess(commentQueryService.getCommentCursor(reviewId, cursor, size));
     }
 }
