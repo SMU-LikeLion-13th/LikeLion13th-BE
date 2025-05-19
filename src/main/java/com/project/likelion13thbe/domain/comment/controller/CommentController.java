@@ -40,10 +40,11 @@ public class CommentController {
     @Operation(summary = "댓글 수정")
     @PatchMapping("comments/{commentId}")
     public CustomResponse<String> updateComment(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long commentId,
             @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
 
-        commentCommandService.updateComment(commentUpdateReqDTO, commentId);
+        commentCommandService.updateComment(userDetails.getUsername(), commentId, commentUpdateReqDTO);
 
         return CustomResponse.onSuccess("댓글 수정 완료");
     }
