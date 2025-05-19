@@ -5,6 +5,7 @@ import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
 import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
+import com.project.likelion13thbe.global.security.entity.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -82,8 +84,11 @@ public class ReviewController {
                     content = @Content(mediaType = "application/json"))
     })
     @PatchMapping("/reviews/{reviewId}")
-    public CustomResponse<String> editReview(@PathVariable Long reviewId, @RequestBody ReviewRequestDTO.ReviewUpdateRequestDTO reviewUpdateRequestDTO) {
-        reviewCommandService.updateReview(reviewId, reviewUpdateRequestDTO);
+    public CustomResponse<String> editReview(
+            @PathVariable Long reviewId,
+            @RequestBody ReviewRequestDTO.ReviewUpdateRequestDTO reviewUpdateRequestDTO,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        reviewCommandService.updateReview(reviewId, reviewUpdateRequestDTO, userDetails.getMember());
         return CustomResponse.onSuccess("리뷰 수정 성공");
     }
 

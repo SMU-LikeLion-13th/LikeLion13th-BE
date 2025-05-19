@@ -43,10 +43,14 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     }
 
     @Override
-    public void updateReview(Long reviewId, ReviewRequestDTO.ReviewUpdateRequestDTO reviewUpdateRequestDTO) {
+    public void updateReview(Long reviewId, ReviewRequestDTO.ReviewUpdateRequestDTO reviewUpdateRequestDTO, Member member) {
 
         Review review = reviewRepository.findByIdAndNotDeleted(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
+
+        if (!review.getMember().getId().equals(member.getId())) {
+            throw new ReviewException(ReviewErrorCode.UNAUTHORIZED);
+        }
 
         review.update(reviewUpdateRequestDTO.content(), reviewUpdateRequestDTO.rating(), reviewUpdateRequestDTO.image());
 

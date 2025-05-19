@@ -8,7 +8,7 @@ public interface ReviewCommandService {
 
     ReviewResponseDTO.ReviewCreateResponseDTO createReview(Long productId, ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO, Member member);
 
-    void updateReview(Long reviewId, ReviewRequestDTO.ReviewUpdateRequestDTO reviewUpdateRequestDTO);
+    void updateReview(Long reviewId, ReviewRequestDTO.ReviewUpdateRequestDTO reviewUpdateRequestDTO, Member member);
 
     void deleteReview(Long reviewId);
 }
