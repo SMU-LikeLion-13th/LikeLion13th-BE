@@ -52,8 +52,9 @@ public class MemberController {
     })
     @PatchMapping("/password-reset/{email}")
     public CustomResponse<String> resetPassword(
-            @PathVariable String email,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody MemberRequestDTO.ResetPasswordRequestDTO resetPasswordRequestDTO) {
+        String email = userDetails.getMember().getEmail();
         memberCommandService.updatePassword(email, resetPasswordRequestDTO);
         return CustomResponse.onSuccess("비밀번호 변경 성공");
     }

@@ -13,7 +13,10 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberConverter {
 
-    public static Member toMember(MemberRequestDTO.MemberCreateRequestDTO memberCreateRequestDTO) {
+    public static Member toMember(
+            MemberRequestDTO.MemberCreateRequestDTO memberCreateRequestDTO,
+            PasswordEncoder passwordEncoder) {
+        String encodedPassword = passwordEncoder.encode(memberCreateRequestDTO.password());
         return Member.builder()
                 .email(memberCreateRequestDTO.email())
                 .password(memberCreateRequestDTO.password())
