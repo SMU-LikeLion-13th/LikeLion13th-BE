@@ -29,6 +29,10 @@ public class Member extends BaseEntity {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 

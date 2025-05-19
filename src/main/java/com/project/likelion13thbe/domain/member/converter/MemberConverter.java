@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.member.converter;
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.entity.Role;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +13,8 @@ public class MemberConverter {
         return Member.builder()
                 .name(memberCreateReqDTO.name())
                 .email(memberCreateReqDTO.email())
-                .password(memberCreateReqDTO.password())
+                .password(encodedPassword)
+                .role(Role.ROLE_USER)
                 .build();
     }
 
