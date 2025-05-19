@@ -51,9 +51,13 @@ public class CommentCommandServiceImpl implements CommentCommandService {
     }
 
     @Override
-    public CommentResDTO.CommentPreviewResDTO updateComment(Long commentId, CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
+    public CommentResDTO.CommentPreviewResDTO updateComment(Long commentId, CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO, String email) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        if (!comment.getMember().getEmail().equals(email)) {
+            throw new CommentException(CommentErrorCode.COMMENT_ACCESS_DENIED);
+        }
 
         comment.setContent(commentUpdateReqDTO.content());
 

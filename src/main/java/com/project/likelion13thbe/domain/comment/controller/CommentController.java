@@ -39,7 +39,6 @@ public class CommentController {
     public CustomResponse<CommentResDTO.CommentCreateResDTO> createComment(
             @PathVariable("productId")  Long productId,
             @PathVariable("reviewId") Long reviewId,
-            @RequestBody @Valid CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO
             @RequestBody @Valid CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
@@ -51,9 +50,10 @@ public class CommentController {
     @PatchMapping("/api/v1/comments/{commentId}")
     public CustomResponse<CommentResDTO.CommentPreviewResDTO> updateCommit(
             @PathVariable("commentId") Long commentId,
-            @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO
+            @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        return CustomResponse.onSuccess(commentCommandService.updateComment(commentId, commentUpdateReqDTO));
+        return CustomResponse.onSuccess(commentCommandService.updateComment(commentId, commentUpdateReqDTO, userDetails.getUsername()));
     }
 
     @Operation(description = "댓글 삭제")
