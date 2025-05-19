@@ -124,11 +124,12 @@ public class MemberController {
     }
 
 
-    @DeleteMapping("/{memberId}")
+    @DeleteMapping
     @Operation(summary = "회원 탈퇴")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK")})
-    public CustomResponse<String> deleteMember(@PathVariable Long memberId) {
+    public CustomResponse<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long memberId = userDetails.getMember().getId();
         memberCommandService.deleteMember(memberId);
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
