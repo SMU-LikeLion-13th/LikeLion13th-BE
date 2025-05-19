@@ -51,6 +51,9 @@ public class SecurityConfig {
             // review
             "/products/**",  // 리뷰 상세 조회, cursor 조회
             "/reviews/*",   // 리뷰 목록 조회 (내 리뷰도 포함되나 선처리로 해결)
+
+            // comment
+            "/reviews/**"    // 댓글 목록 조회, cursor
     };
 
     // 인증이 필요한 GET url
