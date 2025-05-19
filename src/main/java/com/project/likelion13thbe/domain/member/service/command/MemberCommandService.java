@@ -9,7 +9,7 @@ public interface MemberCommandService {
 
     MemberResDTO.ResetPasswordResDTO updatePassword(String email, MemberReqDTO.ResetPasswordReqDTO dto);
 
-    void deleteMember(Long memberId);
+    void deleteMember(String email);
 
     void cleanupDeletedMembers();
 }

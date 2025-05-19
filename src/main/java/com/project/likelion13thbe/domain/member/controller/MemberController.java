@@ -67,9 +67,10 @@ public class MemberController {
         return ResponseEntity.ok(null);
     }
     @Operation(description = "회원 탈퇴")
-    @DeleteMapping("/{memberId}")
-    public CustomResponse<String> deleteMember(@PathVariable("memberId") Long memberId) {
-        memberCommandService.deleteMember((memberId));
+    @DeleteMapping
+    public CustomResponse<String> deleteMember(
+            @AuthenticationPrincipal UserDetails userDetails) {
+        memberCommandService.deleteMember((userDetails.getUsername()));
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
 }
