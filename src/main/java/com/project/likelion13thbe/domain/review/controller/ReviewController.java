@@ -70,8 +70,10 @@ public class ReviewController {
 
     @Operation(summary = "내 리뷰 조회")
     @GetMapping("/reviews/my")
-    public CustomResponse<ReviewResDTO.ReviewListResDTO> getMyReviews() {
-        return CustomResponse.onSuccess(reviewQueryService.getMyReviewList());
+    public CustomResponse<ReviewResDTO.ReviewListResDTO> getMyReviews(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return CustomResponse.onSuccess(reviewQueryService.getMyReviewList(userDetails.getUsername()));
     }
 
     @Operation(summary = "리뷰 목록 조회 (커서 방식)")
