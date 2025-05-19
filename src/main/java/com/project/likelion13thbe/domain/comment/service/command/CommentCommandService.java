@@ -8,7 +8,7 @@ public interface CommentCommandService {
 
     CommentResponseDTO.CommentCreateResponseDTO createComment(Long reviewId, CommentRequestDTO.CommentCreateRequestDTO commentCreateRequestDTO, Member member);
 
-    void updateComment(Long commentId, CommentRequestDTO.CommentUpdateRequestDTO commentUpdateRequestDTO);
+    void updateComment(Long commentId, CommentRequestDTO.CommentUpdateRequestDTO commentUpdateRequestDTO, Member member);
 
     void deleteComment(Long commentId);
 }

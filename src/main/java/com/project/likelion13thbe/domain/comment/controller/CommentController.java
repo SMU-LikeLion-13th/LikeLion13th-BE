@@ -76,8 +76,9 @@ public class CommentController {
     @PatchMapping("/comments/{commentId}")
     public CustomResponse<String> editComment(
             @PathVariable Long commentId,
-            @RequestBody CommentRequestDTO.CommentUpdateRequestDTO commentUpdateRequestDTO) {
-        commentCommandService.updateComment(commentId, commentUpdateRequestDTO);
+            @RequestBody CommentRequestDTO.CommentUpdateRequestDTO commentUpdateRequestDTO,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        commentCommandService.updateComment(commentId, commentUpdateRequestDTO, userDetails.getMember());
         return CustomResponse.onSuccess("댓글 수정 완료");
     }
 
