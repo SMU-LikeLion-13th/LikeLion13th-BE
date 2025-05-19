@@ -18,7 +18,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     private final MemberRepository memberRepository;
 
     @Override
-    public MemberResDTO.MemberPreviewResDTO getMember(String email) {
+    public MemberResDTO.MemberDetailResDTO getMember(String email) {
         // DB에서 pk가 1인 Member 조회
         Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new RuntimeException("Member가 존재하지 않음"));

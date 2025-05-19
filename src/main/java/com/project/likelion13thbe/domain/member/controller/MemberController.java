@@ -39,7 +39,7 @@ public class MemberController {
 
     @Operation(summary = "getMember")
     @GetMapping("/members")
-    public CustomResponse<MemberResDTO.MemberPreviewResDTO> getMember(
+    public CustomResponse<MemberResDTO.MemberDetailResDTO> getMember(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         return CustomResponse.onSuccess(memberQueryService.getMember(userDetails.getUsername()));
