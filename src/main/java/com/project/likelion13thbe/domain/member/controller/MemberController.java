@@ -5,7 +5,10 @@ import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
+import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
+import com.project.likelion13thbe.domain.review.service.query.ReviewQueryServiceImpl;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
+import com.project.likelion13thbe.global.security.entity.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,6 +29,7 @@ public class MemberController {
 
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
+    private final ReviewQueryService reviewQueryService;
 
     @Operation(summary = "일반 로그인")
     @ApiResponses({
@@ -80,8 +85,9 @@ public class MemberController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ReviewResponseDTO.ReviewListResponseDTO.class))),})
     @GetMapping("/my/reviews")
-    public ResponseEntity<ReviewResponseDTO.ReviewListResponseDTO> getMyReviews() {
-        return null;
+    public CustomResponse<ReviewResponseDTO.ReviewListResponseDTO> getMyReviews(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long memberId = userDetails.getMember().getId();
+        return CustomResponse.onSuccess(HttpStatus.OK, reviewQueryService.getReviewsByMemberId(memberId));
     }
 
     @Operation(summary = "카카오 로그인")
