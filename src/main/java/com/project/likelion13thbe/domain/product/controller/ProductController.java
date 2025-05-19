@@ -46,8 +46,11 @@ public class ProductController {
 
     @Operation(summary = "상품 삭제")
     @DeleteMapping("{productId}")
-    public CustomResponse<String> deleteProduct(@PathVariable Long productId) {
-        productCommandService.deleteProduct(productId);
+    public CustomResponse<String> deleteProduct(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long productId
+    ) {
+        productCommandService.deleteProduct(userDetails.getUsername(), productId);
         return CustomResponse.onSuccess(HttpStatus.NO_CONTENT, "상품 삭제 완료");
     }
 

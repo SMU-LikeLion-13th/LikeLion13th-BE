@@ -35,10 +35,13 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     }
 
     @Override
-    public void deleteProduct(Long productId) {
+    public void deleteProduct(String email, Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
-
-        productRepository.delete(product);
+        if (product.getMember().getEmail().equals(email)) {
+            productRepository.delete(product);
+            return;
+        }
+        throw new ProductException(ProductErrorCode.PRODUCT_ACCESS_DENIED);
     }
 }
