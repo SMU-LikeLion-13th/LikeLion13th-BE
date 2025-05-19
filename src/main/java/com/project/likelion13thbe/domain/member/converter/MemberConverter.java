@@ -18,6 +18,7 @@ public class MemberConverter {
                 .nickname(memberCreateReqDTO.nickname())
                 .email(memberCreateReqDTO.email())
                 .password(password)
+                .role(memberCreateReqDTO.role())
                 .socialType(memberCreateReqDTO.socialType())
                 .profileImage(memberCreateReqDTO.profileImage())
                 .age(memberCreateReqDTO.age())

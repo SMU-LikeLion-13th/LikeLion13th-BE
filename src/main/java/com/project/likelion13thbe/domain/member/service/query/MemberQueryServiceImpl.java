@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -19,9 +18,9 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     private final MemberRepository memberRepository;
 
     @Override
-    public MemberResDTO.MemberPreviewResDTO getMember() {
+    public MemberResDTO.MemberPreviewResDTO getMember(String email) {
         // DB에서 pk가 1인 Member 조회
-        Member member = memberRepository.findById(1L)
+        Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new RuntimeException("Member가 존재하지 않음"));
 
         // 응답 DTO로 변환 후 return

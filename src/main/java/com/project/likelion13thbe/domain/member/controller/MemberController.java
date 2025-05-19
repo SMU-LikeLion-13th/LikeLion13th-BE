@@ -10,8 +10,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequiredArgsConstructor
 //@RequestMapping("/members")
@@ -34,9 +35,11 @@ public class MemberController {
     }
 
     @Operation(summary = "getMember")
-    @GetMapping
-    public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
-        return ResponseEntity.ok(memberQueryService.getMember());
+    @GetMapping("/members")
+    public CustomResponse<MemberResDTO.MemberPreviewResDTO> getMember(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return CustomResponse.onSuccess(memberQueryService.getMember(userDetails.getUsername()));
     }
 
     @Operation(summary = "비밀번호 수정")
