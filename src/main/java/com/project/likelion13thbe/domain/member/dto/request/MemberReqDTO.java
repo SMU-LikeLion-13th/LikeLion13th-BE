@@ -52,4 +52,10 @@ public class MemberReqDTO {
         String password
     ) {
     }
+
+    public record LoginReqDTO (
+            String email,
+            String password
+    ) {
+    }
 }
