@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,8 +40,10 @@ public class CommentController {
             @PathVariable("productId")  Long productId,
             @PathVariable("reviewId") Long reviewId,
             @RequestBody @Valid CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO
+            @RequestBody @Valid CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        return CustomResponse.onSuccess(commentCommandService.createComment(productId, reviewId, commentCreateReqDTO));
+        return CustomResponse.onSuccess(commentCommandService.createComment(productId, reviewId, commentCreateReqDTO, userDetails.getUsername()));
     }
 
     @Operation(description = "댓글 수정")
