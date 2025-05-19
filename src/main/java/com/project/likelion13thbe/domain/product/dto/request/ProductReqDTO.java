@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 public class ProductReqDTO {
 
     public record ProductCreateReqDTO(
-            Long memberId,
             @NotBlank(message = "상품 이름은 필수 입력값입니다.")
             String name,
             @NotBlank(message = "상품 설명은 필수 입력값입니다.")
