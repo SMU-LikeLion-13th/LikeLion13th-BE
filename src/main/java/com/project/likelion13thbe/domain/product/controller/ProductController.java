@@ -50,11 +50,14 @@ public class ProductController {
         return CustomResponse.onSuccess(productCommandService.createProduct(productCreateReqDTO, userdetails.getUsername()));
     }
 
-    @Operation(description = "상품 삭제")
+    @Operation(description = "상품 삭제 (로그인 필요)")
     @Parameter(name = "productId", description = "product PK", example = "1")
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{productId}")
-    public CustomResponse<String> deleteProduct(@PathVariable("productId") Long productId) {
-        productCommandService.deleteProduct(productId);
+    public CustomResponse<String> deleteProduct(
+            @PathVariable("productId") Long productId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        productCommandService.deleteProduct(productId, customUserDetails.getUsername());
         return CustomResponse.onSuccess("상품 삭제 성공");
     }
 }
