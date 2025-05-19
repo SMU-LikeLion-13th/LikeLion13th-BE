@@ -24,7 +24,9 @@ public class CommentController {
 
     @Operation(summary = "댓글 목록 조회")
     @GetMapping("reviews/{reviewId}/comments")
-    public CustomResponse<CommentResDTO.CommentListResDTO> getComment(@PathVariable Long reviewId) {
+    public CustomResponse<CommentResDTO.CommentListResDTO> getComment(
+            @PathVariable Long reviewId
+    ) {
         return CustomResponse.onSuccess(commentQueryService.getCommentList(reviewId));
     }
 
@@ -33,7 +35,8 @@ public class CommentController {
     public CustomResponse<CommentResDTO.CommentCreateResDTO> createComment(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long reviewId,
-            @RequestBody @Valid CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO) {
+            @RequestBody @Valid CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO
+    ) {
         return CustomResponse.onSuccess(HttpStatus.CREATED, commentCommandService.createComment(userDetails.getUsername(), reviewId, commentCreateReqDTO));
     }
 
@@ -42,7 +45,8 @@ public class CommentController {
     public CustomResponse<String> updateComment(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long commentId,
-            @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
+            @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO
+    ) {
 
         commentCommandService.updateComment(userDetails.getUsername(), commentId, commentUpdateReqDTO);
 

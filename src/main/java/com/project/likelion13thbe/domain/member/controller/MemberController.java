@@ -24,13 +24,16 @@ public class MemberController {
     @Operation(summary = "createMember")
     @PostMapping("auth")
     public CustomResponse<MemberResDTO.MemberCreateResDTO> createMember(
-            @RequestBody @Valid MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+            @RequestBody @Valid MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO
+    ) {
         return CustomResponse.onSuccess(memberCommandService.createMember(memberCreateReqDTO));
     }
 
     @Operation(summary = "로그인")
     @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody MemberReqDTO.LoginResDTO LoginResDTO) {
+    public ResponseEntity<?> login(
+            @RequestBody MemberReqDTO.LoginResDTO LoginResDTO
+    ) {
         return null;
     }
 
@@ -55,7 +58,9 @@ public class MemberController {
     // 회원 탈퇴 (JWT 인증 필요)
     @Operation(summary = "회원 탈퇴")
     @DeleteMapping("/members/delete")
-    public CustomResponse<String> deleteMember(@AuthenticationPrincipal UserDetails userDetails) {
+    public CustomResponse<String> deleteMember(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
         memberCommandService.deleteMember(userDetails.getUsername());
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }

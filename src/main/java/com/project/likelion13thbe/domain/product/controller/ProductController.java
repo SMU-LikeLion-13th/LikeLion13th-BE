@@ -24,7 +24,9 @@ public class ProductController {
 
     @Operation(summary = "상품 상세 조회")
     @GetMapping("/{productId}")
-    public CustomResponse<ProductResDTO.ProductDetailResDTO> getProduct(@PathVariable Long productId) {
+    public CustomResponse<ProductResDTO.ProductDetailResDTO> getProduct(
+            @PathVariable Long productId
+    ) {
         return CustomResponse.onSuccess(productQueryService.getProduct(productId));
     }
 

@@ -25,13 +25,17 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 세부 조회")
     @GetMapping("reviews/{reviewId}")
-    public CustomResponse<ReviewResDTO.ReviewDetailResDTO> getReview(@PathVariable Long reviewId) {
+    public CustomResponse<ReviewResDTO.ReviewDetailResDTO> getReview(
+            @PathVariable Long reviewId
+    ) {
         return CustomResponse.onSuccess(reviewQueryService.getReview(reviewId));
     }
 
     @Operation(summary = "리뷰 목록 조회")
     @GetMapping("products/{productId}/reviews")
-    public CustomResponse<ReviewResDTO.ReviewListResDTO> getReviewList(@PathVariable Long productId) {
+    public CustomResponse<ReviewResDTO.ReviewListResDTO> getReviewList(
+            @PathVariable Long productId
+    ) {
         return CustomResponse.onSuccess(reviewQueryService.getReviewList(productId));
     }
 
@@ -40,7 +44,8 @@ public class ReviewController {
     public CustomResponse<ReviewResDTO.ReviewCreateResDTO> createReview(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long productId,
-            @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
+            @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO
+    ) {
         return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(userDetails.getUsername(), reviewCreateReqDTO, productId));
     }
 
@@ -49,7 +54,8 @@ public class ReviewController {
     public CustomResponse<String> updateReview(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long reviewId,
-            @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
+            @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO
+    ) {
 
         reviewCommandService.updateReview(userDetails.getUsername(), reviewUpdateReqDTO, reviewId);
 
