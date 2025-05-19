@@ -43,9 +43,13 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     }
 
     @Override
-    public ReviewResDTO.ReviewPreviewResDTO updateReview(Long reviewId, ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
+    public ReviewResDTO.ReviewPreviewResDTO updateReview(Long reviewId, ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO, String email) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
+
+        if (!review.getMember().getEmail().equals(email)) {
+            throw new ReviewException(ReviewErrorCode.REVIEW_ACCESS_DENIED);
+        }
 
         review.setContent(reviewUpdateReqDTO.content());
         review.setRate(reviewUpdateReqDTO.rate());

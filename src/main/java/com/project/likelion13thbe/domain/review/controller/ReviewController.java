@@ -52,9 +52,10 @@ public class ReviewController {
     @PatchMapping("/api/v1/reviews/{reviewId}")
     public CustomResponse<ReviewResDTO.ReviewPreviewResDTO> updateReview(
         @PathVariable("reviewId") Long reviewId,
-        @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO updateReviewDTO
+        @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO updateReviewDTO,
+        @AuthenticationPrincipal UserDetails userDetails
     ) {
-        return CustomResponse.onSuccess(reviewCommandService.updateReview(reviewId, updateReviewDTO));
+        return CustomResponse.onSuccess(reviewCommandService.updateReview(reviewId, updateReviewDTO, userDetails.getUsername()));
     }
     @Operation(description = "리뷰 삭제")
     @Parameter(name = "reviewId", description = "review PK", example = "1")
