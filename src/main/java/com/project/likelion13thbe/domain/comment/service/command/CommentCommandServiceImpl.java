@@ -35,8 +35,8 @@ public class CommentCommandServiceImpl implements CommentCommandService {
 
 
     @Override
-    public CommentResDTO.CommentCreateResDTO createComment(CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO, Long reviewId) {
-        Member member = memberRepository.findByMemberIdAndNotDeleted(commentCreateReqDTO.memberId())
+    public CommentResDTO.CommentCreateResDTO createComment(String email, Long reviewId, CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO) {
+        Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
         Review review = reviewRepository.findByReviewIdAndNotDeleted(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
