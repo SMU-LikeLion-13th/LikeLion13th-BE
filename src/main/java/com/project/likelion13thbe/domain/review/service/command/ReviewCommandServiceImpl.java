@@ -61,11 +61,15 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     }
 
     @Override
-    public void deleteReview(Long reviewId) {
+    public void deleteReview(String email, Long reviewId) {
         Review review = reviewRepository.findByReviewIdAndNotDeleted(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
 
-        review.delete();
+        if (review.getMember().getEmail().equals(email)) {
+            review.delete();
+            return;
+        }
+        throw new ReviewException(ReviewErrorCode.REVIEW_ACCESS_DENIED);
     }
 
     @Scheduled(cron = "0 0 6 * * *")
