@@ -50,18 +50,15 @@ public class MemberController {
         return CustomResponse.onSuccess(memberCommandService.updatePassword(email, resetPasswordReqDTO));
     }
 
-    // 로그인은 반환값으로 토큰을 발급해야해서 일단 커스텀적용 안했습니다
-    @Operation(description = "로그인")
+    @Operation(description = "로그인 (JWT 발급은 필터에서 처리)")
     @PostMapping("/login")
-    public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> login(
-            @RequestBody MemberReqDTO.LoginReqDTO dto
-    ) {
-        return ResponseEntity.ok(null);
+    public void login(@RequestBody MemberReqDTO.LoginReqDTO loginReqDTO) {
+        throw new IllegalStateException("Spring Security Login Filter에서 처리되므로 직접 호출되지 않습니다.");
     }
 
     @Operation(description = "카카오 로그인")
     @PostMapping("/login/kakao")
-    public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> kakaoLogin(
+    public ResponseEntity<JwtDTO> kakaoLogin(
             @RequestBody MemberReqDTO.KakaoLoginRequestDTO dto
     ) {
         return ResponseEntity.ok(null);
