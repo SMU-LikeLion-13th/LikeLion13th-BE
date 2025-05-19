@@ -13,12 +13,13 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    boolean existsByEmail(String email);
+    @Query("SELECT m FROM Member m WHERE m.email = :email AND m.deletedAt IS NULL")
+    boolean existsByEmail(@Param("email") String email);
 
-    @Query("SELECT m FROM Member m WHERE m.email = :Email AND m.deletedAt IS NULL")
-    Optional<Member> findByEmail(@Param("Email") String email);
+    @Query("SELECT m FROM Member m WHERE m.email = :email AND m.deletedAt IS NULL")
+    Optional<Member> findByEmail(@Param("email") String email);
 
-    @Query("SELECT m FROM Member m WHERE m.deletedAt is not null AND m.deletedAt < :OneMonthAgo")
-    List<Member> findDeletedMembersBefore(@Param("OneMonthAgo") LocalDateTime oneMonthAgo);
+    @Query("SELECT m FROM Member m WHERE m.deletedAt is not null AND m.deletedAt < :oneMonthAgo")
+    List<Member> findDeletedMembersBefore(@Param("oneMonthAgo") LocalDateTime oneMonthAgo);
 
 }
