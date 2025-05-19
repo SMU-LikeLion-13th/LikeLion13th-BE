@@ -5,11 +5,14 @@ import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
+import com.project.likelion13thbe.global.security.dto.JwtDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,8 +32,11 @@ public class MemberController {
 
     @Operation(description = "유저 조회")
     @GetMapping
-    public CustomResponse<MemberResDTO.MemberPreviewResDTO> getMember() {
-        return CustomResponse.onSuccess(memberQueryService.getMember());
+    public CustomResponse<MemberResDTO.MemberPreviewResDTO> getMember(
+            @AuthenticationPrincipal UserDetails userDetails
+            ) {
+        System.out.println("컨트롤러 진입");
+        return CustomResponse.onSuccess(memberQueryService.getMember(userDetails.getUsername()));
     }
 
 
