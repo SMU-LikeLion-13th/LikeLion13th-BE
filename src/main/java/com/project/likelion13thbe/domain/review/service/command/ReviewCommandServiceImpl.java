@@ -34,7 +34,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     private final MemberRepository memberRepository;
 
     @Override
-    public ReviewResDTO.ReviewCreateResDTO createReview(String email, ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO, Long productId) {
+    public ReviewResDTO.ReviewCreateResDTO createReview(String email, Long productId, ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
         Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
         Product product = productRepository.findById(productId)
@@ -48,7 +48,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     }
 
     @Override
-    public void updateReview(String email, ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO, Long reviewId) {
+    public void updateReview(String email, Long reviewId, ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
         Review review = reviewRepository.findByReviewIdAndNotDeleted(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
 

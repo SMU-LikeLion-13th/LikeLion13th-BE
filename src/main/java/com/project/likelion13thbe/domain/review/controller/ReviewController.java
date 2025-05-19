@@ -46,7 +46,7 @@ public class ReviewController {
             @PathVariable Long productId,
             @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO
     ) {
-        return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(userDetails.getUsername(), reviewCreateReqDTO, productId));
+        return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(userDetails.getUsername(), productId, reviewCreateReqDTO));
     }
 
     @Operation(summary = "리뷰 수정")
@@ -57,7 +57,7 @@ public class ReviewController {
             @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO
     ) {
 
-        reviewCommandService.updateReview(userDetails.getUsername(), reviewUpdateReqDTO, reviewId);
+        reviewCommandService.updateReview(userDetails.getUsername(), reviewId, reviewUpdateReqDTO);
 
         return CustomResponse.onSuccess("리뷰 수정 완료");
     }
