@@ -29,7 +29,8 @@ public class JwtUtil {
     private final SecretKey secretKey;
     private final Long accessExpMs;
     private final Long refreshExpMs;
-    private TokenRepository tokenRepository;
+    private final TokenRepository tokenRepository;
+
 
     public JwtUtil(
             @Value("${spring.jwt.secret}") String secret,
