@@ -13,11 +13,11 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberConverter {
 
-    public static Member toMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+    public static Member toMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO, String password) {
         return Member.builder()
                 .nickname(memberCreateReqDTO.nickname())
                 .email(memberCreateReqDTO.email())
-                .password(memberCreateReqDTO.password())
+                .password(password)
                 .socialType(memberCreateReqDTO.socialType())
                 .profileImage(memberCreateReqDTO.profileImage())
                 .age(memberCreateReqDTO.age())

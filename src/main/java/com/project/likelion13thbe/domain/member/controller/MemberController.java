@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+//@RequestMapping("/members")
 @Tag(name = "Member", description = "멤버 관련 API")
 public class MemberController {
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
 
     @Operation(summary = "createMember")
-    @PostMapping
+    @PostMapping("auth")
     public CustomResponse<MemberResDTO.MemberCreateResDTO> createMember(
             @RequestBody @Valid MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
         return CustomResponse.onSuccess(memberCommandService.createMember(memberCreateReqDTO));
