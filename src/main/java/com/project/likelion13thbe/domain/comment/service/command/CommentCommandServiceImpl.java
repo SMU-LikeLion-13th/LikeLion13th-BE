@@ -8,8 +8,6 @@ import com.project.likelion13thbe.domain.comment.exception.CommentErrorCode;
 import com.project.likelion13thbe.domain.comment.exception.CommentException;
 import com.project.likelion13thbe.domain.comment.repository.CommentRepository;
 import com.project.likelion13thbe.domain.member.entity.Member;
-import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
-import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.domain.review.entity.Review;
 import com.project.likelion13thbe.domain.review.exception.ReviewErrorCode;
@@ -29,10 +27,7 @@ public class CommentCommandServiceImpl implements CommentCommandService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public CommentResponseDTO.CommentCreateResponseDTO createComment(Long reviewId, CommentRequestDTO.CommentCreateRequestDTO commentCreateRequestDTO) {
-        Member member = memberRepository.findById(commentCreateRequestDTO.memberId())
-                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
-
+    public CommentResponseDTO.CommentCreateResponseDTO createComment(Long reviewId, CommentRequestDTO.CommentCreateRequestDTO commentCreateRequestDTO, Member member) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
 
