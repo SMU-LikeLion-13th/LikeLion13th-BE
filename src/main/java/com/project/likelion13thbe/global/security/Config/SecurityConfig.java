@@ -48,6 +48,7 @@ public class SecurityConfig {
             "/products/{productId}",
             "/api/v1/reviews/{reviewId}",
             "/api/v1/products/{productId}/reviews",
+            "/api/v1/products/{productId}/reviews/{reviewId}/comments"
     };
 
     @Bean
