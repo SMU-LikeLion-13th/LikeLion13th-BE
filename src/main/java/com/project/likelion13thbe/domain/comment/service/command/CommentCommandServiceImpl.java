@@ -51,9 +51,13 @@ public class CommentCommandServiceImpl implements CommentCommandService {
     }
 
     @Override
-    public void deleteComment(Long commentId) {
+    public void deleteComment(Long commentId, Member member) {
         Comment comment = commentRepository.findByIdAndNotDeleted(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        if (!comment.getMember().getId().equals(member.getId())) {
+            throw new CommentException(CommentErrorCode.UNAUTHORIZED);
+        }
 
         comment.delete();
     }

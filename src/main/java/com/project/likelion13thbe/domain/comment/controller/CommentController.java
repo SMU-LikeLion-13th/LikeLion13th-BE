@@ -90,8 +90,8 @@ public class CommentController {
                     content = @Content(mediaType = "application/json"))
     })
     @DeleteMapping("/comments/{commentId}")
-    public CustomResponse<String> deleteComment(@PathVariable Long commentId) {
-        commentCommandService.deleteComment(commentId);
+    public CustomResponse<String> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        commentCommandService.deleteComment(commentId, userDetails.getMember());
         return CustomResponse.onSuccess("댓글 삭제 성공");
     }
 }
