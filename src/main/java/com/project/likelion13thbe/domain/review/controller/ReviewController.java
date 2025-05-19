@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,9 +42,10 @@ public class ReviewController {
     @PostMapping("/api/v1/products/{productId}/reviews")
     public CustomResponse<ReviewResDTO.ReviewCreateResDTO> createReview(
             @PathVariable("productId") Long productId,
-            @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO dto
-    ) {
-        return CustomResponse.onSuccess(reviewCommandService.createReview(productId, dto));
+            @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO,
+            @AuthenticationPrincipal UserDetails userDetails
+            ) {
+        return CustomResponse.onSuccess(reviewCommandService.createReview(productId, reviewCreateReqDTO, userDetails.getUsername()));
     }
     @Operation(description = "리뷰 수정")
     @Parameter(name = "reviewId", description = "review PK", example = "2")

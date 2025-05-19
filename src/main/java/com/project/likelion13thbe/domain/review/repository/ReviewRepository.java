@@ -18,6 +18,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("select count(r) from Review r where r.product.id = :productId AND r.deletedAt IS NULL")
     Long findReviewCountByProductId(@Param("productId") Long productId);
 
-    @Query("SELECT r FROM Review r join fetch r.member WHERE r.member.id= :memberId")
-    List<Review> findAllByMemberId(@Param("memberId") Long memberId);
+    @Query("SELECT r FROM Review r JOIN FETCH r.member WHERE r.member.email = :email AND r.deletedAt IS NULL")
+    List<Review> findAllByEmail(@Param("email") String email);
 }
