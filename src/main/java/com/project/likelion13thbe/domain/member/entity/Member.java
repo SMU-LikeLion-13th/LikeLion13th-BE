@@ -35,6 +35,10 @@ public class Member extends BaseEntity {
     @Column(name = "age")
     private Integer age;
 
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
