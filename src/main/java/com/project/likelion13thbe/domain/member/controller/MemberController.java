@@ -43,12 +43,12 @@ public class MemberController {
     }
 
     @Operation(summary = "비밀번호 수정")
-    @PatchMapping("/{memberId}/password")
+    @PatchMapping("/password-reset")
     public CustomResponse<String> resetPassword(
-            @PathVariable("memberId") Long memberId,
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody @Valid MemberReqDTO.PasswordResetDTO passwordResetDTO
     ) {
-        memberCommandService.updatePassword(memberId, passwordResetDTO);
+        memberCommandService.resetPassword(userDetails.getUsername(), passwordResetDTO);
         return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 

@@ -45,12 +45,12 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     }
 
     @Override
-    public void updatePassword(Long memberId, MemberReqDTO.PasswordResetDTO passwordResetDTO) {
+    public void resetPassword(String email, MemberReqDTO.PasswordResetDTO passwordResetDTO) {
         // 회원 정보 조회
-        Member member = memberRepository.findByMemberIdAndNotDeleted(memberId)
+        Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        member.updatePassword(passwordResetDTO.password());
+        member.updatePassword(passwordEncoder.encode(passwordResetDTO.password()));
     }
 
     @Override
