@@ -60,12 +60,13 @@ public class JwtUtil {
     // JWT 토큰을 입력으로 받아 토큰의 claim 에서 사용자 권한을 추출하는 메서드
     public Role getRoles(String token) throws SignatureException {
         log.info("[ JwtUtil ] 토큰에서 권한을 추출합니다.");
-        return Jwts.parser()
+        String roleStr =  Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("role", Role.class);
+                .get("role", String.class);
+        return Role.valueOf(roleStr);
     }
 
     // Token 발급하는 메서드
@@ -146,7 +147,6 @@ public class JwtUtil {
 
         return tokenFromHeader.split(" ")[1]; //Bearer 와 분리
     }
-
 
     public void validateToken(String token) {
         log.info("[ JwtUtil ] 토큰의 유효성을 검증합니다.");
