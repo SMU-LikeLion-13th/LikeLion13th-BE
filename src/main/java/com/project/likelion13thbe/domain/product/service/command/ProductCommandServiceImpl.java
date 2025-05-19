@@ -24,8 +24,8 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     private final MemberRepository memberRepository;
 
     @Override
-    public ProductResDTO.ProductCreateResDTO createProduct(ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
-        Member member = memberRepository.findById(productCreateReqDTO.memberId())
+    public ProductResDTO.ProductCreateResDTO createProduct(ProductReqDTO.ProductCreateReqDTO productCreateReqDTO, String email) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Product product = ProductConverter.toProduct(productCreateReqDTO, member);

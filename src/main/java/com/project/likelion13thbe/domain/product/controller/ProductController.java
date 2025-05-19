@@ -5,11 +5,15 @@ import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.domain.product.service.command.ProductCommandService;
 import com.project.likelion13thbe.domain.product.service.query.ProductQueryService;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
+import com.project.likelion13thbe.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -36,12 +40,14 @@ public class ProductController {
         return CustomResponse.onSuccess(productQueryService.getProductList());
     }
 
-    @Operation(description = "상품 생성")
+    @Operation(description = "상품 생성 (로그인 필요)")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public CustomResponse<ProductResDTO.ProductCreateResDTO> createProduct(
-            @RequestBody @Valid ProductReqDTO.ProductCreateReqDTO productCreateReqDTO
+            @RequestBody @Valid ProductReqDTO.ProductCreateReqDTO productCreateReqDTO,
+            @AuthenticationPrincipal UserDetails userdetails
     ) {
-        return CustomResponse.onSuccess(productCommandService.createProduct(productCreateReqDTO));
+        return CustomResponse.onSuccess(productCommandService.createProduct(productCreateReqDTO, userdetails.getUsername()));
     }
 
     @Operation(description = "상품 삭제")
