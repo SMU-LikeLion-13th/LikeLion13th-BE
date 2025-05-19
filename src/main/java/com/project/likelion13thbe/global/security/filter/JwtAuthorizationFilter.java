@@ -31,7 +31,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         try {
             // 1. Request에서 Access Token 추출
-            String accessToken = request.getHeader("Authorization");
+            String accessToken = jwtUtil.resolveAccessToken(request);
 
             // 2. Access Token이 없으면 다음 필터로 바로 진행
             if (accessToken == null) {
