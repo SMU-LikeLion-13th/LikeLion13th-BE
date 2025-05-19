@@ -44,15 +44,21 @@ public class MemberCommandServiceImpl implements MemberCommandService{
         return MemberConverter.toMemberResponseDTO(member);
     }
     @Override
-    public MemberResDTO.ResetPasswordResDTO updatePassword(Long memberId, MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO) {
-        Member member = memberRepository.findByIdAndNotDeleted(memberId)
+    public MemberResDTO.ResetPasswordResDTO updatePassword(String email, MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        if (!member.getPassword().equals(resetPasswordReqDTO.currentPassword())) {
+        if (!securityConfig.passwordEncoder().matches(resetPasswordReqDTO.currentPassword(), member.getPassword())) {
             throw new MemberException(MemberErrorCode.MEMBER_WRONG_PASSWORD);
         }
 
-        member.updatePassword(resetPasswordReqDTO.password());
+        if (resetPasswordReqDTO.newPassword().equals(resetPasswordReqDTO.currentPassword())) {
+            throw new MemberException(MemberErrorCode.MEMBER_SAME_PASSWORD);
+        }
+
+        String encodedNewPassword = securityConfig.passwordEncoder().encode(resetPasswordReqDTO.newPassword());
+        member.updatePassword(encodedNewPassword);
+
         return MemberConverter.toMemberResetPasswordResponseDTO(member, resetPasswordReqDTO.currentPassword());
     }
 

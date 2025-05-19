@@ -41,12 +41,13 @@ public class MemberController {
 
 
     @Operation(description = "비밀번호 수정")
-    @PatchMapping("/{memberId}/reset-password")
+    @PatchMapping("/reset-password")
     public CustomResponse<MemberResDTO.ResetPasswordResDTO> resetPassword(
             @RequestBody @Valid MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO,
-            @PathVariable("memberId") Long memberId
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        return CustomResponse.onSuccess(memberCommandService.updatePassword(memberId, resetPasswordReqDTO));
+        String email = userDetails.getUsername();
+        return CustomResponse.onSuccess(memberCommandService.updatePassword(email, resetPasswordReqDTO));
     }
 
     // 로그인은 반환값으로 토큰을 발급해야해서 일단 커스텀적용 안했습니다
