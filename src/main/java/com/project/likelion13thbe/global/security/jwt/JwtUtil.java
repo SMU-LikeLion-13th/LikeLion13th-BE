@@ -60,16 +60,6 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    // JWT 토큰을 입력받아 토큰의 claim에서 사용자 권한을 추출하는 메서드
-    public String getRole(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .get("role", String.class);
-    }
-
     // token 발급 메서드
     public String tokenProvider(CustomUserDetails customUserDetails, Instant expriation) {
 
