@@ -27,6 +27,12 @@ public class MemberController {
         return CustomResponse.onSuccess(memberCommandService.createMember(memberCreateReqDTO));
     }
 
+    @Operation(summary = "로그인")
+    @PostMapping("login")
+    public ResponseEntity<?> login(@RequestBody MemberReqDTO.LoginResDTO LoginResDTO) {
+        return null;
+    }
+
     @Operation(summary = "getMember")
     @GetMapping
     public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
@@ -98,18 +104,6 @@ public class MemberController {
 //        return null;
 //    }
 //
-//    @Operation(summary = "로그인")
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "200", description = "OK",
-//                    content = @Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = MemberResDTO.LoginJwtTokenResDTO.class))),
-//            @ApiResponse(responseCode = "401", description = "Unauthorized",
-//                    content = @Content(mediaType = "application/json"))
-//    })
-//    @PostMapping("login")
-//    public ResponseEntity<MemberResDTO.LoginJwtTokenResDTO> login(@RequestBody MemberReqDTO.LoginResDTO LoginResDTO) {
-//        return null;
-//    }
 //
 //    @Operation(summary = "카카오 로그인")
 //    @ApiResponses({
