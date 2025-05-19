@@ -1,5 +1,7 @@
 package com.project.likelion13thbe.global.security.filter;
 
+import com.project.likelion13thbe.domain.member.entity.Role;
+import com.project.likelion13thbe.global.security.customUserDetails.CustomUserDetails;
 import com.project.likelion13thbe.global.security.jwt.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -10,9 +12,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.security.SignatureException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -61,16 +66,24 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         log.info("[ JwtAuthorizationFilter ] 토큰으로 인가 과정을 시작합니다. ");
 
         // 1. Access Token의 유효성 검증
-
+        jwtUtil.validateToken(accessToken);
         log.info("[ JwtAuthorizationFilter ] Access Token 유효성 검증 성공. ");
 
         // 2. Access Token에서 사용자 정보 추출 후 CustomUserDetails 생성
+        String email = jwtUtil.getEmail(accessToken);
+        Role role = jwtUtil.getRoles(accessToken);
+        log.info("[ JwtAuthorizationFilter ] email = {}, role = {}", email, role);
+
+        CustomUserDetails userDetails = new CustomUserDetails(email, "", role);
 
         log.info("[ JwtAuthorizationFilter ] UserDetails 객체 생성 성공");
 
         // 3. 인증 객체 생성 및 SecurityContextHolder에 저장
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        log.info("[ JwtAuthorizationFilter ] 인증 객체 생성 완료");
 
-
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         log.info("[ JwtAuthorizationFilter ] 인증 객체 저장 완료");
     }
 }
