@@ -47,10 +47,11 @@ public class ReviewController {
     @Operation(summary = "리뷰 수정")
     @PatchMapping("reviews/{reviewId}")
     public CustomResponse<String> updateReview(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long reviewId,
             @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
 
-        reviewCommandService.updateReview(reviewUpdateReqDTO, reviewId);
+        reviewCommandService.updateReview(userDetails.getUsername(), reviewUpdateReqDTO, reviewId);
 
         return CustomResponse.onSuccess("리뷰 수정 완료");
     }
