@@ -65,8 +65,11 @@ public class ReviewController {
             content = @Content(mediaType = "application/json"))
     })
     @PostMapping("/products/{productId}/reviews")
-    public CustomResponse<ReviewResponseDTO.ReviewCreateResponseDTO> createReview(@PathVariable Long productId, @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
-        return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(productId, reviewCreateRequestDTO));
+    public CustomResponse<ReviewResponseDTO.ReviewCreateResponseDTO> createReview(
+            @PathVariable Long productId,
+            @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(productId, reviewCreateRequestDTO, userDetails.getMember()));
     }
 
     @Operation(summary = "리뷰 수정")

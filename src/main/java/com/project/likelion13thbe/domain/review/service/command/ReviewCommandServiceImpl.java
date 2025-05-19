@@ -1,8 +1,6 @@
 package com.project.likelion13thbe.domain.review.service.command;
 
 import com.project.likelion13thbe.domain.member.entity.Member;
-import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
-import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.domain.product.entity.Product;
 import com.project.likelion13thbe.domain.product.exception.ProductErrorCode;
@@ -29,11 +27,10 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     private final ProductRepository productRepository;
 
     @Override
-    public ReviewResponseDTO.ReviewCreateResponseDTO createReview(Long productId, ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
-
-        // 임시로 추가
-        Member member = memberRepository.findById(reviewCreateRequestDTO.memberId())
-                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+    public ReviewResponseDTO.ReviewCreateResponseDTO createReview(
+            Long productId,
+            ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO,
+            Member member) {
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
