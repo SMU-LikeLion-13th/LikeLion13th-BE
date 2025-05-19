@@ -53,10 +53,10 @@ public class MemberController {
     }
 
     // 회원 탈퇴 (JWT 인증 필요)
-    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴 성공")
-    @DeleteMapping("/{memberId}")
-    public CustomResponse<String> deleteMember(@PathVariable("memberId") Long memberId) {
-        memberCommandService.deleteMember(memberId);
+    @Operation(summary = "회원 탈퇴")
+    @DeleteMapping("/members/delete")
+    public CustomResponse<String> deleteMember(@AuthenticationPrincipal UserDetails userDetails) {
+        memberCommandService.deleteMember(userDetails.getUsername());
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
 

@@ -54,9 +54,9 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     }
 
     @Override
-    public void deleteMember(Long memberId) {
+    public void deleteMember(String email) {
         // 회원 정보 조회
-        Member member = memberRepository.findByMemberIdAndNotDeleted(memberId)
+        Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         // soft delete 처리
