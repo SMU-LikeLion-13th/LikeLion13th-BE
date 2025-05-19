@@ -66,9 +66,11 @@ public class ReviewController {
         reviewCommandService.deleteReview(reviewId, userDetails.getUsername());
         return CustomResponse.onSuccess("리뷰 삭제 성공");
     }
-
-    @GetMapping("/api/v1/reviews/my")
-    public CustomResponse<ReviewResDTO.ReviewListDTO> getMyReview() {
-        return CustomResponse.onSuccess(reviewQueryService.getMyReview());
+    @Operation(description = "내 리뷰 조회")
+    @GetMapping("/api/v1/members/me/reviews")
+    public CustomResponse<ReviewResDTO.ReviewListDTO> getMyReview(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return CustomResponse.onSuccess(reviewQueryService.getMyReview(userDetails.getUsername()));
     }
 }

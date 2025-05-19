@@ -7,5 +7,5 @@ public interface ReviewQueryService {
 
     ReviewResDTO.ReviewListDTO getReviewList(Long productId);
 
-    ReviewResDTO.ReviewListDTO getMyReview();
+    ReviewResDTO.ReviewListDTO getMyReview(String email);
 }
