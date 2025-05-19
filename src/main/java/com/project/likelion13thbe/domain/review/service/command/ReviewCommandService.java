@@ -10,5 +10,5 @@ public interface ReviewCommandService {
 
     void updateReview(Long reviewId, ReviewRequestDTO.ReviewUpdateRequestDTO reviewUpdateRequestDTO, Member member);
 
-    void deleteReview(Long reviewId);
+    void deleteReview(Long reviewId, Member member);
 }
