@@ -28,4 +28,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "FROM Member m " +
             "WHERE m.deletedAt IS NOT NULL AND m.deletedAt <= :oneMonthAgo")
     List<Member> findDeletedMembersBefore(@Param("oneMonthAgo") LocalDateTime oneMonthAgo);
+
+    // 삭제되지 않은 회원 중 이메일 조회
+    @Query("SELECT m " +
+            "FROM Member m " +
+            "WHERE m.email = :email AND m.deletedAt IS NULL")
+    Optional<Member> findByEmailAndNotDeleted(@Param("email") String email);
 }
