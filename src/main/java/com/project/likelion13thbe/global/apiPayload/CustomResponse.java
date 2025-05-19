@@ -41,4 +41,8 @@ public class CustomResponse<T> {
     public static <T> CustomResponse<T> onFailure(String code, String message) {
         return new CustomResponse<>(false, code, message, null);
     }
+
+    public static <T> CustomResponse<T> onFailure(HttpStatus httpStatus, String code, String message) {
+        return new CustomResponse<>(false, code, message, null);
+    }
 }
