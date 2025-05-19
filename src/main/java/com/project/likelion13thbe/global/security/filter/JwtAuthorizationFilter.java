@@ -35,7 +35,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             // 2. Access Token이 없으면 다음 필터로 바로 진행
             if (accessToken == null) {
+                log.info("[ JwtAuthorizationFilter ] Access Token 없음, 다음 필터로 진행");
                 filterChain.doFilter(request, response);
+                return;
             }
 
             // 3. Access Token을 이용한 인증 처리
@@ -49,6 +51,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("Access Token 이 만료되었습니다.");
         }
+
+        filterChain.doFilter(request, response);
+
     }
 
     // Access Token을 바탕으로 인증 객체 생성 및 SecurityContext에 저장
