@@ -40,8 +40,8 @@ public class Member extends BaseEntity {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    public void updatePassword(String newPassword) {
-        this.password = newPassword;
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
     }
 
     public void delete() {this.deletedAt = LocalDateTime.now();}

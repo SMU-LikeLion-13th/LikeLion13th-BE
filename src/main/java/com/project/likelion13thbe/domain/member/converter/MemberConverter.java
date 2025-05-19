@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberConverter {
-    public static Member toMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+    public static Member toMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO, String encodedPassword) {
         return Member.builder()
                 .name(memberCreateReqDTO.name())
                 .email(memberCreateReqDTO.email())

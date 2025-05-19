@@ -24,7 +24,7 @@ public class MemberController {
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
     @Operation(description = "회원가입")
-    @PostMapping
+    @PostMapping("/auth")
     public CustomResponse<MemberResDTO.MemberCreateResDTO> createMember(
             @RequestBody @Valid MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
         return CustomResponse.onSuccess(memberCommandService.createMember(memberCreateReqDTO));
