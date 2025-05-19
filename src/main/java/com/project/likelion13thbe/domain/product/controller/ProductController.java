@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +40,6 @@ public class ProductController {
     }
 
     @Operation(description = "상품 생성 (로그인 필요)")
-    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public CustomResponse<ProductResDTO.ProductCreateResDTO> createProduct(
             @RequestBody @Valid ProductReqDTO.ProductCreateReqDTO productCreateReqDTO,
@@ -52,7 +50,6 @@ public class ProductController {
 
     @Operation(description = "상품 삭제 (로그인 필요)")
     @Parameter(name = "productId", description = "product PK", example = "1")
-    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{productId}")
     public CustomResponse<String> deleteProduct(
             @PathVariable("productId") Long productId,
