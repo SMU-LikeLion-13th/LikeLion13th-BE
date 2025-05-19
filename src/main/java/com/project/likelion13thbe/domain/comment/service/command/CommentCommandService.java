@@ -9,5 +9,5 @@ public interface CommentCommandService {
 
     CommentResDTO.CommentPreviewResDTO updateComment(Long commentId,CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO, String email);
 
-    void deleteComment(Long commentId);
+    void deleteComment(Long commentId, String email);
 }
