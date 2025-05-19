@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,9 +37,11 @@ public class ProductController {
     @Operation(summary = "상품 추가")
     @PostMapping
     public CustomResponse<ProductResDTO.ProductCreateResDTO> addProduct(
-            @RequestBody @Valid ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody @Valid ProductReqDTO.ProductCreateReqDTO productCreateReqDTO
+    ) {
         return CustomResponse
-                .onSuccess(productCommandService.createProduct(productCreateReqDTO));
+                .onSuccess(productCommandService.createProduct(userDetails.getUsername(), productCreateReqDTO));
     }
 
     @Operation(summary = "상품 삭제")

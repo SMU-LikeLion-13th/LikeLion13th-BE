@@ -23,14 +23,10 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     private final MemberRepository memberRepository;
 
     @Override
-    public ProductResDTO.ProductCreateResDTO createProduct(ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
-        // 멤버를 토큰으로 구별하지만 아직 방법을 몰라서 일단 직접 주입
-        // Req로 받은 멤버 아이디로 멤버 객체를 찾고
-        Member member = memberRepository.findById(productCreateReqDTO.memberId())
-                // 이 부분 일단 이렇게만 해놓겠습니다
+    public ProductResDTO.ProductCreateResDTO createProduct(String email, ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
+        Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        // ProductCreateReqDTO + Member => Entity
         Product product = ProductConverter.toProduct(productCreateReqDTO, member);
 
         productRepository.save(product);
