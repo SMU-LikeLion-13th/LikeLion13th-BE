@@ -8,5 +8,5 @@ public interface ReviewCommandService {
 
     ReviewResDTO.ReviewPreviewResDTO updateReview(Long reviewId, ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO, String email);
 
-    void deleteReview(Long reviewId);
+    void deleteReview(Long reviewId, String email);
 }
