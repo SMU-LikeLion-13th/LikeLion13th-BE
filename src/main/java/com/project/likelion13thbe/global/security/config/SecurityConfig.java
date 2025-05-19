@@ -44,8 +44,19 @@ public class SecurityConfig {
 
     // 인증이 필요하지 않은 GET url
     private final String[] allowGetUrl = {
+            // product
             "/products",    // 상품 목록 조회
             "/products/*",  // 상품 상세 조회, cursor 조회
+
+            // review
+            "/products/**",  // 리뷰 상세 조회, cursor 조회
+            "/reviews/*",   // 리뷰 목록 조회 (내 리뷰도 포함되나 선처리로 해결)
+    };
+
+    // 인증이 필요한 GET url
+    private final String[] forbidGetUrl = {
+            // review
+            "/reviews/my"   // 내 리뷰 조회
     };
 
     @Bean
@@ -55,6 +66,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers(HttpMethod.GET, forbidGetUrl).authenticated()
                         .requestMatchers(allowUrl).permitAll()
                         .requestMatchers(HttpMethod.GET, allowGetUrl).permitAll()
                         .anyRequest().authenticated())
