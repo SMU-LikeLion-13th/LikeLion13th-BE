@@ -39,7 +39,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
         if (product.getMember().getEmail().equals(email)) {
-            productRepository.delete(product);
+            product.delete();
             return;
         }
         throw new ProductException(ProductErrorCode.PRODUCT_ACCESS_DENIED);
