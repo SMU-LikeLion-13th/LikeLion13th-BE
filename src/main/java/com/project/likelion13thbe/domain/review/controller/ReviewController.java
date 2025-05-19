@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -36,9 +38,10 @@ public class ReviewController {
     @Operation(summary = "리뷰 작성")
     @PostMapping("products/{productId}/reviews")
     public CustomResponse<ReviewResDTO.ReviewCreateResDTO> createReview(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long productId,
             @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
-        return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(reviewCreateReqDTO, productId));
+        return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(userDetails.getUsername(), reviewCreateReqDTO, productId));
     }
 
     @Operation(summary = "리뷰 수정")
