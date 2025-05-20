@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 public class AuthException extends CustomException {
 
     public AuthException(BaseErrorCode errorCode) {
-        super(errorCode.getMessage());
+        super(errorCode);
     }
 
 

@@ -63,8 +63,7 @@ public class SecurityConfig {
                         //그 외는 인증 필요
                         .anyRequest().authenticated())
                 //jwt인증 필터 등록 -> 매 요청마다 jwt 유효성 검사하겠음
-                //여기 JwtAuthorizationFilter()에 jwtUtil이 인자로 들어가있었는데 삭제했습니다.
-                .addFilterBefore(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthorizationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 //로그인 필터 등록 -> 아이디, 비밀번호 검증 후 jwt 발급
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
                 //기본 로그인 페이지 비활성화 (우리는 restapi로 처리하겠다.)
