@@ -43,5 +43,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             return new CustomUserDetails(member.getEmail(), member.getPassword(), member.getRole());
         }
         throw new UsernameNotFoundException("사용자가 존재하지 않습니다.");
+
     }
 }

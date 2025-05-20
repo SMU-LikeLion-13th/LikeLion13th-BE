@@ -38,7 +38,7 @@ public class JwtUtil {
             @Value("${spring.jwt.token.refresh-expiration-time}") Long refresh,
             TokenRepository tokenRepo
     ) {
-
+        //시크릿 키 생성 + 각종 필드 초기화
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
                 Jwts.SIG.HS256.key().build().getAlgorithm());
         accessExpMs = access;
@@ -46,6 +46,8 @@ public class JwtUtil {
         tokenRepository = tokenRepo;
     }
 
+
+    //토큰에서 이메일 추출
     public String getEmail(String token) throws SignatureException {
         return Jwts.parser()
                 .verifyWith(secretKey)
@@ -54,7 +56,7 @@ public class JwtUtil {
                 .getPayload()
                 .getSubject();
     }
-
+    //토큰에서 role추출
     public String getRoles(String token) throws SignatureException {
         return Jwts.parser()
                 .verifyWith(secretKey)
@@ -68,7 +70,7 @@ public class JwtUtil {
 
         log.info("[ JwtUtil ] 토큰을 새로 생성합니다.");
 
-        //현재 시간
+        //현재 시간 (토큰 생성 시간)
         Instant issuedAt = Instant.now();
 
         //토큰에 부여할 권한
@@ -88,11 +90,13 @@ public class JwtUtil {
                 .compact();
     }
 
+    //accessToken 생성
     public String createJwtAccessToken(CustomUserDetails customUserDetails) {
         Instant expiration = Instant.now().plusMillis(accessExpMs);
         return tokenProvider(customUserDetails, expiration);
     }
 
+    //refreshToken 생성, 저장
     public String createJwtRefreshToken(CustomUserDetails customUserDetails) {
         Instant expiration = Instant.now().plusMillis(refreshExpMs);
         String refreshToken = tokenProvider(customUserDetails, expiration);
@@ -106,6 +110,7 @@ public class JwtUtil {
         return refreshToken;
     }
 
+    //refreshToken을 활용해서 accessToken 재발급
     public JwtDTO reissueToken(String refreshToken) throws SignatureException {
 
         CustomUserDetails userDetails = new CustomUserDetails(
@@ -124,10 +129,12 @@ public class JwtUtil {
     }
 
     //HTTP 요청의 'Authorization' 헤더에서 JWT 엑세스 토큰을 검색
+    //request에서 token을 추출
     public String resolveAccessToken(HttpServletRequest request) {
         log.info("[ JwtUtil ] 헤더에서 토큰을 추출합니다.");
         String tokenFromHeader = request.getHeader("Authorization");
 
+        //헤더에 토큰이 없거나, beartoken이 아닐 때
         if (tokenFromHeader == null || !tokenFromHeader.startsWith("Bearer ")){
             log.warn("[ JwtUtil ] Request Header 에 토큰이 존재하지 않습니다.");
             return null;
@@ -138,6 +145,7 @@ public class JwtUtil {
         return tokenFromHeader.split(" ")[1]; //Bearer 와 분리
     }
 
+    //토큰의 유효성 검사
     public void validateToken(String token) {
         log.info("[ JwtUtil ] 토큰의 유효성을 검증합니다.");
         try {
