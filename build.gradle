@@ -66,3 +66,5 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+buildDir = 'C:/intelliJ_builds/LikeLion13th-BE/build'
