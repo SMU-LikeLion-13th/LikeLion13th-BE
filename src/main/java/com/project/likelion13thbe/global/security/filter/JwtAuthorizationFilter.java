@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 
 @Slf4j
@@ -53,7 +54,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             log.info("[ JwtAuthorizationFilter ] 로그아웃 여부 확인");
             String isLogout = redisTemplate.opsForValue().get("Logout " + accessToken);
             if (isLogout != null) {
-                throw new AuthException(AuthErrorCode.BLACKLISTED_TOKEN);
+//                throw new AuthException(AuthErrorCode.BLACKLISTED_TOKEN);
+                log.info("[ JwtAuthorizationFilter ] 블랙리스트 토큰. 인증 생략하고 다음 필터로 진행");
+                filterChain.doFilter(request, response);
+                return;
             }
 
             // 3. Access Token을 이용한 인증 처리
@@ -68,22 +72,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("Access Token 이 만료되었습니다.");
-        } catch (AuthException e) {
-            // 로그아웃(블랙리스트)된 토큰일 때
-            logger.warn("[ JwtAuthorizationFilter ] 로그아웃된 토큰입니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("로그아웃된 토큰입니다");
-//            response.setContentType("application/json; charset=UTF-8");
-//            response.setStatus(401);
-//            CustomResponse<Object> errorResponse = CustomResponse.onFailure(
-//                    AuthErrorCode.BLACKLISTED_TOKEN.getCode(),
-//                    AuthErrorCode.BLACKLISTED_TOKEN.getMessage(),
-//                    null
-//            );
-//            ObjectMapper mapper = new ObjectMapper();
-//            mapper.writeValue(response.getOutputStream(), errorResponse);
         }
+//        catch (AuthException e) {
+//            // 로그아웃(블랙리스트)된 토큰일 때
+//            logger.warn("[ JwtAuthorizationFilter ] 로그아웃된 토큰입니다.");
+//            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//            response.setCharacterEncoding("UTF-8");
+//            response.getWriter().write("로그아웃된 토큰입니다");
+//        }
 
     }
 
