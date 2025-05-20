@@ -1,35 +1,61 @@
 package com.project.likelion13thbe.domain.order.service.command;
 
+import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.domain.order.converter.OrderConverter;
 import com.project.likelion13thbe.domain.order.dto.request.OrderReqDTO;
 import com.project.likelion13thbe.domain.order.dto.response.OrderResDTO;
 import com.project.likelion13thbe.domain.order.entity.Order;
 import com.project.likelion13thbe.domain.order.repository.OrderRepository;
-import com.project.likelion13thbe.domain.order.service.command.OrderCommandServiceImpl;
-import jakarta.transaction.Transactional;
+import com.project.likelion13thbe.domain.product.entity.Product;
+import com.project.likelion13thbe.domain.product.repository.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class OrderCommandServiceImpl implements OrderCommandService {
     private final OrderRepository orderRepository;
+    private final MemberRepository memberRepository;
+    private final ProductRepository productRepository;
 
     public OrderResDTO.OrderCreateResDTO createOrder(OrderReqDTO.OrderCreateReqDTO orderCreateReqDTO) {
-        Order order = OrderConverter.toOrder(orderCreateReqDTO);
+        Member member = memberRepository.findById(orderCreateReqDTO.getMemberId())
+                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+        Product product = productRepository.findById(orderCreateReqDTO.getProductId())
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
+        Order order = OrderConverter.toOrder(orderCreateReqDTO, member, product);
         orderRepository.save(order);
 
         return OrderConverter.toOrderResDTO(order);
+
     }
 
-    public void updateOrderStatus(String status, OrderReqDTO.updateOrderStatusDTO dto) {
+    public void updateOrder(Long id, OrderReqDTO.OrderUpdateReqDTO dto) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Order not found"));
 
-        Order order = orderRepository.findByIdAndNotDeleted(id).orElseThrow();
-
-        order.updateOrderStatus(status);
+        if (dto.getQuantity() != null) {
+            order.setQuantity(dto.getQuantity());
+        }
+        if (dto.getStatus() != null) {
+            order.setStatus(dto.getStatus());
+        }
+        if (dto.getMemberId() != null) {
+            order.setMember(memberRepository.findById(dto.getMemberId()).orElseThrow());
+        }
+        if (dto.getProductId() != null) {
+            order.setProduct(productRepository.findById(dto.getProductId()).orElseThrow());
+        }
+        orderRepository.save(order);
     }
 
+    public void deleteOrder(Long id) {
+        if (orderRepository.existsById(id)) {
+            orderRepository.deleteById(id);
+        } else {
+            throw new EntityNotFoundException("Order not found");
+        }
+    }
 }

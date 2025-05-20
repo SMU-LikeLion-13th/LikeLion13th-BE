@@ -6,35 +6,36 @@ import com.project.likelion13thbe.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-//@Entity
 @Entity
 @Getter
+@Setter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Review extends BaseEntity {
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="content", nullable = false)
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "starRating", nullable = false)
-    private String starRating;
+    @Column(name = "rating", nullable = false)
+    private Float rating;
 
-    @Column(name = "likeCount", nullable = false)
-    private String likeCount;
+    @Column(name = "like_count", nullable = false)
+    private Integer likeCount;
 
-    public void editReview(String newContent) {
-        this.content = newContent;
-    }
+    // member 테이블과 1:n 매핑
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
+    // product 테이블과 1:n 매핑
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 }

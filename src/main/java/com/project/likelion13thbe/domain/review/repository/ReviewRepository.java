@@ -1,15 +1,12 @@
 package com.project.likelion13thbe.domain.review.repository;
 
+import com.project.likelion13thbe.domain.product.entity.Product;
 import com.project.likelion13thbe.domain.review.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    @Query("SELECT r FROM Review r.id = id AND r.deletedAt is NULL")
-    Optional<Review> findByIdAndNotDeleted(@Param("id") String id);
+    Optional<Review> findById(long id);
+
 }
