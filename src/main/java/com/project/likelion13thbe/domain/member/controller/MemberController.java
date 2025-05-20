@@ -4,6 +4,7 @@ import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
+import com.project.likelion13thbe.global.Security.DTO.JwtDTO;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,6 +15,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,14 +38,14 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "일반 로그인", description = "일반 로그인을 수행")
+    @Operation(summary = "일반 로그인")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "일반 로그인 성공")
-    })
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = JwtDTO.class)))    })
     @PostMapping("/login")
-    public ResponseEntity<Void> login() {
-        // 로그인 로직
-        return ResponseEntity.ok().build();
+    public ResponseEntity<JwtDTO> localLogin(@RequestBody MemberRequestDTO.LoginRequestDTO loginRequestDTO) {
+        return null;
     }
 
     @Operation(summary = "비밀번호 수정", description = "비밀번호를 수정")
@@ -59,7 +62,7 @@ public class MemberController {
         return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
-    @Operation(summary = "4주차 실습", description = "사용자 회원가입")
+    @Operation(summary = "회원가입", description = "사용자 회원가입")
     @ApiResponse(responseCode = "201",
             description = "회원 생성 성공",
             content = @Content(
@@ -67,7 +70,7 @@ public class MemberController {
                     schema = @Schema(implementation = MemberResponseDTO.MemberCreateResponseDTO.class)
             )
     )
-    @PostMapping
+    @PostMapping("/auth")
     public ResponseEntity<MemberResponseDTO.MemberCreateResDTO> createMember(
             @RequestBody MemberRequestDTO.MemberCreateRequestDTO memberCreateRequestDTO) {
         return ResponseEntity
@@ -75,7 +78,7 @@ public class MemberController {
                 .body(memberCommandService.createMember((memberCreateRequestDTO)));
     }
 
-    @Operation(summary = "4주차 실습", description = "사용자 정보 조회")
+    @Operation(summary = "사용자 정보 조회", description = "사용자 정보 조회")
     @ApiResponse(responseCode = "200",
             description = "사용자 정보 조회 성공",
             content = @Content(
@@ -84,7 +87,9 @@ public class MemberController {
             )
     )
     @GetMapping
-    public ResponseEntity<MemberResponseDTO.MemberPreviewResDTO> getMember() {
+    public ResponseEntity<MemberResponseDTO.MemberPreviewResDTO> getMember(
+            @AuthenticationPrincipal UserDetails userDetails
+            ) {
         return ResponseEntity.ok(memberQueryService.getMember());
     }
 
