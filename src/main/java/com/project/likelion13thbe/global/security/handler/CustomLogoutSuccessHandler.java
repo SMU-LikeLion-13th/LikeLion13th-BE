@@ -2,7 +2,6 @@ package com.project.likelion13thbe.global.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -18,7 +17,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
         CustomResponse<String> responseBody = CustomResponse.onSuccess("로그아웃 성공");
 
