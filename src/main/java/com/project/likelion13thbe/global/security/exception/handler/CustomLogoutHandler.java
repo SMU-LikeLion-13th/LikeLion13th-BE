@@ -1,6 +1,8 @@
 package com.project.likelion13thbe.global.security.exception.handler;
 
+import com.project.likelion13thbe.global.security.entity.Token;
 import com.project.likelion13thbe.global.security.jwt.JwtUtil;
+import com.project.likelion13thbe.global.security.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -26,6 +29,7 @@ public class CustomLogoutHandler implements LogoutHandler {
     // 로그아웃을 한 순간 얘는 만료될 때까지 못 쓰는 토큰이다라고 블랙리스트로 올리는 방식입니다.
     // 로그인할 때, 저장하고, 로그아웃할 때 삭제하는 화이트 리스트 방식은 세션 처럼 동작한다는데, 차차 알아보겠습니다
     private final RedisTemplate<String, String> redisTemplate;
+    private final TokenRepository tokenRepository;
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -38,5 +42,9 @@ public class CustomLogoutHandler implements LogoutHandler {
         log.info("[ Redis 저장 ] key = Logout {}, 남은시간 = {}", token, expiration);
         redisTemplate.opsForValue().set("Logout " + token, "logout", expiration, TimeUnit.MILLISECONDS);
         log.info("[ CustomLogoutHandler ] Logout 블랙리스트 등록 완료");
+
+        Optional<Token> refreshToken = tokenRepository.findByEmail(authentication.getName());
+        refreshToken.ifPresent(tokenRepository::delete);
+        log.info("[ CustomLogoutHandler ] 블랙리스트 RefreshToken 삭제 완료");
     }
 }
