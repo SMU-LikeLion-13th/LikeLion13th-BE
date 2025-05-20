@@ -8,6 +8,5 @@ public interface MemberCommandService {
 
     void updatePassword(String email, MemberReqDTO.PasswordResetDTO dto);
 
-
     void deleteMember(String email);
 }

@@ -7,7 +7,9 @@ import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
 import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
+import com.project.likelion13thbe.domain.member.type.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,12 +18,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MemberCommandServicelmpl implements MemberCommandService{
     private final MemberRepository memberRepository;
-    //private final MemberConverter passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public MemberResDTO.MemberCreateResDTO createMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+
+        String encodedPassword = passwordEncoder.encode(memberCreateReqDTO.password());
+
         //DTO -> Member
-        Member member = MemberConverter.toMember(memberCreateReqDTO);
+        Member member = Member.builder()
+                .email(memberCreateReqDTO.email())
+                .password(encodedPassword) // 해싱된 비밀번호 저장
+                .role(Role.USER)
+                .build();
 
         // Member 엔티티 DB에 저장
         memberRepository.save(member);
@@ -36,7 +45,9 @@ public class MemberCommandServicelmpl implements MemberCommandService{
         Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        //member.updatePassword(passwordEncoder.encode(dto.getPassword()));
+        //비밀번호 인코딩
+        String encodedPassword = passwordEncoder.encode(dto.password());
+        member.updatePassword(encodedPassword);
     }
 
     @Override

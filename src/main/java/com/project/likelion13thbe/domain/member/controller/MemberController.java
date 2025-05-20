@@ -49,10 +49,10 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "비밀번호 수정 성공")
     )
     public CustomResponse<String> resetPassword(
-            @PathVariable String email,
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody MemberReqDTO.PasswordResetDTO request
     ) {
-        memberCommandService.updatePassword(email, request);
+        memberCommandService.updatePassword(userDetails.getUsername(), request);
         return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
