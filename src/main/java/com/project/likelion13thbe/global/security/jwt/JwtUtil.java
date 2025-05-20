@@ -111,6 +111,9 @@ public class JwtUtil {
         // 토큰에서 이메일 추출
         String email = getEmail(refreshToken);
 
+        // 기존 refresh token 삭제
+        tokenRepository.deleteByEmail(email);
+
         // DB에서 해당 사용자 조회
         Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
