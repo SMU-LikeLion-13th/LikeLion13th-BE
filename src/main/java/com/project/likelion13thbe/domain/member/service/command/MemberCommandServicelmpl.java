@@ -31,18 +31,18 @@ public class MemberCommandServicelmpl implements MemberCommandService{
     }
 
     @Override
-    public void updatePassword(Long userId, MemberReqDTO.PasswordResetDTO dto){
+    public void updatePassword(String email, MemberReqDTO.PasswordResetDTO dto){
         //회원정보 조회
-        Member member = memberRepository.findByIdAndNotDeleted(userId)
+        Member member = memberRepository.findByIdAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         //member.updatePassword(passwordEncoder.encode(dto.getPassword()));
     }
 
     @Override
-    public void deleteMember(Long userId){
+    public void deleteMember(String email){
         //회원 정보 조회
-        Member member = memberRepository.findByIdAndNotDeleted(userId)
+        Member member = memberRepository.findByIdAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         //soft delete 처리

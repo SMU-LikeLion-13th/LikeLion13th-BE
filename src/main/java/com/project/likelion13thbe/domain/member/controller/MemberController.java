@@ -14,6 +14,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name="Member",description = "멤버 API")
@@ -36,7 +38,7 @@ public class MemberController {
 
     @Operation(summary = "일반 로그인")
     @PostMapping("/login")
-    public MemberResDTO.MemberResponseDTO postLogin() { return null; }
+    public MemberResDTO.MemberResponseDTO Login() { return null; }
 
 
     @Operation(summary = "비밀번호 수정",description = "회원의 정보를 수정합니다.")
@@ -45,10 +47,10 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "비밀번호 수정 성공")
     )
     public CustomResponse<String> resetPassword(
-            @PathVariable Long userId,
+            @PathVariable String email,
             @RequestBody MemberReqDTO.PasswordResetDTO request
     ) {
-        memberCommandService.updatePassword(userId, request);
+        memberCommandService.updatePassword(email, request);
         return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
@@ -85,8 +87,8 @@ public class MemberController {
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "회원 탈퇴 성공")
     })
-    public CustomResponse<String> deleteMember(@PathVariable Long memberId){
-        memberCommandService.deleteMember(memberId);
+    public CustomResponse<String> deleteMember(@AuthenticationPrincipal UserDetails userDetails){
+        memberCommandService.deleteMember(userDetails.getUsername());
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
 

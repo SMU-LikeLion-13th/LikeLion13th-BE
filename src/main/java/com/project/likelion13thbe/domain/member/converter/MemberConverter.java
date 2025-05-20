@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.member.converter;
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.type.Role;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ public class MemberConverter {
                 .name(memberCreateReqDTO.name())
                 .email(memberCreateReqDTO.email())
                 .password(memberCreateReqDTO.password())
+                .role(Role.USER)
                 .build();
 
     }
