@@ -2,10 +2,12 @@ package com.project.likelion13thbe.global.config;
 
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.global.security.filter.JwtAuthorizationFilter;
+import com.project.likelion13thbe.global.security.handler.CustomLogoutHandler;
 import com.project.likelion13thbe.global.security.handler.JwtAccessDeniedHandler;
 import com.project.likelion13thbe.global.security.handler.JwtAuthenticationEntryPoint;
 import com.project.likelion13thbe.global.security.filter.CustomLoginFilter;
 import com.project.likelion13thbe.global.security.jwt.JwtUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,9 @@ public class SecurityConfig {
 
     // 인증에 실패한 경우 실행할 예외 처리 handler
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    // 로그아웃 handler 주입
+    private final CustomLogoutHandler customLogoutHandler;
 
     private final JwtUtil jwtUtil;
     private final MemberRepository memberRepository;
@@ -87,7 +92,13 @@ public class SecurityConfig {
                 // 인증 인가에 대한 예외처리
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedHandler(jwtAccessDeniedHandler)
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint));
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint))
+
+                .logout(logout -> logout
+                        .logoutUrl("/api/v1/members/logout")
+                        .addLogoutHandler(customLogoutHandler)
+                        .logoutSuccessHandler((request, response, authentication) ->
+                                response.setStatus(HttpServletResponse.SC_OK)));
 
         // build()를 통해 SecurityFilterChain 형태로 반환
         return http.build();
