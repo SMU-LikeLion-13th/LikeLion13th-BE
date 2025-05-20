@@ -50,9 +50,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-            //블랙리스트 확인
+            //블랙리스트 token이어도 일단 리턴
             if (redisTemplate.hasKey("blacklist:" + accessToken)) {
-                throw new AuthException(AuthErrorCode._UNAUTHORIZED);
+                log.warn("[ JwtAuthorizationFilter ] 로그아웃된 accessToken 입니다.");
+                filterChain.doFilter(request, response);
+                return;
             }
 
             // 3. Access Token을 이용한 인증 처리
@@ -66,14 +68,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("Access Token 이 만료되었습니다.");
             return;
-        } catch (AuthException e) {
-            log.warn("[ JwtAuthorizationFilter ] 로그아웃된 토큰입니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("로그아웃된 토큰입니다.");
-            return;
         }
-
         filterChain.doFilter(request, response);
     }
 
