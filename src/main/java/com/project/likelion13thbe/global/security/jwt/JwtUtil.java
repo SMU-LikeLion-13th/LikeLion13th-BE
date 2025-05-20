@@ -161,7 +161,11 @@ public class JwtUtil {
                     .getExpiration()
                     .before(new Date());
 
-            if (isExpired) log.info("만료된 JWT 토큰입니다.");
+            if (isExpired){
+                log.info("만료된 JWT 토큰입니다.");
+                throw new ExpiredJwtException(null, null, "만료된 JWT 토큰입니다.");
+            }
+
 
         } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
             // 원하는 Exception throw

@@ -8,6 +8,7 @@ import com.project.likelion13thbe.global.security.jwt.JwtDTO;
 import com.project.likelion13thbe.global.security.jwt.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -73,10 +74,15 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal(); // getPrincipal(): 로그인한 사용자 정보를 꺼내는 메서드
 
+        String accessToken = jwtUtil.createJwtAccessToken(customUserDetails);
+        String refreshToken = jwtUtil.createJwtRefreshToken(customUserDetails);
+
+        Cookie refreshCookie = createCookie("refreshToken", refreshToken);
+        response.addCookie(refreshCookie);
+
         // Client 에게 줄 Response build
         JwtDTO jwtDTO = JwtDTO.builder()
-                .accessToken(jwtUtil.createJwtAccessToken(customUserDetails))
-                .refreshToken(jwtUtil.createJwtRefreshToken(customUserDetails))
+                .accessToken(accessToken)
                 .build();
 
         // CustomResponse 작성
@@ -124,5 +130,15 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         // CustomResponse 생성 (데이터는 null로 설정)
         CustomResponse<Void> customResponse = CustomResponse.onFailure(HttpStatus.UNAUTHORIZED, errorCode, errorMessage);
+    }
+
+    private Cookie createCookie(String key, String value) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(24 * 60 * 60);
+        cookie.setPath("/");
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+
+        return cookie;
     }
 }
