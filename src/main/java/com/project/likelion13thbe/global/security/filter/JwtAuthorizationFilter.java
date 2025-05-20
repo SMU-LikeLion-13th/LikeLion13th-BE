@@ -2,6 +2,8 @@ package com.project.likelion13thbe.global.security.filter;
 
 import com.project.likelion13thbe.domain.member.entity.Role;
 import com.project.likelion13thbe.global.security.customUserDetails.CustomUserDetails;
+import com.project.likelion13thbe.global.security.exception.AuthErrorCode;
+import com.project.likelion13thbe.global.security.exception.AuthException;
 import com.project.likelion13thbe.global.security.jwt.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -11,13 +13,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.security.SignatureException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +27,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     // JWT 관련 유틸리티 클래스 주입
     private final JwtUtil jwtUtil;
+
+    // redis 주입
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     protected void doFilterInternal(
@@ -45,9 +50,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 return;
             }
 
+            log.info("[ JwtAuthorizationFilter ] 로그아웃 여부 확인");
+            String isLogout = redisTemplate.opsForValue().get("Logout " + accessToken);
+            if (isLogout != null) {
+                throw new AuthException(AuthErrorCode.BLACKLISTED_TOKEN);
+            }
+
             // 3. Access Token을 이용한 인증 처리
             authenticateAccessToken(accessToken);
             log.info("[ JwtAuthorizationFilter ] 종료. 다음 필터로 넘어갑니다.");
+
+            filterChain.doFilter(request, response);
 
         } catch (ExpiredJwtException e) {
             // 4. 토큰 만료 시 401 응답 처리
@@ -55,9 +68,22 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("Access Token 이 만료되었습니다.");
+        } catch (AuthException e) {
+            // 로그아웃(블랙리스트)된 토큰일 때
+            logger.warn("[ JwtAuthorizationFilter ] 로그아웃된 토큰입니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("로그아웃된 토큰입니다");
+//            response.setContentType("application/json; charset=UTF-8");
+//            response.setStatus(401);
+//            CustomResponse<Object> errorResponse = CustomResponse.onFailure(
+//                    AuthErrorCode.BLACKLISTED_TOKEN.getCode(),
+//                    AuthErrorCode.BLACKLISTED_TOKEN.getMessage(),
+//                    null
+//            );
+//            ObjectMapper mapper = new ObjectMapper();
+//            mapper.writeValue(response.getOutputStream(), errorResponse);
         }
-
-        filterChain.doFilter(request, response);
 
     }
 
@@ -85,5 +111,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         log.info("[ JwtAuthorizationFilter ] 인증 객체 저장 완료");
+
+
     }
 }

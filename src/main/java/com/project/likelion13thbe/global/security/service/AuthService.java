@@ -7,11 +7,11 @@ import com.project.likelion13thbe.global.security.exception.AuthErrorCode;
 import com.project.likelion13thbe.global.security.exception.AuthException;
 import com.project.likelion13thbe.global.security.jwt.JwtUtil;
 import com.project.likelion13thbe.global.security.repository.TokenRepository;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.security.SignatureException;
 
 @Slf4j
 @RequiredArgsConstructor

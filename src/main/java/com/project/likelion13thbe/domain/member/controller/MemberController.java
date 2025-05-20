@@ -37,6 +37,12 @@ public class MemberController {
         return null;
     }
 
+    @Operation(summary = "로그아웃")
+    @PostMapping("logout")
+    public ResponseEntity<?> logout() {
+        return null;
+    }
+
     @Operation(summary = "getMember")
     @GetMapping("/members")
     public CustomResponse<MemberResDTO.MemberDetailResDTO> getMember(

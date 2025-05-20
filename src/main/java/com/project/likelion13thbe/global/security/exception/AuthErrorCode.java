@@ -11,7 +11,8 @@ public enum AuthErrorCode implements BaseErrorCode {
     _UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다"),
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "접근이 금지되었습니다"),
     _NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON404", "요청한 자원을 찾을 수 없습니다"),
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "COMMON401", "이상한 토큰입니다")
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "COMMON401", "이상한 토큰입니다"),
+    BLACKLISTED_TOKEN(HttpStatus.UNAUTHORIZED, "AUTH401-BL", "로그아웃된 토큰입니다")
     ;
 
 
