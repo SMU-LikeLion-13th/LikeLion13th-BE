@@ -66,7 +66,7 @@ public class SecurityConfig {
                         // 인증에 대해 예외처리할 핸들러 추가
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint))
         ;
-        // build 해서 시큐리티필터체인 현태로 반환
+        // build 해서 시큐리티필터체인 형태로 반환
         return http.build();
     }
 
