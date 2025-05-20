@@ -9,20 +9,23 @@ import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public MemberResponseDTO.MemberCreateResDTO createMember(MemberRequestDTO.MemberCreateRequestDTO memberCreateRequestDTO) {
-        // DTO -> Member
-        Member member = MemberConverter.toMember(memberCreateRequestDTO);
+        // 평문 비밀번호 암호화하기
+        String encodedPassword = passwordEncoder.encode(memberCreateRequestDTO.password());
+
+        // 암호화된 비밀번호를 포함해서 Member 객체 생성
+        Member member = MemberConverter.toMember(memberCreateRequestDTO, encodedPassword);
 
         // Member 엔티티 DB에 저장
         memberRepository.save(member);
