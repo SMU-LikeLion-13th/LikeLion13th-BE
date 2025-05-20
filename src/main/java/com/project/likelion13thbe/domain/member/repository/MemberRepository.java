@@ -20,5 +20,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m FROM Member m WHERE m.id = :userId AND m.deletedAt IS NULL")
     Optional<Member> findByIdAndNotDeleted(@Param("userId") Long userId);
 
-    Long id(Long id);
+    // 이메일 조회
+    @Query("SELECT m FROM Member m WHERE m.email = :email")
+    Optional<Member> findByEmail(@Param("email") String email);
+
 }
