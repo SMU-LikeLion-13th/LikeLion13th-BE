@@ -20,6 +20,7 @@ public class MemberConverter {
                 .password(encodedPassword)
                 .name(memberCreateRequestDTO.name())
                 .image(memberCreateRequestDTO.image())
+                .role(memberCreateRequestDTO.role())
                 .build();
     }
 
