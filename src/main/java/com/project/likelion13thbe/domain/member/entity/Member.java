@@ -1,6 +1,7 @@
 package com.project.likelion13thbe.domain.member.entity;
 
 import com.project.likelion13thbe.global.BaseEntity;
+import com.project.likelion13thbe.global.security.AuthType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,6 +31,12 @@ public class Member extends BaseEntity {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    @Column(name = "active")
+    private boolean active;
+
+    @Column(name = "authType")
+    private AuthType authType;
 
     //권한
     @Column(name = "role")
