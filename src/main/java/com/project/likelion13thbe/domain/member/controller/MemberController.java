@@ -70,4 +70,9 @@ public class MemberController {
         memberCommandService.deleteMember((userDetails.getUsername()));
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<CustomResponse<String>> logout() {
+        return ResponseEntity.ok(CustomResponse.onSuccess("로그아웃 요청 완료"));
+    }
 }

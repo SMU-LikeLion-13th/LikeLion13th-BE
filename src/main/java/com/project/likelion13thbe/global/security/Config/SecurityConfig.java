@@ -4,11 +4,14 @@ package com.project.likelion13thbe.global.security.Config;
 import com.project.likelion13thbe.global.security.JwtUtil;
 import com.project.likelion13thbe.global.security.filter.CustomLoginFilter;
 import com.project.likelion13thbe.global.security.filter.JwtAuthorizationFilter;
+import com.project.likelion13thbe.global.security.handler.CustomLogoutHandler;
+import com.project.likelion13thbe.global.security.handler.CustomLogoutSuccessHandler;
 import com.project.likelion13thbe.global.security.handler.JwtAccessDeniedHandler;
 import com.project.likelion13thbe.global.security.handler.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -29,6 +32,9 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final CustomLogoutHandler customLogoutHandler;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    private final RedisTemplate<String, String> redisTemplate;
 
 
     //인증이 필요하지 않은 url
@@ -61,7 +67,7 @@ public class SecurityConfig {
                         .requestMatchers(allowUrl).permitAll()
                         .requestMatchers(HttpMethod.GET, allowGetUrl).permitAll()
                         .anyRequest().authenticated())
-                .addFilterBefore(new JwtAuthorizationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthorizationFilter(jwtUtil, redisTemplate), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
@@ -69,8 +75,10 @@ public class SecurityConfig {
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedHandler(jwtAccessDeniedHandler)
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint))
-        ;
-
+                .logout(logout -> logout.logoutUrl("/members/logout")
+                        .addLogoutHandler(customLogoutHandler)
+                        .logoutSuccessHandler(customLogoutSuccessHandler)
+                );
         return http.build();
     }
 

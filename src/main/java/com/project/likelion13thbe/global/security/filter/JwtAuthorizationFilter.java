@@ -3,6 +3,8 @@ package com.project.likelion13thbe.global.security.filter;
 import com.project.likelion13thbe.domain.member.entity.Role;
 import com.project.likelion13thbe.global.security.CustomUserDetails;
 import com.project.likelion13thbe.global.security.JwtUtil;
+import com.project.likelion13thbe.global.security.exception.AuthErrorCode;
+import com.project.likelion13thbe.global.security.exception.AuthException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +30,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     // JWT 관련 유틸리티 클래스 주입
     private final JwtUtil jwtUtil;
+    private final RedisTemplate<String, String> redisTemplate; // 필드 추가 필요
 
     @Override
     protected void doFilterInternal(
@@ -46,6 +50,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
+            //블랙리스트 확인
+            if (redisTemplate.hasKey("blacklist:" + accessToken)) {
+                throw new AuthException(AuthErrorCode._UNAUTHORIZED);
+            }
 
             // 3. Access Token을 이용한 인증 처리
             authenticateAccessToken(accessToken);
@@ -57,6 +65,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("Access Token 이 만료되었습니다.");
+            return;
+        } catch (AuthException e) {
+            log.warn("[ JwtAuthorizationFilter ] 로그아웃된 토큰입니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("로그아웃된 토큰입니다.");
             return;
         }
 
