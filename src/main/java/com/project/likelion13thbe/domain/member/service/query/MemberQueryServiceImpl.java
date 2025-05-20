@@ -23,9 +23,9 @@ public class MemberQueryServiceImpl implements MemberQueryService{
 
 
     @Override
-    public MemberResDTO.MemberPreviewResDTO getMember(Long memberId) {
+    public MemberResDTO.MemberPreviewResDTO getMember(String email) {
         // DB에서 pk가 1인 Member 조회
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
         return MemberConverter.toMemberPreviewResponseDTO(member);
     }
@@ -42,7 +42,8 @@ public class MemberQueryServiceImpl implements MemberQueryService{
 
 
     //커서기반 사용자 조회
-    public MemberResDTO.MemberCursorResDTO getMemberCursor(Long cursor,Integer size) {
+    @Override
+    public MemberResDTO.MemberCursorResDTO getMemberCursor(Long cursor, Integer size) {
 
         Pageable pageable = PageRequest.of(0,size);
 

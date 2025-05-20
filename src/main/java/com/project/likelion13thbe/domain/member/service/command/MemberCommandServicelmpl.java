@@ -33,7 +33,7 @@ public class MemberCommandServicelmpl implements MemberCommandService{
     @Override
     public void updatePassword(String email, MemberReqDTO.PasswordResetDTO dto){
         //회원정보 조회
-        Member member = memberRepository.findByIdAndNotDeleted(email)
+        Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         //member.updatePassword(passwordEncoder.encode(dto.getPassword()));
@@ -42,7 +42,7 @@ public class MemberCommandServicelmpl implements MemberCommandService{
     @Override
     public void deleteMember(String email){
         //회원 정보 조회
-        Member member = memberRepository.findByIdAndNotDeleted(email)
+        Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         //soft delete 처리

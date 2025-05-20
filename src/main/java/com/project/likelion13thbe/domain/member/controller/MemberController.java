@@ -5,6 +5,7 @@ import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
+import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 import com.project.likelion13thbe.global.apiPayload.exception.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +38,7 @@ public class MemberController {
     public MemberResDTO.MemberResponseDTO postKakaoLogin() { return null; }
 
 
-    @Operation(summary = "일반 로그인")
+    @Operation(summary = "일반 로그인", description = "CustomLoginFilter에서 로그인함, 컨트롤러 관여x")
     @PostMapping("/login")
     public MemberResDTO.MemberResponseDTO Login() { return null; }
 
@@ -68,9 +70,20 @@ public class MemberController {
 
     @Operation(summary = "회원 조회")
     @GetMapping("/members/{memberId}")
-    public CustomResponse<MemberResDTO.MemberPreviewResDTO> getMember(@PathVariable Long memberId){
-        return CustomResponse.onSuccess(memberQueryService.getMember(memberId));
+    public CustomResponse<MemberResDTO.MemberPreviewResDTO> getMember(
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+        return CustomResponse.onSuccess(memberQueryService.getMember(userDetails.getUsername()));
     }
+
+    @Operation(summary = "로그인한 사용자 정보 조회")
+    @GetMapping("/members/me")
+    public CustomResponse<MemberResDTO.MemberPreviewResDTO> getMyInfo(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return CustomResponse.onSuccess(memberQueryService.getMember(userDetails.getUsername()));
+    }
+
 
     @Operation(summary = "사용자 정보 페이지네이션 조회, offset 기반")
     @GetMapping("/offset")
@@ -79,6 +92,14 @@ public class MemberController {
             @RequestParam Integer size
     ){
         return CustomResponse.onSuccess(memberQueryService.getMemberOffset(offset, size));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")//관리자만 사용자 리스트 조회가능 하게 설정
+    @Operation(summary = "사용자 정보 페이지네이션 조회, cursor 기반")
+    @GetMapping("/cursor")
+    public CustomResponse<MemberResDTO.MemberCursorResDTO> getMemberCursor(@RequestParam(required = false, defaultValue = "0") Long cursor,
+                                                                           @RequestParam Integer size) {
+        return CustomResponse.onSuccess(memberQueryService.getMemberCursor(cursor, size));
     }
 
     //회원 탈퇴 (JWT 인증 필요)
