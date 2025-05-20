@@ -29,4 +29,8 @@ public class Order extends BaseEntity {
 
     @Column(name = "status", nullable = false)
     private String status;
+
+    public void updateOrderStatus(String newStatus) {
+        this.status = newStatus;
+    }
 }

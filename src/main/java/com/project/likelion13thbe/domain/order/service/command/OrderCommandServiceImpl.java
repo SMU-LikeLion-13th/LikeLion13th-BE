@@ -25,4 +25,11 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         return OrderConverter.toOrderResDTO(order);
     }
 
+    public void updateOrderStatus(String status, OrderReqDTO.updateOrderStatusDTO dto) {
+
+        Order order = orderRepository.findByIdAndNotDeleted(id).orElseThrow();
+
+        order.updateOrderStatus(status);
+    }
+
 }

@@ -33,4 +33,8 @@ public class Review extends BaseEntity {
 
     @Column(name = "likeCount", nullable = false)
     private String likeCount;
+
+    public void editReview(String newContent) {
+        this.content = newContent;
+    }
 }

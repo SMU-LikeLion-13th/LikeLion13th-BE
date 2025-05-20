@@ -16,11 +16,16 @@ import org.springframework.stereotype.Service;
 public class ReviewCommandServiceImpl implements ReviewCommandService {
     private final ReviewRepository reviewRepository;
 
+    @Override
     public ReviewResDTO.ReviewCreateResDTO createReview(ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
         Review review = ReviewConverter.toReview(reviewCreateReqDTO);
 
         reviewRepository.save(review);
 
         return ReviewConverter.toReviewResDTO(review);
+    }
+
+    public void DeleteReview(String content) {
+        Review review = reviewRepository.findByIdAndNotDeleted(content).orElseThrow();
     }
 }
