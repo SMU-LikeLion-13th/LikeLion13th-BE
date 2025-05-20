@@ -6,7 +6,6 @@ import com.project.likelion13thbe.domain.member.service.command.MemberCommandSer
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
-import com.project.likelion13thbe.domain.review.service.query.ReviewQueryServiceImpl;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import com.project.likelion13thbe.global.security.entity.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
