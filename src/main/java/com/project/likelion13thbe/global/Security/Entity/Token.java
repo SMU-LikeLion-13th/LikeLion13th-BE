@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(name = "token")
 public class Token {
-    // Refresh Token을 저장하는 엔티티
+//    // Refresh Token을 저장하는 엔티티
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(nullable = false, unique = true)
     private String email;
 
