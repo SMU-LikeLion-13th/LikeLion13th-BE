@@ -17,3 +17,9 @@ spring:
     properties:
       hibernate:
         format_sql: true # 출력되는 SQL 쿼리를 보기 좋게 포맷팅
+
+  jwt:
+    secret: likelion13th # JWT 시크릿 키
+    token:
+      access-expiration-time: 3600000  # Access Token 만료 시간
+      refresh-expiration-time: 86400000  #  Refresh Token 만료 시간

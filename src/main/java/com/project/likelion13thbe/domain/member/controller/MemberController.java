@@ -19,6 +19,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +36,9 @@ public class MemberController {
 
 
     @GetMapping
-    public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
+    public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember(
+            @AuthenticationPrincipal UserDetails userDetails
+            ) {
         return ResponseEntity.ok(memberQueryService.getMember());
     }
 

@@ -1,9 +1,11 @@
 package com.project.likelion13thbe.domain.member.entity;
 
 import com.project.likelion13thbe.global.BaseEntity;
+import com.project.likelion13thbe.global.security.AuthType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import javax.management.relation.Role;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,12 +27,22 @@ public class Member extends BaseEntity {
     private String name;
 
     @Column(name = "password")
-    private Long password;
+    private String password;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public void updatePassword(Long newPassword) {
+    @Column(name = "active")
+    private boolean active;
+
+    @Column(name = "authType")
+    private AuthType authType;
+
+    //권한
+    @Column(name = "role")
+    private String role;
+
+    public void updatePassword(String newPassword) {
         this.password = newPassword;
     }
 

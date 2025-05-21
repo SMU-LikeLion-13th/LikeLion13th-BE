@@ -3,10 +3,12 @@ package com.project.likelion13thbe.domain.member.converter;
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.global.security.AuthType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -19,6 +21,18 @@ public class MemberConverter {
                 .password(memberCreateReqDTO.password())
                 .name(memberCreateReqDTO.name())
                 .build();
+    }
+
+    public static Member toEntity(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO,
+                                  PasswordEncoder passwordEncoder) {
+        String encodePassword = passwordEncoder.encode(memberCreateReqDTO.password());
+        return Member.builder()
+                .email(memberCreateReqDTO.email())
+                .password(encodePassword)
+                .active(true)
+                .authType(AuthType.GENERAL)
+                .build();
+
     }
 
     public static MemberResDTO.MemberCreateResDTO toMemberResponseDTO(Member member) {

@@ -10,7 +10,7 @@ public class MemberReqDTO {
     public record MemberCreateReqDTO(
             String email,
             String name,
-            Long password
+            String password
     ) {}
 
     public record PasswordResetDTO(

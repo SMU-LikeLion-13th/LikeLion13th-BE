@@ -18,5 +18,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
     Slice<Member> findAllByMemberIdLessThanOrderByMemberIdDesc(Long memberId, Pageable pageable);
     @Query("SELECT m FROM Member m WHERE m.email = :email AND m.deletedAt IS NULL")
     Optional<Member> findByMemberIdAndNotDeleted(@Param("memberId") Long memberId);
+    @Query("SELECT m FROM Member m WHERE m.email = :email AND m.deletedAt IS NULL")
+    Optional<Member> findByEmail(@Param("email") String email);
 }
 
