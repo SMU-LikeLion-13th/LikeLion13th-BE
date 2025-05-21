@@ -33,8 +33,8 @@ public class CommentCommandServiceImpl implements CommentCommandService {
     private final CommentRepository commentRepository;
 
     @Override
-    public CommentResDTO.CommentCreateResDTO createComment(Long productId, Long reviewId, CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO) {
-        Member member = memberRepository.findById(commentCreateReqDTO.memberId())
+    public CommentResDTO.CommentCreateResDTO createComment(Long productId, Long reviewId, CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO, String email) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
@@ -51,9 +51,13 @@ public class CommentCommandServiceImpl implements CommentCommandService {
     }
 
     @Override
-    public CommentResDTO.CommentPreviewResDTO updateComment(Long commentId, CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
+    public CommentResDTO.CommentPreviewResDTO updateComment(Long commentId, CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO, String email) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        if (!comment.getMember().getEmail().equals(email)) {
+            throw new CommentException(CommentErrorCode.COMMENT_ACCESS_DENIED);
+        }
 
         comment.setContent(commentUpdateReqDTO.content());
 
@@ -61,9 +65,14 @@ public class CommentCommandServiceImpl implements CommentCommandService {
     }
 
     @Override
-    public void deleteComment(Long commentId) {
+    public void deleteComment(Long commentId, String email) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        if (!comment.getMember().getEmail().equals(email)) {
+            throw new CommentException(CommentErrorCode.COMMENT_ACCESS_DENIED);
+        }
+
         comment.delete();
     }
 }

@@ -29,6 +29,10 @@ public class Member extends BaseEntity {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
@@ -36,8 +40,8 @@ public class Member extends BaseEntity {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    public void updatePassword(String newPassword) {
-        this.password = newPassword;
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
     }
 
     public void delete() {this.deletedAt = LocalDateTime.now();}

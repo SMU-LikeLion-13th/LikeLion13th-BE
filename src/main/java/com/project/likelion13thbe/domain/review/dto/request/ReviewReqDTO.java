@@ -11,8 +11,7 @@ public class ReviewReqDTO {
             String content,
             @NotNull(message = "평점은 필수 입력값입니다.")
             @Max(value = 5, message = "평점은 최대 5점 이하여야 합니다.")
-            Double rate,
-            Long memberId
+            Double rate
     ) {
     }
     @Builder

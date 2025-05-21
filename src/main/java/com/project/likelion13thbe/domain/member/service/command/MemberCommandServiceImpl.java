@@ -8,6 +8,7 @@ import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
 import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
+import com.project.likelion13thbe.global.security.Config.SecurityConfig;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +25,17 @@ import java.util.List;
 public class MemberCommandServiceImpl implements MemberCommandService{
 
     private final MemberRepository memberRepository;
+    private final SecurityConfig securityConfig;
 
     @Override
     public MemberResDTO.MemberCreateResDTO createMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
         if (memberRepository.existsByEmail(memberCreateReqDTO.email())) {
             throw new CustomException(MemberErrorCode.MEMBER_EMAIL_DUPLICATE);
         }
+        String password = memberCreateReqDTO.password();
+        String encodedPassword = securityConfig.passwordEncoder().encode(password);
         //DTO -> Member
-        Member member = MemberConverter.toMember(memberCreateReqDTO);
+        Member member = MemberConverter.toMember(memberCreateReqDTO, encodedPassword);
 
         // Member 엔티티 DB에 저장
         memberRepository.save(member);
@@ -40,21 +44,27 @@ public class MemberCommandServiceImpl implements MemberCommandService{
         return MemberConverter.toMemberResponseDTO(member);
     }
     @Override
-    public MemberResDTO.ResetPasswordResDTO updatePassword(Long memberId, MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO) {
-        Member member = memberRepository.findByIdAndNotDeleted(memberId)
+    public MemberResDTO.ResetPasswordResDTO updatePassword(String email, MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        if (!member.getPassword().equals(resetPasswordReqDTO.currentPassword())) {
+        if (!securityConfig.passwordEncoder().matches(resetPasswordReqDTO.currentPassword(), member.getPassword())) {
             throw new MemberException(MemberErrorCode.MEMBER_WRONG_PASSWORD);
         }
 
-        member.updatePassword(resetPasswordReqDTO.password());
+        if (resetPasswordReqDTO.newPassword().equals(resetPasswordReqDTO.currentPassword())) {
+            throw new MemberException(MemberErrorCode.MEMBER_SAME_PASSWORD);
+        }
+
+        String encodedNewPassword = securityConfig.passwordEncoder().encode(resetPasswordReqDTO.newPassword());
+        member.updatePassword(encodedNewPassword);
+
         return MemberConverter.toMemberResetPasswordResponseDTO(member, resetPasswordReqDTO.currentPassword());
     }
 
     @Override
-    public void deleteMember(Long memberId) {
-        Member member = memberRepository.findByIdAndNotDeleted(memberId)
+    public void deleteMember(String email) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         member.delete();

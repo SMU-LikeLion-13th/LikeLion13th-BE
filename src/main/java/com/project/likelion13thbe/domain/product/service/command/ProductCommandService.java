@@ -4,6 +4,6 @@ import com.project.likelion13thbe.domain.product.dto.request.ProductReqDTO;
 import com.project.likelion13thbe.domain.product.dto.response.ProductResDTO;
 
 public interface ProductCommandService {
-    ProductResDTO.ProductCreateResDTO createProduct(ProductReqDTO.ProductCreateReqDTO productCreateReqDTO);
-    void deleteProduct(Long productId);
+    ProductResDTO.ProductCreateResDTO createProduct(ProductReqDTO.ProductCreateReqDTO productCreateReqDTO, String email);
+    void deleteProduct(Long productId, String email);
 }

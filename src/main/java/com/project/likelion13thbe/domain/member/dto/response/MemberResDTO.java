@@ -26,17 +26,4 @@ public class MemberResDTO {
             String newPassword
     ) {
     }
-
-    @Builder
-    public record LoginJwtTokenResDTo(
-            String tokenType,
-            String accessToken,
-            String expiresIn,
-            String refreshToken,
-            String refreshTokenExpiresIn,
-            String scope,
-            Long userId,
-            String username
-    ) {
-    }
 }

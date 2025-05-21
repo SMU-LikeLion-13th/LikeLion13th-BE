@@ -29,8 +29,8 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     private final MemberRepository memberRepository;
 
     @Override
-    public ReviewResDTO.ReviewCreateResDTO createReview(Long productId, ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
-        Member member = memberRepository.findById(reviewCreateReqDTO.memberId())
+    public ReviewResDTO.ReviewCreateResDTO createReview(Long productId, ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO, String email) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
@@ -43,9 +43,13 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     }
 
     @Override
-    public ReviewResDTO.ReviewPreviewResDTO updateReview(Long reviewId, ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
+    public ReviewResDTO.ReviewPreviewResDTO updateReview(Long reviewId, ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO, String email) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
+
+        if (!review.getMember().getEmail().equals(email)) {
+            throw new ReviewException(ReviewErrorCode.REVIEW_ACCESS_DENIED);
+        }
 
         review.setContent(reviewUpdateReqDTO.content());
         review.setRate(reviewUpdateReqDTO.rate());
@@ -54,9 +58,13 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     }
 
     @Override
-    public void deleteReview(Long reviewId) {
+    public void deleteReview(Long reviewId, String email) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
+
+        if (!review.getMember().getEmail().equals(email)) {
+            throw new ReviewException(ReviewErrorCode.REVIEW_ACCESS_DENIED);
+        }
 
         review.delete();
     }

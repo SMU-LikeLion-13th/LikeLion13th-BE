@@ -5,12 +5,14 @@ import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
 import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
+import com.project.likelion13thbe.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,29 +42,35 @@ public class ReviewController {
     @PostMapping("/api/v1/products/{productId}/reviews")
     public CustomResponse<ReviewResDTO.ReviewCreateResDTO> createReview(
             @PathVariable("productId") Long productId,
-            @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO dto
-    ) {
-        return CustomResponse.onSuccess(reviewCommandService.createReview(productId, dto));
+            @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+            ) {
+        return CustomResponse.onSuccess(reviewCommandService.createReview(productId, reviewCreateReqDTO, customUserDetails.getUsername()));
     }
     @Operation(description = "리뷰 수정")
     @Parameter(name = "reviewId", description = "review PK", example = "2")
     @PatchMapping("/api/v1/reviews/{reviewId}")
     public CustomResponse<ReviewResDTO.ReviewPreviewResDTO> updateReview(
         @PathVariable("reviewId") Long reviewId,
-        @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO updateReviewDTO
+        @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO updateReviewDTO,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        return CustomResponse.onSuccess(reviewCommandService.updateReview(reviewId, updateReviewDTO));
+        return CustomResponse.onSuccess(reviewCommandService.updateReview(reviewId, updateReviewDTO, customUserDetails.getUsername()));
     }
     @Operation(description = "리뷰 삭제")
     @Parameter(name = "reviewId", description = "review PK", example = "1")
     @DeleteMapping("/api/v1/reviews/{reviewId}")
-    public CustomResponse<String> deleteReview(@PathVariable("reviewId") Long reviewId) {
-        reviewCommandService.deleteReview(reviewId);
+    public CustomResponse<String> deleteReview(
+            @PathVariable("reviewId") Long reviewId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        reviewCommandService.deleteReview(reviewId, customUserDetails.getUsername());
         return CustomResponse.onSuccess("리뷰 삭제 성공");
     }
-
-    @GetMapping("/api/v1/reviews/my")
-    public CustomResponse<ReviewResDTO.ReviewListDTO> getMyReview() {
-        return CustomResponse.onSuccess(reviewQueryService.getMyReview());
+    @Operation(description = "내 리뷰 조회")
+    @GetMapping("/api/v1/members/me/reviews")
+    public CustomResponse<ReviewResDTO.ReviewListDTO> getMyReview(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        return CustomResponse.onSuccess(reviewQueryService.getMyReview(customUserDetails.getUsername()));
     }
 }

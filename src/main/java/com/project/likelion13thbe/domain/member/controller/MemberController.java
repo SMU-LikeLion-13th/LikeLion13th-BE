@@ -5,11 +5,14 @@ import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
+import com.project.likelion13thbe.global.security.CustomUserDetails;
+import com.project.likelion13thbe.global.security.dto.JwtDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +24,7 @@ public class MemberController {
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
     @Operation(description = "회원가입")
-    @PostMapping
+    @PostMapping("/auth")
     public CustomResponse<MemberResDTO.MemberCreateResDTO> createMember(
             @RequestBody @Valid MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
         return CustomResponse.onSuccess(memberCommandService.createMember(memberCreateReqDTO));
@@ -29,40 +32,47 @@ public class MemberController {
 
     @Operation(description = "유저 조회")
     @GetMapping
-    public CustomResponse<MemberResDTO.MemberPreviewResDTO> getMember() {
-        return CustomResponse.onSuccess(memberQueryService.getMember());
+    public CustomResponse<MemberResDTO.MemberPreviewResDTO> getMember(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+            ) {
+        System.out.println("컨트롤러 진입");
+        return CustomResponse.onSuccess(memberQueryService.getMember(customUserDetails.getUsername()));
     }
 
 
     @Operation(description = "비밀번호 수정")
-    @PatchMapping("/{memberId}/reset-password")
+    @PatchMapping("/reset-password")
     public CustomResponse<MemberResDTO.ResetPasswordResDTO> resetPassword(
             @RequestBody @Valid MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO,
-            @PathVariable("memberId") Long memberId
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        return CustomResponse.onSuccess(memberCommandService.updatePassword(memberId, resetPasswordReqDTO));
+        String email = customUserDetails.getUsername();
+        return CustomResponse.onSuccess(memberCommandService.updatePassword(email, resetPasswordReqDTO));
     }
 
-    // 로그인은 반환값으로 토큰을 발급해야해서 일단 커스텀적용 안했습니다
-    @Operation(description = "로그인")
+    @Operation(description = "로그인 (JWT 발급은 필터에서 처리)")
     @PostMapping("/login")
-    public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> login(
-            @RequestBody MemberReqDTO.LoginReqDTO dto
-    ) {
-        return ResponseEntity.ok(null);
+    public void login(@RequestBody MemberReqDTO.LoginReqDTO loginReqDTO) {
+        throw new IllegalStateException("Spring Security Login Filter에서 처리되므로 직접 호출되지 않습니다.");
     }
 
     @Operation(description = "카카오 로그인")
     @PostMapping("/login/kakao")
-    public ResponseEntity<MemberResDTO.LoginJwtTokenResDTo> kakaoLogin(
+    public ResponseEntity<JwtDTO> kakaoLogin(
             @RequestBody MemberReqDTO.KakaoLoginRequestDTO dto
     ) {
         return ResponseEntity.ok(null);
     }
     @Operation(description = "회원 탈퇴")
-    @DeleteMapping("/{memberId}")
-    public CustomResponse<String> deleteMember(@PathVariable("memberId") Long memberId) {
-        memberCommandService.deleteMember((memberId));
+    @DeleteMapping
+    public CustomResponse<String> deleteMember(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        memberCommandService.deleteMember((customUserDetails.getUsername()));
         return CustomResponse.onSuccess("회원 탈퇴 성공");
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<CustomResponse<String>> logout() {
+        return ResponseEntity.ok(CustomResponse.onSuccess("로그아웃 요청 완료"));
     }
 }
