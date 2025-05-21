@@ -4,6 +4,8 @@ import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
+import com.project.likelion13thbe.global.Security.AuthErrorCode;
+import com.project.likelion13thbe.global.Security.AuthException;
 import com.project.likelion13thbe.global.Security.DTO.JwtDTO;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,11 +56,11 @@ public class MemberController {
     })
     @PostMapping("/password-reset")
     public CustomResponse<String> resetPassword(
-            @RequestBody MemberRequestDTO.PasswordResetDTO requestDTO
-
+            @RequestBody MemberRequestDTO.PasswordResetDTO requestDTO,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        memberCommandService.updatePassword(1L, requestDTO);
-        // 비밀번호 수정 로직
+        Long userId = Long.parseLong(userDetails.getUsername());
+        memberCommandService.updatePassword(userId, requestDTO);
         return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
@@ -78,20 +80,22 @@ public class MemberController {
                 .body(memberCommandService.createMember((memberCreateRequestDTO)));
     }
 
-    @Operation(summary = "사용자 정보 조회", description = "사용자 정보 조회")
+    @Operation(summary = "내 정보 조회", description = "로그인한 사용자의 정보를 조회합니다.")
     @ApiResponse(responseCode = "200",
             description = "사용자 정보 조회 성공",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = MemberResponseDTO.MemberCreateResponseDTO.class)
+                    schema = @Schema(implementation = MemberResponseDTO.MemberPreviewResDTO.class)
             )
     )
-    @GetMapping
-    public ResponseEntity<MemberResponseDTO.MemberPreviewResDTO> getMember(
+    @GetMapping("/me")
+    public ResponseEntity<MemberResponseDTO.MemberPreviewResDTO> getMyInfo(
             @AuthenticationPrincipal UserDetails userDetails
-            ) {
-        return ResponseEntity.ok(memberQueryService.getMember());
+    ) {
+        Long userId = Long.parseLong(userDetails.getUsername());
+        return ResponseEntity.ok(memberQueryService.getMember(userId));
     }
+
 
     @Operation(summary = "4주차 실습", description = "사용자 정보 페이지네이션 조회_offset 기반")
     @ApiResponse(responseCode = "200",
@@ -114,7 +118,14 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "회원 탈퇴 성공")
     })
-    public CustomResponse<String> deleteMember(@PathVariable Long memberId) {
+    public CustomResponse<String> deleteMember(
+            @PathVariable Long memberId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        Long userId = Long.parseLong(userDetails.getUsername());
+        if (!userId.equals(memberId)) {
+            throw new AuthException(AuthErrorCode._FORBIDDEN);
+        }
         memberCommandService.deleteMember(memberId);
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
