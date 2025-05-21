@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -48,6 +50,27 @@ public class MemberController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteMember(@PathVariable Long id) {
         memberCommandService.deleteMember(id);
+        return ResponseEntity.ok("Member Deleted Successfully.");
+    }
+
+    // Update @AuthenticationPrincipal
+    @PatchMapping("/myaccount")
+    public ResponseEntity<String> updateMyAccount(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody MemberReqDTO.MemberUpdateReqDTO dto
+    ) {
+        String username = userDetails.getUsername();
+        memberCommandService.updateMemberByUsername(username, dto);
+        return ResponseEntity.ok("Member Updated Successfully.");
+    }
+
+    // Delete @AuthenticationPrincipal
+    @DeleteMapping("/myaccount")
+    public ResponseEntity<String> deleteMyAccount(
+            @AuthenticationPrincipal UserDetails userDetails
+            ) {
+        String username = userDetails.getUsername();
+        memberCommandService.deleteMemberByUsername(username);
         return ResponseEntity.ok("Member Deleted Successfully.");
     }
 }

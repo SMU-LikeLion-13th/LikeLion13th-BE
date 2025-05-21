@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,5 +41,27 @@ public class OrderController {
     public ResponseEntity<String> deleteOrder(@PathVariable Long id) {
         orderCommandService.deleteOrder(id);
         return ResponseEntity.ok("Order Deleted Successfully.");
+    }
+
+    // Update @AuthenticationPrincipal
+    @PatchMapping("/myaccount/{id}")
+    public ResponseEntity<String> updateMyOrder(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long id,
+            @RequestBody OrderReqDTO.OrderUpdateReqDTO dto
+    ) {
+        String username = userDetails.getUsername();
+        orderCommandService.updateOrderByUsernameAndId(username, id, dto);
+        return ResponseEntity.ok("Order Updated Successfully.");
+    }
+
+    // Delete @AuthenticationPrincipal
+    @DeleteMapping("/myaccount")
+    public ResponseEntity<String> deleteMyOrder(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        String username = userDetails.getUsername();
+        orderCommandService.deleteOrderByUsername(username);
+        return ResponseEntity.ok("Member Deleted Successfully.");
     }
 }

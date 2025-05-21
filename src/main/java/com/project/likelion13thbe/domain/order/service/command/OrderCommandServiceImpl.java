@@ -9,6 +9,8 @@ import com.project.likelion13thbe.domain.order.entity.Order;
 import com.project.likelion13thbe.domain.order.repository.OrderRepository;
 import com.project.likelion13thbe.domain.product.entity.Product;
 import com.project.likelion13thbe.domain.product.repository.ProductRepository;
+import com.project.likelion13thbe.global.apiPayload.code.GeneralErrorCode;
+import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,9 +24,9 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
     public OrderResDTO.OrderCreateResDTO createOrder(OrderReqDTO.OrderCreateReqDTO orderCreateReqDTO) {
         Member member = memberRepository.findById(orderCreateReqDTO.getMemberId())
-                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+                .orElseThrow(() -> new CustomException(GeneralErrorCode.NOT_FOUND_404));
         Product product = productRepository.findById(orderCreateReqDTO.getProductId())
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+                .orElseThrow(() -> new CustomException(GeneralErrorCode.NOT_FOUND_404));
 
         Order order = OrderConverter.toOrder(orderCreateReqDTO, member, product);
         orderRepository.save(order);
@@ -34,7 +36,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     }
 
     public void updateOrder(Long id, OrderReqDTO.OrderUpdateReqDTO dto) {
-        Order order = orderRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Order not found"));
+        Order order = orderRepository.findById(id).orElseThrow(() -> new CustomException(GeneralErrorCode.NOT_FOUND_404));
 
         if (dto.getQuantity() != null) {
             order.setQuantity(dto.getQuantity());
@@ -55,7 +57,32 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         if (orderRepository.existsById(id)) {
             orderRepository.deleteById(id);
         } else {
-            throw new EntityNotFoundException("Order not found");
+            throw new CustomException(GeneralErrorCode.NOT_FOUND_404);
         }
+    }
+
+    public void updateOrderByUsernameAndId(String username, Long id, OrderReqDTO.OrderUpdateReqDTO dto) {
+        Order order = orderRepository.findByIdAndUsername(id, username)
+                .orElseThrow(() -> new CustomException(GeneralErrorCode.UNAUTHORIZED_401));
+
+        if (dto.getQuantity() != null) {
+            order.setQuantity(dto.getQuantity());
+        }
+        if (dto.getStatus() != null) {
+            order.setStatus(dto.getStatus());
+        }
+        if (dto.getMemberId() != null) {
+            order.setMember(memberRepository.findById(dto.getMemberId()).orElseThrow());
+        }
+        if (dto.getProductId() != null) {
+            order.setProduct(productRepository.findById(dto.getProductId()).orElseThrow());
+        }
+        orderRepository.save(order);
+    }
+
+    public void deleteOrderByUsername(String username) {
+        Order order = orderRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(GeneralErrorCode.UNAUTHORIZED_401));
+        orderRepository.delete(order);
     }
 }

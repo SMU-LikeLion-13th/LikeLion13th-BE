@@ -2,6 +2,7 @@ package com.project.likelion13thbe.global.security;
 
 import com.project.likelion13thbe.global.token.dto.TokenDTO;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -18,6 +21,8 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
+
+    private final JwtUtil jwtUtil;
 
     // JWT 관련 유틸리티 클래스 주입
 
@@ -31,14 +36,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         try {
             // 1. Request에서 Access Token 추출
-            String authorizationHeader = request.getHeader("Authorization");
-            String accessToken = null;
-            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-                accessToken = authorizationHeader.substring(7);
-            }
+            String accessToken = jwtUtil.resolveAccessToken(request);
 
             // 2. Access Token이 없으면 다음 필터로 바로 진행
-
             if (accessToken == null || accessToken.isEmpty()) {
                 filterChain.doFilter(request, response);
                 return;
@@ -62,16 +62,28 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         log.info("[ JwtAuthorizationFilter ] 토큰으로 인가 과정을 시작합니다. ");
 
         // 1. Access Token의 유효성 검증
+        try {
+            jwtUtil.validateToken(accessToken);
+        } catch (JwtException e) {
+            return;
+        }
 
         log.info("[ JwtAuthorizationFilter ] Access Token 유효성 검증 성공. ");
 
         // 2. Access Token에서 사용자 정보 추출 후 CustomUserDetails 생성
 
+        String email = jwtUtil.getEmail(accessToken);
+        String roles = jwtUtil.getRoles(accessToken);
+
+        CustomUserDetails userDetails = new CustomUserDetails(email, null, roles);
+
         log.info("[ JwtAuthorizationFilter ] UserDetails 객체 생성 성공");
 
         // 3. 인증 객체 생성 및 SecurityContextHolder에 저장
+        UsernamePasswordAuthenticationToken authentication =
+               new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         log.info("[ JwtAuthorizationFilter ] 인증 객체 저장 완료");
     }
 }

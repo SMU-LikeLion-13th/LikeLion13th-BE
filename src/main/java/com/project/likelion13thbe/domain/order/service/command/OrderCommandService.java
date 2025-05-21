@@ -7,4 +7,6 @@ public interface OrderCommandService {
     OrderResDTO.OrderCreateResDTO createOrder(OrderReqDTO.OrderCreateReqDTO orderCreateReqDTO);
     void updateOrder(Long id, OrderReqDTO.OrderUpdateReqDTO dto);
     void deleteOrder(Long id);
+    void updateOrderByUsernameAndId(String username, Long id, OrderReqDTO.OrderUpdateReqDTO dto);
+    void deleteOrderByUsername(String username);
 }
