@@ -34,8 +34,8 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     private final MemberRepository memberRepository;
 
     @Override
-    public ReviewResDTO.ReviewCreateResDTO createReview(ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO, Long productId) {
-        Member member = memberRepository.findById(reviewCreateReqDTO.memberId())
+    public ReviewResDTO.ReviewCreateResDTO createReview(String email, Long productId, ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
+        Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
@@ -48,19 +48,28 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     }
 
     @Override
-    public void updateReview(ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO, Long reviewId) {
+    public void updateReview(String email, Long reviewId, ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
         Review review = reviewRepository.findByReviewIdAndNotDeleted(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
 
-        review.updateReview(reviewUpdateReqDTO.rating(), reviewUpdateReqDTO.content());
+        log.info("reviewemail={}, email={}", review.getMember().getEmail(), email);
+        if (review.getMember().getEmail().equals(email)) {
+            review.updateReview(reviewUpdateReqDTO.rating(), reviewUpdateReqDTO.content());
+            return;
+        }
+        throw new ReviewException(ReviewErrorCode.REVIEW_ACCESS_DENIED);
     }
 
     @Override
-    public void deleteReview(Long reviewId) {
+    public void deleteReview(String email, Long reviewId) {
         Review review = reviewRepository.findByReviewIdAndNotDeleted(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
 
-        review.delete();
+        if (review.getMember().getEmail().equals(email)) {
+            review.delete();
+            return;
+        }
+        throw new ReviewException(ReviewErrorCode.REVIEW_ACCESS_DENIED);
     }
 
     @Scheduled(cron = "0 0 6 * * *")

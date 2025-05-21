@@ -35,8 +35,8 @@ public class CommentCommandServiceImpl implements CommentCommandService {
 
 
     @Override
-    public CommentResDTO.CommentCreateResDTO createComment(CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO, Long reviewId) {
-        Member member = memberRepository.findByMemberIdAndNotDeleted(commentCreateReqDTO.memberId())
+    public CommentResDTO.CommentCreateResDTO createComment(String email, Long reviewId, CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO) {
+        Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
         Review review = reviewRepository.findByReviewIdAndNotDeleted(reviewId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
@@ -49,19 +49,26 @@ public class CommentCommandServiceImpl implements CommentCommandService {
     }
 
     @Override
-    public void updateComment(CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO, Long commentId) {
+    public void updateComment(String email, Long commentId, CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
         Comment comment = commentRepository.findByCommentIdAndNotDeleted(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
-
-        comment.updateComment(commentUpdateReqDTO.content());
+        if (comment.getMember().getEmail().equals(email)) {
+            comment.updateComment(commentUpdateReqDTO.content());
+            return;
+        }
+        throw new CommentException(CommentErrorCode.COMMENT_ACCESS_DENIED);
     }
 
     @Override
-    public void deleteComment(Long commentId) {
+    public void deleteComment(String email, Long commentId) {
         Comment comment = commentRepository.findByCommentIdAndNotDeleted(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
 
-        comment.delete();
+        if (comment.getMember().getEmail().equals(email)) {
+            comment.delete();
+            return;
+        }
+        throw new CommentException(CommentErrorCode.COMMENT_ACCESS_DENIED);
     }
 
     @Scheduled(cron = "0 0 6 * * *")

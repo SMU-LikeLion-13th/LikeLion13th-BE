@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -23,48 +25,61 @@ public class ReviewController {
 
     @Operation(summary = "리뷰 세부 조회")
     @GetMapping("reviews/{reviewId}")
-    public CustomResponse<ReviewResDTO.ReviewDetailResDTO> getReview(@PathVariable Long reviewId) {
+    public CustomResponse<ReviewResDTO.ReviewDetailResDTO> getReview(
+            @PathVariable Long reviewId
+    ) {
         return CustomResponse.onSuccess(reviewQueryService.getReview(reviewId));
     }
 
     @Operation(summary = "리뷰 목록 조회")
     @GetMapping("products/{productId}/reviews")
-    public CustomResponse<ReviewResDTO.ReviewListResDTO> getReviewList(@PathVariable Long productId) {
+    public CustomResponse<ReviewResDTO.ReviewListResDTO> getReviewList(
+            @PathVariable Long productId
+    ) {
         return CustomResponse.onSuccess(reviewQueryService.getReviewList(productId));
     }
 
     @Operation(summary = "리뷰 작성")
     @PostMapping("products/{productId}/reviews")
     public CustomResponse<ReviewResDTO.ReviewCreateResDTO> createReview(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long productId,
-            @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
-        return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(reviewCreateReqDTO, productId));
+            @RequestBody @Valid ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO
+    ) {
+        return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(userDetails.getUsername(), productId, reviewCreateReqDTO));
     }
 
     @Operation(summary = "리뷰 수정")
     @PatchMapping("reviews/{reviewId}")
     public CustomResponse<String> updateReview(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long reviewId,
-            @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO) {
+            @RequestBody @Valid ReviewReqDTO.ReviewUpdateReqDTO reviewUpdateReqDTO
+    ) {
 
-        reviewCommandService.updateReview(reviewUpdateReqDTO, reviewId);
+        reviewCommandService.updateReview(userDetails.getUsername(), reviewId, reviewUpdateReqDTO);
 
         return CustomResponse.onSuccess("리뷰 수정 완료");
     }
 
     @Operation(summary = "리뷰 삭제")
     @DeleteMapping("reviews/{reviewId}")
-    public CustomResponse<String> deleteReview(@PathVariable Long reviewId) {
+    public CustomResponse<String> deleteReview(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long reviewId
+    ) {
 
-        reviewCommandService.deleteReview(reviewId);
+        reviewCommandService.deleteReview(userDetails.getUsername(), reviewId);
 
         return CustomResponse.onSuccess(HttpStatus.NO_CONTENT, "리뷰 삭제 완료");
     }
 
     @Operation(summary = "내 리뷰 조회")
     @GetMapping("/reviews/my")
-    public CustomResponse<ReviewResDTO.ReviewListResDTO> getMyReviews() {
-        return CustomResponse.onSuccess(reviewQueryService.getMyReviewList());
+    public CustomResponse<ReviewResDTO.ReviewListResDTO> getMyReviews(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return CustomResponse.onSuccess(reviewQueryService.getMyReviewList(userDetails.getUsername()));
     }
 
     @Operation(summary = "리뷰 목록 조회 (커서 방식)")

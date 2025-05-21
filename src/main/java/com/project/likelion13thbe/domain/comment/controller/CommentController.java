@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,34 +24,43 @@ public class CommentController {
 
     @Operation(summary = "댓글 목록 조회")
     @GetMapping("reviews/{reviewId}/comments")
-    public CustomResponse<CommentResDTO.CommentListResDTO> getComment(@PathVariable Long reviewId) {
+    public CustomResponse<CommentResDTO.CommentListResDTO> getComment(
+            @PathVariable Long reviewId
+    ) {
         return CustomResponse.onSuccess(commentQueryService.getCommentList(reviewId));
     }
 
     @Operation(summary = "댓글 작성")
     @PostMapping("reviews/{reviewId}/comments")
     public CustomResponse<CommentResDTO.CommentCreateResDTO> createComment(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long reviewId,
-            @RequestBody @Valid CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO) {
-        return CustomResponse.onSuccess(HttpStatus.CREATED, commentCommandService.createComment(commentCreateReqDTO, reviewId));
+            @RequestBody @Valid CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO
+    ) {
+        return CustomResponse.onSuccess(HttpStatus.CREATED, commentCommandService.createComment(userDetails.getUsername(), reviewId, commentCreateReqDTO));
     }
 
     @Operation(summary = "댓글 수정")
     @PatchMapping("comments/{commentId}")
     public CustomResponse<String> updateComment(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long commentId,
-            @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO) {
+            @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO
+    ) {
 
-        commentCommandService.updateComment(commentUpdateReqDTO, commentId);
+        commentCommandService.updateComment(userDetails.getUsername(), commentId, commentUpdateReqDTO);
 
         return CustomResponse.onSuccess("댓글 수정 완료");
     }
 
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("comments/{commentId}")
-    public CustomResponse<String> deleteComment(@PathVariable Long commentId) {
+    public CustomResponse<String> deleteComment(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long commentId
+    ) {
 
-        commentCommandService.deleteComment(commentId);
+        commentCommandService.deleteComment(userDetails.getUsername(), commentId);
 
         return CustomResponse.onSuccess(HttpStatus.NO_CONTENT, "댓글 삭제 완료");
     }

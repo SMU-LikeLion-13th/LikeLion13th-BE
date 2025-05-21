@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,7 +24,9 @@ public class ProductController {
 
     @Operation(summary = "상품 상세 조회")
     @GetMapping("/{productId}")
-    public CustomResponse<ProductResDTO.ProductDetailResDTO> getProduct(@PathVariable Long productId) {
+    public CustomResponse<ProductResDTO.ProductDetailResDTO> getProduct(
+            @PathVariable Long productId
+    ) {
         return CustomResponse.onSuccess(productQueryService.getProduct(productId));
     }
 
@@ -35,15 +39,20 @@ public class ProductController {
     @Operation(summary = "상품 추가")
     @PostMapping
     public CustomResponse<ProductResDTO.ProductCreateResDTO> addProduct(
-            @RequestBody @Valid ProductReqDTO.ProductCreateReqDTO productCreateReqDTO) {
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody @Valid ProductReqDTO.ProductCreateReqDTO productCreateReqDTO
+    ) {
         return CustomResponse
-                .onSuccess(productCommandService.createProduct(productCreateReqDTO));
+                .onSuccess(productCommandService.createProduct(userDetails.getUsername(), productCreateReqDTO));
     }
 
     @Operation(summary = "상품 삭제")
     @DeleteMapping("{productId}")
-    public CustomResponse<String> deleteProduct(@PathVariable Long productId) {
-        productCommandService.deleteProduct(productId);
+    public CustomResponse<String> deleteProduct(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long productId
+    ) {
+        productCommandService.deleteProduct(userDetails.getUsername(), productId);
         return CustomResponse.onSuccess(HttpStatus.NO_CONTENT, "상품 삭제 완료");
     }
 

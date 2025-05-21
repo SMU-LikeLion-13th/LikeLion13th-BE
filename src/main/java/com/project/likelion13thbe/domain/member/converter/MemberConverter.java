@@ -13,11 +13,12 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberConverter {
 
-    public static Member toMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+    public static Member toMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO, String password) {
         return Member.builder()
                 .nickname(memberCreateReqDTO.nickname())
                 .email(memberCreateReqDTO.email())
-                .password(memberCreateReqDTO.password())
+                .password(password)
+                .role(memberCreateReqDTO.role())
                 .socialType(memberCreateReqDTO.socialType())
                 .profileImage(memberCreateReqDTO.profileImage())
                 .age(memberCreateReqDTO.age())
@@ -31,8 +32,8 @@ public class MemberConverter {
                 .build();
     }
 
-    public static MemberResDTO.MemberPreviewResDTO toMemberPreviewResDTO(Member member) {
-        return MemberResDTO.MemberPreviewResDTO.builder()
+    public static MemberResDTO.MemberDetailResDTO toMemberPreviewResDTO(Member member) {
+        return MemberResDTO.MemberDetailResDTO.builder()
                 .id(member.getMemberId())
                 .email(member.getEmail())
                 .age(member.getAge())
@@ -40,7 +41,7 @@ public class MemberConverter {
     }
 
     public static MemberResDTO.MemberOffsetResDTO toMemberOffsetResDTO(Page<Member> page) {
-        List<MemberResDTO.MemberPreviewResDTO> members =
+        List<MemberResDTO.MemberDetailResDTO> members =
                 page.getContent().stream()
                         .map(MemberConverter::toMemberPreviewResDTO)
                         .toList();
@@ -53,7 +54,7 @@ public class MemberConverter {
     }
 
     public static MemberResDTO.MemberCursorResDTO toMemberCursorResDTO(Slice<Member> members) {
-        List<MemberResDTO.MemberPreviewResDTO> memberList = members.stream()
+        List<MemberResDTO.MemberDetailResDTO> memberList = members.stream()
                 .map(MemberConverter::toMemberPreviewResDTO)
                 .toList();
 

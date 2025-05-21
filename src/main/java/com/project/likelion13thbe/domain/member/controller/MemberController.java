@@ -10,44 +10,64 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+//@RequestMapping("/members")
 @Tag(name = "Member", description = "멤버 관련 API")
 public class MemberController {
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
 
     @Operation(summary = "createMember")
-    @PostMapping
+    @PostMapping("auth")
     public CustomResponse<MemberResDTO.MemberCreateResDTO> createMember(
-            @RequestBody @Valid MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+            @RequestBody @Valid MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO
+    ) {
         return CustomResponse.onSuccess(memberCommandService.createMember(memberCreateReqDTO));
     }
 
+    @Operation(summary = "로그인")
+    @PostMapping("login")
+    public ResponseEntity<?> login(
+            @RequestBody MemberReqDTO.LoginResDTO LoginResDTO
+    ) {
+        return null;
+    }
+
+    @Operation(summary = "로그아웃")
+    @PostMapping("logout")
+    public ResponseEntity<?> logout() {
+        return null;
+    }
+
     @Operation(summary = "getMember")
-    @GetMapping
-    public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
-        return ResponseEntity.ok(memberQueryService.getMember());
+    @GetMapping("/members")
+    public CustomResponse<MemberResDTO.MemberDetailResDTO> getMember(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return CustomResponse.onSuccess(memberQueryService.getMember(userDetails.getUsername()));
     }
 
     @Operation(summary = "비밀번호 수정")
-    @PatchMapping("/{memberId}/password")
+    @PatchMapping("/password-reset")
     public CustomResponse<String> resetPassword(
-            @PathVariable("memberId") Long memberId,
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody @Valid MemberReqDTO.PasswordResetDTO passwordResetDTO
     ) {
-        memberCommandService.updatePassword(memberId, passwordResetDTO);
+        memberCommandService.resetPassword(userDetails.getUsername(), passwordResetDTO);
         return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
 
     // 회원 탈퇴 (JWT 인증 필요)
-    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴 성공")
-    @DeleteMapping("/{memberId}")
-    public CustomResponse<String> deleteMember(@PathVariable("memberId") Long memberId) {
-        memberCommandService.deleteMember(memberId);
+    @Operation(summary = "회원 탈퇴")
+    @DeleteMapping("/members")
+    public CustomResponse<String> deleteMember(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        memberCommandService.deleteMember(userDetails.getUsername());
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
 
@@ -98,18 +118,6 @@ public class MemberController {
 //        return null;
 //    }
 //
-//    @Operation(summary = "로그인")
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "200", description = "OK",
-//                    content = @Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = MemberResDTO.LoginJwtTokenResDTO.class))),
-//            @ApiResponse(responseCode = "401", description = "Unauthorized",
-//                    content = @Content(mediaType = "application/json"))
-//    })
-//    @PostMapping("login")
-//    public ResponseEntity<MemberResDTO.LoginJwtTokenResDTO> login(@RequestBody MemberReqDTO.LoginResDTO LoginResDTO) {
-//        return null;
-//    }
 //
 //    @Operation(summary = "카카오 로그인")
 //    @ApiResponses({

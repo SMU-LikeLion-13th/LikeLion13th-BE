@@ -26,7 +26,7 @@ public class MemberResDTO {
     }
 
     @Builder
-    public record MemberPreviewResDTO(
+    public record MemberDetailResDTO(
             Long id,
             String email,
             Integer age
@@ -35,7 +35,7 @@ public class MemberResDTO {
 
     @Builder
     public record MemberOffsetResDTO(
-            List<MemberPreviewResDTO> members,
+            List<MemberDetailResDTO> members,
             Long totalElements,
             Integer totalPages
     ) {
@@ -43,7 +43,7 @@ public class MemberResDTO {
 
     @Builder
     public record MemberCursorResDTO(
-            List<MemberPreviewResDTO> members,
+            List<MemberDetailResDTO> members,
             Long nextCursor,
             Boolean hasNext
     ) {

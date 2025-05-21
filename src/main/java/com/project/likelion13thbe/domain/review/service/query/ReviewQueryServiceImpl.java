@@ -44,10 +44,8 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
     }
 
     @Override
-    public ReviewResDTO.ReviewListResDTO getMyReviewList() {
-        List<Review> reviewList = reviewRepository.findAllReviewsByMemberIdAndNotDeleted(1L);
-        // 이게 상품별 리뷰 조회는 Path Variable로 받아왔는데,
-        // 내 리뷰는 아직 토큰 구별 기능 불가능 이슈로 상수 넣었습니다
+    public ReviewResDTO.ReviewListResDTO getMyReviewList(String email) {
+        List<Review> reviewList = reviewRepository.findAllReviewsByEmailAndNotDeleted(email);
         if (reviewList.isEmpty()) {
             throw new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND);
         }
