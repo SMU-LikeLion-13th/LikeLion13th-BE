@@ -5,13 +5,13 @@ import com.project.likelion13thbe.domain.comment.dto.response.CommentResDTO;
 import com.project.likelion13thbe.domain.comment.service.command.CommentCommandService;
 import com.project.likelion13thbe.domain.comment.service.query.CommentQueryService;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
+import com.project.likelion13thbe.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,9 +40,9 @@ public class CommentController {
             @PathVariable("productId")  Long productId,
             @PathVariable("reviewId") Long reviewId,
             @RequestBody @Valid CommentReqDTO.CommentCreateReqDTO commentCreateReqDTO,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        return CustomResponse.onSuccess(commentCommandService.createComment(productId, reviewId, commentCreateReqDTO, userDetails.getUsername()));
+        return CustomResponse.onSuccess(commentCommandService.createComment(productId, reviewId, commentCreateReqDTO, customUserDetails.getUsername()));
     }
 
     @Operation(description = "댓글 수정")
@@ -51,9 +51,9 @@ public class CommentController {
     public CustomResponse<CommentResDTO.CommentPreviewResDTO> updateCommit(
             @PathVariable("commentId") Long commentId,
             @RequestBody @Valid CommentReqDTO.CommentUpdateReqDTO commentUpdateReqDTO,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        return CustomResponse.onSuccess(commentCommandService.updateComment(commentId, commentUpdateReqDTO, userDetails.getUsername()));
+        return CustomResponse.onSuccess(commentCommandService.updateComment(commentId, commentUpdateReqDTO, customUserDetails.getUsername()));
     }
 
     @Operation(description = "댓글 삭제")
@@ -61,8 +61,8 @@ public class CommentController {
     @DeleteMapping("/api/v1/comments/{commentId}")
     public CustomResponse<String> deleteCommit(
             @PathVariable("commentId") Long commentId,
-            @AuthenticationPrincipal UserDetails userDetails) {
-        commentCommandService.deleteComment(commentId, userDetails.getUsername());
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        commentCommandService.deleteComment(commentId, customUserDetails.getUsername());
         return CustomResponse.onSuccess("댓글 삭제 성공");
     }
 }

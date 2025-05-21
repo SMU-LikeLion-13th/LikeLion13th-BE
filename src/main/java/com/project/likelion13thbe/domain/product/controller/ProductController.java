@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -43,9 +42,9 @@ public class ProductController {
     @PostMapping
     public CustomResponse<ProductResDTO.ProductCreateResDTO> createProduct(
             @RequestBody @Valid ProductReqDTO.ProductCreateReqDTO productCreateReqDTO,
-            @AuthenticationPrincipal UserDetails userdetails
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        return CustomResponse.onSuccess(productCommandService.createProduct(productCreateReqDTO, userdetails.getUsername()));
+        return CustomResponse.onSuccess(productCommandService.createProduct(productCreateReqDTO, customUserDetails.getUsername()));
     }
 
     @Operation(description = "상품 삭제 (로그인 필요)")

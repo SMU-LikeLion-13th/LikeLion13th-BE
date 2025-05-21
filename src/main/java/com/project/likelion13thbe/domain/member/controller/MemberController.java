@@ -5,6 +5,7 @@ import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
+import com.project.likelion13thbe.global.security.CustomUserDetails;
 import com.project.likelion13thbe.global.security.dto.JwtDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,7 +13,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,10 +33,10 @@ public class MemberController {
     @Operation(description = "유저 조회")
     @GetMapping
     public CustomResponse<MemberResDTO.MemberPreviewResDTO> getMember(
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
             ) {
         System.out.println("컨트롤러 진입");
-        return CustomResponse.onSuccess(memberQueryService.getMember(userDetails.getUsername()));
+        return CustomResponse.onSuccess(memberQueryService.getMember(customUserDetails.getUsername()));
     }
 
 
@@ -44,9 +44,9 @@ public class MemberController {
     @PatchMapping("/reset-password")
     public CustomResponse<MemberResDTO.ResetPasswordResDTO> resetPassword(
             @RequestBody @Valid MemberReqDTO.ResetPasswordReqDTO resetPasswordReqDTO,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        String email = userDetails.getUsername();
+        String email = customUserDetails.getUsername();
         return CustomResponse.onSuccess(memberCommandService.updatePassword(email, resetPasswordReqDTO));
     }
 
@@ -66,8 +66,8 @@ public class MemberController {
     @Operation(description = "회원 탈퇴")
     @DeleteMapping
     public CustomResponse<String> deleteMember(
-            @AuthenticationPrincipal UserDetails userDetails) {
-        memberCommandService.deleteMember((userDetails.getUsername()));
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        memberCommandService.deleteMember((customUserDetails.getUsername()));
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
 
