@@ -63,7 +63,7 @@ public class MemberController {
 
     // 회원 탈퇴 (JWT 인증 필요)
     @Operation(summary = "회원 탈퇴")
-    @DeleteMapping("/members/delete")
+    @DeleteMapping("/members")
     public CustomResponse<String> deleteMember(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
