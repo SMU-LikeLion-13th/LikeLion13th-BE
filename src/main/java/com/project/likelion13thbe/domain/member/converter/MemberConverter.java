@@ -14,12 +14,13 @@ import java.util.List;
 public class MemberConverter {
 
     // 사용자 회원가입 , 요청 DTO → Member 엔티티로 변환
-    public static Member toMember(MemberRequestDTO.MemberCreateRequestDTO memberCreateRequestDTO) {
+    public static Member toMember(MemberRequestDTO.MemberCreateRequestDTO memberCreateRequestDTO, String encodedPassword) {
         return Member.builder()
                 .email(memberCreateRequestDTO.email())
-                .password(memberCreateRequestDTO.password())
+                .password(encodedPassword)
                 .name(memberCreateRequestDTO.name())
                 .image(memberCreateRequestDTO.image())
+                .role(memberCreateRequestDTO.role())
                 .build();
     }
 

@@ -37,6 +37,17 @@ public class Member extends BaseEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @PrePersist
+    public void setDefaultRole() {
+        if (this.role == null) {
+            this.role = Role.USER;
+        }
+    }
+
     // 비밀번호 변경 메서드
     public void updatePassword(String newPassword) { this.password = newPassword; }
 
