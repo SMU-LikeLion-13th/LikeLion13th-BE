@@ -18,7 +18,9 @@ public class MemberReqDTO {
              Integer age,
              String name,
              String password,
-             String image
+             String image,
+             String role
+
             ) {}
     @Builder
     public record KakaoLoginRequest(
@@ -26,5 +28,6 @@ public class MemberReqDTO {
     @Builder
     public record PasswordResetDTO(
             String password
-    ){ }
+    ){
+    }
 }

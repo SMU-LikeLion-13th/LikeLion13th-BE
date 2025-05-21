@@ -9,6 +9,7 @@ import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -17,9 +18,10 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class MemberCommandServiceImpl implements MemberCommandService{
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public MemberResDTO.MemberCreateResDTO createMember(MemberReqDTO.SignUpRequest signUpRequest){
-        Member member= MemberConvert.toMember(signUpRequest);
+        Member member= MemberConvert.toMember(signUpRequest,passwordEncoder);
 
         memberRepository.save(member);
 
@@ -29,7 +31,8 @@ public class MemberCommandServiceImpl implements MemberCommandService{
     public void updatePassword(String email,MemberReqDTO.PasswordResetDTO passwordResetDTO){
         Member member=memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(()-> new MemberException(MemberErrorCode.MEMBER_ERROR_CODE));
-        member.updatePassword(passwordResetDTO.getPassword());
+        String encodedPassword = passwordEncoder.encode(passwordResetDTO.password());
+        member.updatePassword(encodedPassword);
     }
     @Override
     public void deleteMember(String email){

@@ -7,17 +7,20 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberConvert {
-    public static Member toMember(MemberReqDTO.SignUpRequest signUpRequest){
+    public static Member toMember(MemberReqDTO.SignUpRequest signUpRequest, PasswordEncoder passwordEncoder) {
+        String encodedPassword = passwordEncoder.encode(signUpRequest.password());
         return Member.builder()
                 .name(signUpRequest.name())
                 .email(signUpRequest.email())
                 .password(signUpRequest.password())
                 .image(signUpRequest.image())
+                .role(Member.Role.ROLE_USER)
                 .build();
 
     }
