@@ -10,6 +10,7 @@ import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +23,12 @@ import java.util.List;
 @Transactional
 public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public MemberResponseDTO.MemberCreateResponseDTO createMember(MemberRequestDTO.MemberCreateRequestDTO memberCreateRequestDTO) {
         // DTO -> Member
-        Member member = MemberConverter.toMember(memberCreateRequestDTO);
+        Member member = MemberConverter.toMember(memberCreateRequestDTO, passwordEncoder);
 
         // Member Entity DB에 저장
         memberRepository.save(member);
@@ -40,7 +42,12 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         Member member = memberRepository.findByEmailAndNotDeleted(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        member.updatePassword(passwordResetRequestDTO.password());
+        if (passwordEncoder.matches(passwordResetRequestDTO.password(), member.getPassword())) {
+            throw new MemberException(MemberErrorCode.PASSWORD_UNCHANGED);
+        }
+
+        String encodedPassword = passwordEncoder.encode(passwordResetRequestDTO.password());
+        member.updatePassword(encodedPassword);
     }
 
     @Override

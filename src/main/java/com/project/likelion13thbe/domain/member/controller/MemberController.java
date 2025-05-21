@@ -5,7 +5,9 @@ import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
+import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
+import com.project.likelion13thbe.global.security.entity.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,6 +28,7 @@ public class MemberController {
 
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
+    private final ReviewQueryService reviewQueryService;
 
     @Operation(summary = "일반 로그인")
     @ApiResponses({
@@ -52,8 +56,9 @@ public class MemberController {
     })
     @PatchMapping("/password-reset/{email}")
     public CustomResponse<String> resetPassword(
-            @PathVariable String email,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody MemberRequestDTO.ResetPasswordRequestDTO resetPasswordRequestDTO) {
+        String email = userDetails.getMember().getEmail();
         memberCommandService.updatePassword(email, resetPasswordRequestDTO);
         return CustomResponse.onSuccess("비밀번호 변경 성공");
     }
@@ -79,8 +84,9 @@ public class MemberController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ReviewResponseDTO.ReviewListResponseDTO.class))),})
     @GetMapping("/my/reviews")
-    public ResponseEntity<ReviewResponseDTO.ReviewListResponseDTO> getMyReviews() {
-        return null;
+    public CustomResponse<ReviewResponseDTO.ReviewListResponseDTO> getMyReviews(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long memberId = userDetails.getMember().getId();
+        return CustomResponse.onSuccess(HttpStatus.OK, reviewQueryService.getReviewsByMemberId(memberId));
     }
 
     @Operation(summary = "카카오 로그인")
@@ -117,11 +123,12 @@ public class MemberController {
     }
 
 
-    @DeleteMapping("/{memberId}")
+    @DeleteMapping
     @Operation(summary = "회원 탈퇴")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK")})
-    public CustomResponse<String> deleteMember(@PathVariable Long memberId) {
+    public CustomResponse<String> deleteMember(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long memberId = userDetails.getMember().getId();
         memberCommandService.deleteMember(memberId);
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }

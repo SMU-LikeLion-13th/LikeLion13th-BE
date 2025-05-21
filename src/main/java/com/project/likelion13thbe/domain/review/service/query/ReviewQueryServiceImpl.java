@@ -48,4 +48,11 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
         return ReviewConverter.toReviewCursorResponseDTO(reviews);
     }
+
+    @Override
+    public ReviewResponseDTO.ReviewListResponseDTO getReviewsByMemberId(Long memberId) {
+        List<ReviewResponseDTO.ReviewDetailResponseDTO> reviews = reviewRepository.findAllByMemberIdAndNotDeleted(memberId)
+                .stream().map(ReviewConverter::toReviewDetailResponseDTO).toList();
+        return ReviewResponseDTO.ReviewListResponseDTO.builder().reviewList(reviews).build();
+    }
 }

@@ -5,6 +5,7 @@ import com.project.likelion13thbe.domain.review.dto.response.ReviewResponseDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
 import com.project.likelion13thbe.domain.review.service.query.ReviewQueryService;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
+import com.project.likelion13thbe.global.security.entity.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -65,8 +67,11 @@ public class ReviewController {
             content = @Content(mediaType = "application/json"))
     })
     @PostMapping("/products/{productId}/reviews")
-    public CustomResponse<ReviewResponseDTO.ReviewCreateResponseDTO> createReview(@PathVariable Long productId, @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO) {
-        return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(productId, reviewCreateRequestDTO));
+    public CustomResponse<ReviewResponseDTO.ReviewCreateResponseDTO> createReview(
+            @PathVariable Long productId,
+            @RequestBody ReviewRequestDTO.ReviewCreateRequestDTO reviewCreateRequestDTO,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return CustomResponse.onSuccess(HttpStatus.CREATED, reviewCommandService.createReview(productId, reviewCreateRequestDTO, userDetails.getMember()));
     }
 
     @Operation(summary = "리뷰 수정")
@@ -79,8 +84,11 @@ public class ReviewController {
                     content = @Content(mediaType = "application/json"))
     })
     @PatchMapping("/reviews/{reviewId}")
-    public CustomResponse<String> editReview(@PathVariable Long reviewId, @RequestBody ReviewRequestDTO.ReviewUpdateRequestDTO reviewUpdateRequestDTO) {
-        reviewCommandService.updateReview(reviewId, reviewUpdateRequestDTO);
+    public CustomResponse<String> editReview(
+            @PathVariable Long reviewId,
+            @RequestBody ReviewRequestDTO.ReviewUpdateRequestDTO reviewUpdateRequestDTO,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        reviewCommandService.updateReview(reviewId, reviewUpdateRequestDTO, userDetails.getMember());
         return CustomResponse.onSuccess("리뷰 수정 성공");
     }
 
@@ -92,8 +100,10 @@ public class ReviewController {
                     content = @Content(mediaType = "application/json"))
     })
     @DeleteMapping("/reviews/{reviewId}")
-    public CustomResponse<String> deleteReview(@PathVariable Long reviewId) {
-        reviewCommandService.deleteReview(reviewId);
+    public CustomResponse<String> deleteReview(
+            @PathVariable Long reviewId,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        reviewCommandService.deleteReview(reviewId, userDetails.getMember());
         return CustomResponse.onSuccess("리뷰 삭제 성공");
     }
 }

@@ -8,9 +8,7 @@ public class ReviewRequestDTO {
     public record ReviewCreateRequestDTO(
             String content,
             Integer rating,
-            String image,
-
-            Long memberId
+            String image
     ) {
     }
 

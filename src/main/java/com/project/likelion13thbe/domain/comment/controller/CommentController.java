@@ -5,6 +5,7 @@ import com.project.likelion13thbe.domain.comment.dto.response.CommentResponseDTO
 import com.project.likelion13thbe.domain.comment.service.command.CommentCommandService;
 import com.project.likelion13thbe.domain.comment.service.query.CommentQueryService;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
+import com.project.likelion13thbe.global.security.entity.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -54,10 +56,12 @@ public class CommentController {
                     content = @Content(mediaType = "application/json"))
     })
     @PostMapping("/reviews/{reviewId}/comments")
-    public CustomResponse<CommentResponseDTO.CommentCreateResponseDTO> createComment(@PathVariable Long reviewId,
-                                                                                     @RequestBody CommentRequestDTO.CommentCreateRequestDTO commentCreateRequestDTO
-    ) {
-        return CustomResponse.onSuccess(HttpStatus.CREATED, commentCommandService.createComment(reviewId, commentCreateRequestDTO));
+    public CustomResponse<CommentResponseDTO.CommentCreateResponseDTO> createComment(
+            @PathVariable Long reviewId,
+            @RequestBody CommentRequestDTO.CommentCreateRequestDTO commentCreateRequestDTO,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+            ) {
+        return CustomResponse.onSuccess(HttpStatus.CREATED, commentCommandService.createComment(reviewId, commentCreateRequestDTO, userDetails.getMember()));
     }
 
     @Operation(summary = "댓글 수정")
@@ -72,8 +76,9 @@ public class CommentController {
     @PatchMapping("/comments/{commentId}")
     public CustomResponse<String> editComment(
             @PathVariable Long commentId,
-            @RequestBody CommentRequestDTO.CommentUpdateRequestDTO commentUpdateRequestDTO) {
-        commentCommandService.updateComment(commentId, commentUpdateRequestDTO);
+            @RequestBody CommentRequestDTO.CommentUpdateRequestDTO commentUpdateRequestDTO,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        commentCommandService.updateComment(commentId, commentUpdateRequestDTO, userDetails.getMember());
         return CustomResponse.onSuccess("댓글 수정 완료");
     }
 
@@ -85,8 +90,8 @@ public class CommentController {
                     content = @Content(mediaType = "application/json"))
     })
     @DeleteMapping("/comments/{commentId}")
-    public CustomResponse<String> deleteComment(@PathVariable Long commentId) {
-        commentCommandService.deleteComment(commentId);
+    public CustomResponse<String> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        commentCommandService.deleteComment(commentId, userDetails.getMember());
         return CustomResponse.onSuccess("댓글 삭제 성공");
     }
 }
