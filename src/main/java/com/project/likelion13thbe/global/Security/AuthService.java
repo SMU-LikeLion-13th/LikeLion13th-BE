@@ -1,8 +1,6 @@
 package com.project.likelion13thbe.global.Security;
 
-import com.project.likelion13thbe.global.Security.AuthErrorCode;
-import com.project.likelion13thbe.global.Security.AuthException;
-import com.project.likelion13thbe.global.Security.DTO.JwtDTO;
+import com.project.likelion13thbe.global.Security.DTO.jwtDTO;
 import com.project.likelion13thbe.global.Security.Entity.Token;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +15,7 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final TokenRepository tokenRepository;
 
-    public JwtDTO reissueToken(JwtDTO jwtDto) throws SignatureException {
+    public jwtDTO reissueToken(jwtDTO jwtDto) throws SignatureException {
 
         log.info("[ Auth Service ] 토큰 재발급을 시작합니다.");
         String accessToken = jwtDto.getAccessToken();
