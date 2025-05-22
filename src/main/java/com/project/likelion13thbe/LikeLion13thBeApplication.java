@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
-//@EntityScan(basePackages = "com.project.likelion13thbe")
 public class LikeLion13thBeApplication {
 
     public static void main(String[] args) {
