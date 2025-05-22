@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JwtDTO {
+public class jwtDTO {
     // 로그인 성공 -> 토큰 응답
     public String accessToken; // 엑세스 토큰
     public String refreshToken; // 리프레쉬 토큰
