@@ -25,6 +25,7 @@ public class MemberRequestDTO {
         private String note;
     }
     // 사용자 회원가입
+    @Builder
     public record MemberCreateRequestDTO (
             String email,
             String name,
