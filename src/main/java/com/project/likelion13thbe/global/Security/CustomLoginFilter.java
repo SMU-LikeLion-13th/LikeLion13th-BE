@@ -3,7 +3,7 @@ package com.project.likelion13thbe.global.Security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
 import com.project.likelion13thbe.global.Security.CustomUserDetail.CustomUserDetails;
-import com.project.likelion13thbe.global.Security.DTO.jwtDTO;
+import com.project.likelion13thbe.global.Security.DTO.JwtDto;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -76,13 +76,13 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
 
         //Client 에게 줄 Response 를 Build
-        jwtDTO jwtDto = jwtDTO.builder()
+        JwtDto jwtDto = JwtDto.builder()
                 .accessToken(jwtUtil.createJwtAccessToken(customUserDetails)) //access token 생성
                 .refreshToken(jwtUtil.createJwtRefreshToken(customUserDetails)) //refresh token 생성
                 .build();
 
         // CustomResponse 사용하여 응답 통일
-        CustomResponse<jwtDTO> responseBody = CustomResponse.onSuccess(jwtDto);
+        CustomResponse<JwtDto> responseBody = CustomResponse.onSuccess(jwtDto);
 
         //JSON 변환
         ObjectMapper objectMapper = new ObjectMapper();
@@ -127,7 +127,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         }
 
         // CustomResponse 사용하여 응답 통일
-        CustomResponse<jwtDTO> responseBody = CustomResponse.onFailure(errorCode, errorMessage);
+        CustomResponse<JwtDto> responseBody = CustomResponse.onFailure(errorCode, errorMessage);
 
         ObjectMapper objectMapper = new ObjectMapper();
         response.setStatus(Integer.parseInt(errorCode)); // HTTP 상태 코드 설정
