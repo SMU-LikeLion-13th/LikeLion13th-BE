@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,7 +29,14 @@ public class Member extends BaseEntity {
     private String password;
 
     @Column(name="image")
+
     private String image;
+    public enum Role {
+        ROLE_USER, ROLE_ADMIN
+    }
+    @Column(name="role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     // 비밀번호 변경 메서드
     public void updatePassword(String newPassword){

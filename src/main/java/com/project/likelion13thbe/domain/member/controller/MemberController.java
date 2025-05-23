@@ -6,6 +6,7 @@ import com.project.likelion13thbe.domain.member.service.command.MemberCommandSer
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandServiceImpl;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryServiceImpl;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
+import com.project.likelion13thbe.global.security.entitiy.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -98,8 +100,8 @@ public class MemberController {
     }
 
     @GetMapping
-    public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember() {
-        return ResponseEntity.ok(memberQueryServiceImpl.getMember());
+    public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember(@PathVariable Long memberId) {
+        return ResponseEntity.ok(memberQueryServiceImpl.getMember(memberId));
     }
     @GetMapping("/offset")
     public ResponseEntity<MemberResDTO.MemberOffsetResDTO> getMemberOffset(
@@ -118,8 +120,9 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200",description ="회원 탈퇴 성공" )
     })
-    public CustomResponse<String> deleteMember(@PathVariable String memberId ) {
-        memberCommandServiceImpl.deleteMember(memberId);
+    public CustomResponse<String> deleteMember(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        memberCommandServiceImpl.deleteMember(customUserDetails.getUsername());
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
 
