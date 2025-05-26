@@ -62,7 +62,10 @@ public class SecurityConfig {
             "/reviews/**",    // 댓글 목록 조회, cursor
 
             // kakao
-            "/callback/kakao"
+            "/callback/kakao",
+
+            // mail
+            "/mail-verifications/request",
     };
 
     // 인증이 필요한 GET url
