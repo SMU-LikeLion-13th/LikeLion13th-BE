@@ -33,18 +33,19 @@ public class CustomLogoutHandler implements LogoutHandler {
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        String token = jwtUtil.resolveAccessToken(request);
+        String accessToken = jwtUtil.resolveAccessToken(request);
 
-        jwtUtil.validateToken(token);
+        jwtUtil.validateToken(accessToken);
 
         // 로그아웃 블랙리스트 등록
-        long expiration = jwtUtil.getExpiration(token);
-        log.info("[ Redis 저장 ] key = Logout {}, 남은시간 = {}", token, expiration);
-        redisTemplate.opsForValue().set("Logout " + token, "logout", expiration, TimeUnit.MILLISECONDS);
+        long expiration = jwtUtil.getExpiration(accessToken);
+        log.info("[ Redis 저장 ] key = Logout {}, 남은시간 = {}", accessToken, expiration);
+        redisTemplate.opsForValue().set("Logout " + accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
         log.info("[ CustomLogoutHandler ] Logout 블랙리스트 등록 완료");
 
-        Optional<Token> refreshToken = tokenRepository.findByEmail(authentication.getName());
-        refreshToken.ifPresent(tokenRepository::delete);
+        String email = jwtUtil.getEmail(accessToken);
+        Optional<Token> token = tokenRepository.findByEmail(email);
+        token.ifPresent(tokenRepository::delete);
         log.info("[ CustomLogoutHandler ] 블랙리스트 RefreshToken 삭제 완료");
     }
 }
