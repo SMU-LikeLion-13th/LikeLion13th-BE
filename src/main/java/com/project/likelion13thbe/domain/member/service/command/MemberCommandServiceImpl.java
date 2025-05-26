@@ -7,6 +7,7 @@ import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
 import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
+import com.project.likelion13thbe.global.mail.MailService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import java.util.List;
 @Transactional
 public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberRepository memberRepository;
+    private final MailService mailService;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
@@ -67,6 +69,18 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         // soft delete 처리
         member.delete();
+    }
+
+    @Override
+    public void sendTempPassword(MemberReqDTO.TempPasswordReqDTO tempPasswordReqDTO) {
+        Member member = memberRepository.findByEmailAndNicknameAndNotDeleted(tempPasswordReqDTO.email(), tempPasswordReqDTO.nickname())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        String tempPassword = "password"; // 나중에 만들어주는 메서드 필요
+        member.updatePassword(passwordEncoder.encode(tempPassword));
+
+        // 메일 전송 호출
+        mailService.sendTempPassword(tempPasswordReqDTO.email(), tempPassword);
     }
 
     @Scheduled(cron = "0 0 3 * * *")

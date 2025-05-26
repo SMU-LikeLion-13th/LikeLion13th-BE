@@ -51,6 +51,15 @@ public class MemberController {
         return CustomResponse.onSuccess(memberQueryService.getMember(userDetails.getUsername()));
     }
 
+    @Operation(summary = "임시 비밀번호 발급")
+    @PostMapping("/temp-password")
+    public CustomResponse<String> sendTempPassword(
+            @RequestBody @Valid MemberReqDTO.TempPasswordReqDTO tempPasswordReqDTO
+    ) {
+        memberCommandService.sendTempPassword(tempPasswordReqDTO);
+        return CustomResponse.onSuccess("임시 비밀번호가 발급되었습니다");
+    }
+
     @Operation(summary = "비밀번호 수정")
     @PatchMapping("/password-reset")
     public CustomResponse<String> resetPassword(

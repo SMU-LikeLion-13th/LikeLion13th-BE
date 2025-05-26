@@ -40,6 +40,7 @@ public class SecurityConfig {
     private final String[] allowUrl = {
             "/login", //로그인 은 인증이 필요하지 않음
             "/auth", // 회원가입은 인증이 필요하지 않음
+            "/temp-password", // 임시 비밀번호 발급
             "/api/v1/login/kakao",
             "/auth/reissue", // 토큰 재발급은 인증이 필요하지 않음
             "/auth/**",

@@ -60,4 +60,10 @@ public class MemberReqDTO {
             String password
     ) {
     }
+
+    public record TempPasswordReqDTO(
+            String email,
+            String nickname
+    ) {
+    }
 }

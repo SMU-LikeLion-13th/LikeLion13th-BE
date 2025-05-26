@@ -9,4 +9,6 @@ public interface MemberCommandService {
     void resetPassword(String email, MemberReqDTO.PasswordResetDTO passwordResetDTO);
 
     void deleteMember(String email);
+
+    void sendTempPassword(MemberReqDTO.TempPasswordReqDTO tempPasswordReqDTO);
 }
