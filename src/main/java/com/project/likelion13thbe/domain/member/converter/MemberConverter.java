@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.member.converter;
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.entity.MemberStatus;
 import com.project.likelion13thbe.domain.member.entity.Role;
 import com.project.likelion13thbe.domain.member.entity.SocialType;
 import com.project.likelion13thbe.global.kakao.KakaoUserInfoResDTO;
@@ -23,6 +24,7 @@ public class MemberConverter {
                 .password(password)
                 .role(Role.USER)
                 .socialType(memberCreateReqDTO.socialType())
+                .memberStatus(MemberStatus.NORMAL)
                 .profileImage(memberCreateReqDTO.profileImage())
                 .age(memberCreateReqDTO.age())
                 .build();

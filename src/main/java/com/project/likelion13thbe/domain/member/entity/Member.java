@@ -36,7 +36,7 @@ public class Member extends BaseEntity {
     @Column(name = "age")
     private Integer age;
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -49,7 +49,7 @@ public class Member extends BaseEntity {
     private LocalDateTime deletedAt;
 
     // 비밀번호 재발급 받았을 때, 비밀번호 바꾸게 하기 위한
-    @Column(name = "member_status")
+    @Column(name = "member_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberStatus memberStatus;
 
