@@ -61,8 +61,8 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         }
     }
 
-    public void updateOrderByUsernameAndId(String username, Long id, OrderReqDTO.OrderUpdateReqDTO dto) {
-        Order order = orderRepository.findByIdAndUsername(id, username)
+    public void updateOrderByMemberIdAndId(Long memberId, Long id, OrderReqDTO.OrderUpdateReqDTO dto) {
+        Order order = orderRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(() -> new CustomException(GeneralErrorCode.UNAUTHORIZED_401));
 
         if (dto.getQuantity() != null) {
@@ -80,8 +80,8 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         orderRepository.save(order);
     }
 
-    public void deleteOrderByUsername(String username) {
-        Order order = orderRepository.findByUsername(username)
+    public void deleteOrderByMemberId(Long memberId) {
+        Order order = orderRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(GeneralErrorCode.UNAUTHORIZED_401));
         orderRepository.delete(order);
     }

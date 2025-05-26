@@ -1,9 +1,13 @@
 package com.project.likelion13thbe.domain.review.controller;
 
+import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.domain.order.dto.request.OrderReqDTO;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
+import com.project.likelion13thbe.global.apiPayload.code.GeneralErrorCode;
+import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name="Review", description="Review 관련 API입니다.")
 public class ReviewController {
     private final ReviewCommandService reviewCommandService;
+    private final MemberRepository memberRepository;
 
     @PostMapping
     public ResponseEntity<ReviewResDTO.ReviewCreateResDTO> createReview(
@@ -51,8 +56,11 @@ public class ReviewController {
             @PathVariable Long id,
             @RequestBody ReviewReqDTO.ReviewUpdateReqDTO dto
     ) {
-       String username = userDetails.getUsername();
-        reviewCommandService.updateReviewByUsernameAndId(username, id, dto);
+        String username = userDetails.getUsername();
+        Member member = memberRepository.findByEmail(username)
+                        .orElseThrow(() -> new CustomException(GeneralErrorCode.UNAUTHORIZED_401));
+        Long memberId = member.getId();
+        reviewCommandService.updateReviewByMemberIdAndId(memberId, id, dto);
         return ResponseEntity.ok("Review Updated Successfully.");
     }
 
@@ -61,7 +69,10 @@ public class ReviewController {
             @AuthenticationPrincipal UserDetails userDetails
             ) {
         String username = userDetails.getUsername();
-        reviewCommandService.deleteReviewByUsername(username);
+        Member member = memberRepository.findByEmail(username)
+                        .orElseThrow(() -> new CustomException(GeneralErrorCode.UNAUTHORIZED_401));
+        Long memberId = member.getId();
+        reviewCommandService.deleteReviewByMemberId(memberId);
         return ResponseEntity.ok("Review Deleted Successfully.");
     }
 }

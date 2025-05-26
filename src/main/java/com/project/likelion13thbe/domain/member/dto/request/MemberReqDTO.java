@@ -10,6 +10,7 @@ public class MemberReqDTO {
         private String email;
         private String password;
         private String nickname;
+        private String role;
     }
 
     @Getter
@@ -23,8 +24,8 @@ public class MemberReqDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public class LoginRequestDTO {
-        public String email;
-        public String password;
+    public static class LoginRequestDTO {
+        private String email;
+        private String password;
     }
 }

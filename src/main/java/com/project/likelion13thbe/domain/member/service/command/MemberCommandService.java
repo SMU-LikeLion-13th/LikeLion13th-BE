@@ -9,6 +9,6 @@ public interface MemberCommandService {
     MemberResDTO.MemberCreateResDTO createMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO);
     void updateMember(Long id, MemberReqDTO.MemberUpdateReqDTO dto);
     void deleteMember(Long id);
-    void deleteMemberByUsername(String username);
-    void updateMemberByUsername(String username, MemberReqDTO.MemberUpdateReqDTO dto);
+    void deleteMemberByEmail(String email);
+    void updateMemberByEmail(String email, MemberReqDTO.MemberUpdateReqDTO dto);
 }

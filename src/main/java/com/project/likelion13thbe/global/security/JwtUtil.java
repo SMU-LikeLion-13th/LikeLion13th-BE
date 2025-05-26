@@ -31,7 +31,7 @@ public class JwtUtil {
     private final TokenRepository tokenRepository;
 
     public JwtUtil(
-            @Value("${spring.jwt.secret}") String secret,
+            @Value("ThisIsASecretKeyForJwtSigningAndMustBeLongEnough123") String secret,
             @Value("${spring.jwt.token.access-expiration-time}") Long access,
             @Value("${spring.jwt.token.refresh-expiration-time}") Long refresh,
             TokenRepository tokenRepo

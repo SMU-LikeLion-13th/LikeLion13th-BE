@@ -7,4 +7,6 @@ public interface ReviewCommandService {
     ReviewResDTO.ReviewCreateResDTO createReview(ReviewReqDTO.ReviewCreateReqDTO dto);
     void deleteReview(Long id);
     void updateReview(Long id, ReviewReqDTO.ReviewUpdateReqDTO dto);
+    void updateReviewByMemberIdAndId(Long memberId, Long id, ReviewReqDTO.ReviewUpdateReqDTO dto);
+    void deleteReviewByMemberId(Long memberId);
 }
