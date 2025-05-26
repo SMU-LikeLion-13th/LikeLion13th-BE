@@ -34,10 +34,10 @@ public class MemberConverter {
                 .build();
     }
 
-    public static MemberResDTO.ResetPasswordResDTO toMemberResetPasswordResponseDTO(Member member, String currentPassword) {
+    public static MemberResDTO.ResetPasswordResDTO toMemberResetPasswordResponseDTO(String newPassword, String currentPassword) {
         return MemberResDTO.ResetPasswordResDTO.builder()
                 .currentPassword(currentPassword)
-                .newPassword(member.getPassword())
+                .newPassword(newPassword)
                 .build();
     }
 
