@@ -75,4 +75,10 @@ public class MemberController {
     public ResponseEntity<CustomResponse<String>> logout() {
         return ResponseEntity.ok(CustomResponse.onSuccess("로그아웃 요청 완료"));
     }
+
+    @PostMapping("send-temp-password")
+    public CustomResponse<String> sendTempPassword(@RequestParam String email) {
+        memberCommandService.sendTempEmail(email);
+        return CustomResponse.onSuccess("임시 비밀번호가 이메일로 전송되었습니다.");
+    }
 }

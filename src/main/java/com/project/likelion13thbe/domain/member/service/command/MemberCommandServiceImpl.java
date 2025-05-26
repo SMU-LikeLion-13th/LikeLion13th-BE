@@ -8,16 +8,20 @@ import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
 import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
+import com.project.likelion13thbe.global.auth.email.EmailService;
 import com.project.likelion13thbe.global.security.Config.SecurityConfig;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -27,6 +31,8 @@ public class MemberCommandServiceImpl implements MemberCommandService{
 
     private final MemberRepository memberRepository;
     private final SecurityConfig securityConfig;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Override
     public MemberResDTO.MemberCreateResDTO createMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
@@ -64,7 +70,11 @@ public class MemberCommandServiceImpl implements MemberCommandService{
         String encodedNewPassword = securityConfig.passwordEncoder().encode(resetPasswordReqDTO.newPassword());
         member.updatePassword(encodedNewPassword);
 
-        return MemberConverter.toMemberResetPasswordResponseDTO(member, resetPasswordReqDTO.currentPassword());
+        if (member.getIsTempPassword()) {
+            member.isNotTempPassword();
+        }
+
+        return MemberConverter.toMemberResetPasswordResponseDTO(resetPasswordReqDTO.newPassword(), resetPasswordReqDTO.currentPassword());
     }
 
     @Override
@@ -95,6 +105,29 @@ public class MemberCommandServiceImpl implements MemberCommandService{
             }
         }
         log.info("Completed delete of deleted members.");
+    }
+
+    @Override
+    public void sendTempEmail(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        String tempPassword = generateTempPassword();
+        String encodedPassword = passwordEncoder.encode(tempPassword);
+
+        member.updatePassword(encodedPassword);
+        memberRepository.save(member);
+
+        member.isTempPassword(); // isTempPassword = true;
+
+        emailService.sendTempPassword(email, tempPassword);
+    }
+    //임시 비밀번호 발급용 메서드
+    private String generateTempPassword() {
+        return new SecureRandom().ints(10, 33, 122)
+                .mapToObj(i -> (char) i)
+                .map(String::valueOf)
+                .collect(Collectors.joining());
     }
 
 

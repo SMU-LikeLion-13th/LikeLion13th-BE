@@ -36,6 +36,9 @@ public class Member extends BaseEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @Column(name = "is_temp_password")
+    private Boolean isTempPassword = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
@@ -45,4 +48,11 @@ public class Member extends BaseEntity {
     }
 
     public void delete() {this.deletedAt = LocalDateTime.now();}
+
+    public void isTempPassword() {
+        this.isTempPassword = true;
+    }
+    public void isNotTempPassword() {
+        this.isTempPassword = false;
+    }
 }

@@ -15,6 +15,7 @@ public class MemberConverter {
                 .email(memberCreateReqDTO.email())
                 .password(encodedPassword)
                 .role(Role.ROLE_USER)
+                .isTempPassword(false)
                 .build();
     }
 

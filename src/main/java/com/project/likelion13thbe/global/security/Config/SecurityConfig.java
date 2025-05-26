@@ -42,11 +42,12 @@ public class SecurityConfig {
             "/members/login", //로그인 은 인증이 필요하지 않음
             "/members/auth", // 회원가입은 인증이 필요하지 않음
             "/members/login/kakao",
+            "/members/send-temp-password",
             "/auth/reissue", // 토큰 재발급은 인증이 필요하지 않음
             "/auth/**",
             "api/usage",
             "/swagger-ui/**",   // swagger 관련 URL
-            "/v3/api-docs/**",
+            "/v3/api-docs/**"
     };
 
     public final String[] allowGetUrl = {
