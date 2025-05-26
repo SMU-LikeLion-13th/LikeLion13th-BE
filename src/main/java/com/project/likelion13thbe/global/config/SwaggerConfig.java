@@ -30,6 +30,7 @@ public class SwaggerConfig {
                         .name(jwtSchemeName)
                         .type(SecurityScheme.Type.HTTP) // HTTP 방식
                         .scheme("bearer")
+                        .description("JWT 토큰을 입력하세요. 예: Bearer {access_token}")
                         .bearerFormat("JWT"));
 
         return new OpenAPI()
