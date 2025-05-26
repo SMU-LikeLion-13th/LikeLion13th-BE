@@ -42,6 +42,18 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+  mail:
+    host: smtp.naver.com              # 네이버 SMTP 서버 주소
+    port: 465                         # 네이버 SMTP 포트 번호
+    username: ${NAVER_SMTP_USERNAME}  # 네이버 이메일
+    password: ${NAVER_SMTP_PASSWORD}  # 네이버 비밀번호
+    properties:
+      mail:
+        smtp:
+          auth: true                  #사용자 인증 여부
+          ssl:
+            enable: true
+            trust: smtp.naver.com
   data:
     redis:
       host: localhost
