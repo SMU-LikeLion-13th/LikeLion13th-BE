@@ -26,4 +26,10 @@ public class MailController {
         mailService.sendVerificationCode();
         return CustomResponse.onSuccess("인증 코드가 전송되었습니다.");
     }
+
+    @PostMapping("/validation")
+    public CustomResponse<String> verifyEmailCode() {
+
+        return CustomResponse.onSuccess("인증성공");
+    }
 }

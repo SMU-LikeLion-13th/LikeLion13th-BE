@@ -78,6 +78,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         String tempPassword = "password"; // 나중에 만들어주는 메서드 필요
         member.updatePassword(passwordEncoder.encode(tempPassword));
+        member.updateMemberStatusMustChangePassword(); // 비밀번호를 임시로 받았으니 직접 재설정 해야함
 
         // 메일 전송 호출
         mailService.sendTempPassword(tempPasswordReqDTO.email(), tempPassword);

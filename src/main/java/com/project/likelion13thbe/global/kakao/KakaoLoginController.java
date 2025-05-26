@@ -3,6 +3,7 @@ package com.project.likelion13thbe.global.kakao;
 import com.project.likelion13thbe.domain.member.converter.MemberConverter;
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.entity.MemberStatus;
 import com.project.likelion13thbe.domain.member.entity.Role;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
@@ -64,7 +65,7 @@ public class KakaoLoginController {
         }
         // 로그인으로 이동
         log.info("[ KakaoLoginController ] 회원 정보가 존재해 로그인을 진행합니다");
-        CustomUserDetails customUserDetails = new CustomUserDetails(userInfo.kakaoAccount().email(), null, Role.USER);
+        CustomUserDetails customUserDetails = new CustomUserDetails(userInfo.kakaoAccount().email(), null, Role.USER, MemberStatus.NORMAL);
 
         //Client 에게 줄 Response 를 Build
         JwtDTO jwtDto = JwtDTO.builder()
