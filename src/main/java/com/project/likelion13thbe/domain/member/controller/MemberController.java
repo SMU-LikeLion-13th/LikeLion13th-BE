@@ -71,6 +71,7 @@ public class MemberController {
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
 
+    @Operation(description = "로그아웃")
     @PostMapping("/logout")
     public ResponseEntity<CustomResponse<String>> logout() {
         return ResponseEntity.ok(CustomResponse.onSuccess("로그아웃 요청 완료"));
