@@ -12,6 +12,7 @@ import com.project.likelion13thbe.global.security.Config.SecurityConfig;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -29,16 +30,20 @@ public class MemberCommandServiceImpl implements MemberCommandService{
 
     @Override
     public MemberResDTO.MemberCreateResDTO createMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
-        if (memberRepository.existsByEmail(memberCreateReqDTO.email())) {
-            throw new CustomException(MemberErrorCode.MEMBER_EMAIL_DUPLICATE);
-        }
         String password = memberCreateReqDTO.password();
-        String encodedPassword = securityConfig.passwordEncoder().encode(password);
+        String encodedPassword = null;
+        if (password != null) {
+            encodedPassword = securityConfig.passwordEncoder().encode(password);
+        }
         //DTO -> Member
         Member member = MemberConverter.toMember(memberCreateReqDTO, encodedPassword);
 
         // Member 엔티티 DB에 저장
-        memberRepository.save(member);
+        try {
+            memberRepository.save(member);
+        } catch (DataIntegrityViolationException e) {
+            throw new CustomException(MemberErrorCode.MEMBER_EMAIL_DUPLICATE);
+        }
 
         // 응답 DTO로 변환 후 return
         return MemberConverter.toMemberResponseDTO(member);

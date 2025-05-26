@@ -39,4 +39,11 @@ public class MemberConverter {
                 .newPassword(member.getPassword())
                 .build();
     }
+
+    public static MemberReqDTO.MemberCreateReqDTO toMemberKakaoRequestDTO(String kakaoName, String kakaoEmail) {
+        return MemberReqDTO.MemberCreateReqDTO.builder()
+                .name(kakaoName)
+                .email(kakaoEmail)
+                .build();
+    }
 }
