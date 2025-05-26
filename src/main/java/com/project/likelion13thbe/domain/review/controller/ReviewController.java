@@ -1,26 +1,22 @@
 package com.project.likelion13thbe.domain.review.controller;
 
-import com.project.likelion13thbe.domain.order.dto.response.OrderResDTO;
-import com.project.likelion13thbe.domain.order.service.command.OrderCommandService;
+import com.project.likelion13thbe.domain.order.dto.request.OrderReqDTO;
 import com.project.likelion13thbe.domain.review.dto.request.ReviewReqDTO;
 import com.project.likelion13thbe.domain.review.dto.response.ReviewResDTO;
 import com.project.likelion13thbe.domain.review.service.command.ReviewCommandService;
-import com.project.likelion13thbe.global.apiPayload.CustomResponse;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Review API", description = "리뷰 관련 API입니다.")
+@RequestMapping("/api/v1/reviews")
+@Tag(name="Review", description="Review 관련 API입니다.")
 public class ReviewController {
     private final ReviewCommandService reviewCommandService;
 
@@ -29,81 +25,43 @@ public class ReviewController {
             @RequestBody ReviewReqDTO.ReviewCreateReqDTO reviewCreateReqDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(reviewCommandService.createReview(CreateReqDTO.reviewCreateReqDTO));
+                .body(reviewCommandService.createReview(reviewCreateReqDTO));
     }
 
-    // 리뷰 수정 엔드포인트
-    @PatchMapping("/api/v1/reviews/{reviewId}")
-    @Operation(summary = "리뷰 수정", description = "회원의 리뷰를 수정")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "리뷰 수정 성공")
-    })
-    public CustomResponse<String> EditReview(
-            @RequestBody ReviewReqDTO.ReviewEditDTO request
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> updateReview(
+            @PathVariable Long id,
+            @RequestBody ReviewReqDTO.ReviewUpdateReqDTO dto
     ) {
-        return CustomResponse.onSuccess("리뷰 수정 성공");
+        reviewCommandService.updateReview(id, dto);
+        return ResponseEntity.ok("Review Updated Successfully.");
     }
 
-    // 리뷰 삭제 엔드포인트
-    @DeleteMapping("/api/v1/reviews/{reviewId}")
-    @Operation(summary = "리뷰 삭제", description = "회원의 리뷰를 삭제")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200",description = "리뷰 삭제 성공")
-    })
-    public CustomResponse<String> DeleteReview(
-            @RequestBody ReviewReqDTO.ReviewDeleteDTO request
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteReview(
+            @PathVariable Long id
     ) {
-        return CustomResponse.onSuccess("리뷰 삭제 성공");
+        reviewCommandService.deleteReview(id);
+        return ResponseEntity.ok("Review Deleted Successfully.");
     }
 
-    @Operation(summary = "단건 리뷰 조회 API")
-    @ApiResponses({
-        @ApiResponse(
-            responseCode="COMMON200", description="OK, 성공",
-            content = @Content(mediaType = "application/json",
-            schema= @Schema(implementation = ReviewResDTO.ReviewResponseDTO.class)
-            )
-        )
-    })
-    @Parameter(name = "reviewId", description = "review PK", example = "1")
-    @GetMapping("/api/v1/reviews/{reviewId}")
-    public ReviewResDTO.ReviewResponseDTO getReview(
-            @PathVariable Long reviewId
+    @PatchMapping("/myaccount/{id}")
+    public ResponseEntity<String> updateMyReview(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long id,
+            @RequestBody ReviewReqDTO.ReviewUpdateReqDTO dto
     ) {
-        return null;
+       String username = userDetails.getUsername();
+        reviewCommandService.updateReviewByUsernameAndId(username, id, dto);
+        return ResponseEntity.ok("Review Updated Successfully.");
     }
 
-    @Operation(summary = "리뷰 목록 조회 API")
-    @Parameter(name = "productId", description = "review PK", example = "1")
-    @GetMapping("/api/v1/{productId}/reviews")
-    public ReviewResDTO.ReviewResponseDTO getReviewsList(
-            @PathVariable Long productId
-    ) {
-        return null;
-    }
-
-    @Operation(summary = "리뷰 생성 API")
-    @Parameter(name = "reviewId", description = "review PK", example = "1")
-    @PostMapping("/api/v1/reviews/{reviewId}")
-    public ReviewResDTO.ReviewResponseDTO addReview(
-            @PathVariable Long reviewId
-    ) {
-        return null;
-    }
-
-    @Operation(summary = "리뷰 수정 API")
-    @PutMapping("/api/v1/reviews/{reviewId}")
-    public ReviewResDTO.ReviewResponseDTO updateReview(
-            @PathVariable Long reviewId
-    ) {
-        return null;
-    }
-
-    @Operation(summary = "리뷰 삭제 API")
-    @DeleteMapping("/api/v1/reviews/{reviewId}")
-    public ReviewResDTO.ReviewResponseDTO deleteReview(
-            @PathVariable Long reviewId
-    ) {
-        return null;
+    @DeleteMapping("/myaccount/{id}")
+    public ResponseEntity<String> deleteMyReview(
+            @AuthenticationPrincipal UserDetails userDetails
+            ) {
+        String username = userDetails.getUsername();
+        reviewCommandService.deleteReviewByUsername(username);
+        return ResponseEntity.ok("Review Deleted Successfully.");
     }
 }

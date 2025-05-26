@@ -1,8 +1,9 @@
-package com.project.likelion13thbe.global.apiPayload.exception;
+package com.project.likelion13thbe.global.apiPayload.exception.handler;
 
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import com.project.likelion13thbe.global.apiPayload.code.BaseErrorCode;
 import com.project.likelion13thbe.global.apiPayload.code.GeneralErrorCode;
+import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

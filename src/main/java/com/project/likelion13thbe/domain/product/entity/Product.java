@@ -3,28 +3,31 @@ package com.project.likelion13thbe.domain.product.entity;
 import com.project.likelion13thbe.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Collate;
 
 @Entity
 @Getter
+@Setter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Table(name = "product")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "item", nullable = false)
-    private String item;
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "description", nullable = false)
+    private String description;
 
     @Column(name = "price", nullable = false)
-    private int price;
+    private Integer price;
 
-    @Column(name = "rating")
-    private int rating;
+    @Column(name = "stock", nullable = false)
+    private Integer stock;
 
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
+    @Column(name = "rating", nullable = true)
+    private Float rating;
 }

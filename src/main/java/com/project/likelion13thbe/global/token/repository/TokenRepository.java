@@ -1,0 +1,13 @@
+package com.project.likelion13thbe.global.token.repository;
+
+import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.global.token.entity.Token;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface TokenRepository extends JpaRepository<Token, Long> {
+    Optional<Token> findByEmail(String email);
+}
