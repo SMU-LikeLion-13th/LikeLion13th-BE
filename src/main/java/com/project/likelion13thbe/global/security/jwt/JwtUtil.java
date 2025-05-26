@@ -152,6 +152,13 @@ public class JwtUtil {
     public void validateToken(String token) {
         log.info("[ JwtUtil ] 토큰의 유효성을 검증합니다.");
 
+        // 블랙리스트 확인
+        String isBlacklisted = redisTemplate.opsForValue().get("accessToken:" + token);
+        if (isBlacklisted != null) {
+            log.warn("[ JwtUtil ] 블랙리스트에 등록된 토큰입니다.");
+            throw new SecurityException("이미 로그아웃된 토큰입니다.");
+        }
+
         try {
             // 구문 분석 시스템의 시계가 JWT를 생성한 시스템의 시계 오차 고려
             // 약 3분 허용
@@ -178,5 +185,26 @@ public class JwtUtil {
         } catch (ExpiredJwtException e) {
             throw new ExpiredJwtException(null, null, "만료된 JWT 토큰입니다.");
         }
+    }
+
+    public void blacklistToken(String accessToken) {
+        log.info("[ JwtUtil ] Access Token을 블랙리스트에 등록합니다.");
+
+        Date expiration = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(accessToken)
+                .getPayload()
+                .getExpiration();
+
+        long now = System.currentTimeMillis();
+        long expiry = expiration.getTime() - now;
+
+        redisTemplate.opsForValue().set(
+                "accessToken:" + accessToken,
+                "logout",
+                expiry,
+                TimeUnit.MILLISECONDS
+        );
     }
 }
