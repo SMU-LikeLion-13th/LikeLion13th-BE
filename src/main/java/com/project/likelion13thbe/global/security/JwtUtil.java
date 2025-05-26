@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.global.security;
 
+import com.project.likelion13thbe.domain.member.entity.IsTempPassword;
 import com.project.likelion13thbe.domain.member.entity.Role;
 import com.project.likelion13thbe.global.security.dto.JwtDTO;
 import com.project.likelion13thbe.global.security.entity.Token;
@@ -63,6 +64,15 @@ public class JwtUtil {
                 .get("role", String.class);
         return Role.valueOf(roleStr);
     }
+    public IsTempPassword getIsTempPassword(String token) throws SignatureException {
+        String tempPwdStr = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("isTempPassword", String.class);
+        return IsTempPassword.valueOf(tempPwdStr);
+    }
 
     // Token 발급하는 메서드
     public String tokenProvider(CustomUserDetails customUserDetails, Instant expiration) {
@@ -72,16 +82,17 @@ public class JwtUtil {
         Instant issuedAt = Instant.now();
 
         //토큰에 부여할 권한
-        String authorities = customUserDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+//        String authorities = customUserDetails.getAuthorities().stream()
+//                .map(GrantedAuthority::getAuthority)
+//                .collect(Collectors.joining(","));
 
         return Jwts.builder()
                 .header() //헤더 부분
                 .add("typ", "JWT") // JWT type
                 .and()
                 .subject(customUserDetails.getUsername()) //Subject 에 username (email) 추가
-                .claim("role", authorities) //권한 추가
+                .claim("role", customUserDetails.getRoles().name()) //권한 추가
+                .claim("isTempPassword", customUserDetails.getIsTempPassword().name()) // 비밀번호 상태 추가
                 .issuedAt(Date.from(issuedAt)) // 현재 시간 추가
                 .expiration(Date.from(expiration)) //만료 시간 추가
                 .signWith(secretKey) //signature 추가
@@ -117,7 +128,8 @@ public class JwtUtil {
         CustomUserDetails userDetails = new CustomUserDetails(
                 getEmail(refreshToken),
                 null,
-                getRoles(refreshToken)
+                getRoles(refreshToken),
+                getIsTempPassword(refreshToken)
         );
         log.info("[ JwtUtil ] 새로운 토큰을 재발급 합니다.");
 
@@ -182,4 +194,3 @@ public class JwtUtil {
         return expiration.getTime() - System.currentTimeMillis();
     }
 }
-

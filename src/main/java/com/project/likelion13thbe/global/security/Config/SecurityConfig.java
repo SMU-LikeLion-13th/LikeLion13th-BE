@@ -3,6 +3,7 @@ package com.project.likelion13thbe.global.security.Config;
 
 import com.project.likelion13thbe.global.security.JwtUtil;
 import com.project.likelion13thbe.global.security.filter.CustomLoginFilter;
+import com.project.likelion13thbe.global.security.filter.ForcePasswordChangeFilter;
 import com.project.likelion13thbe.global.security.filter.JwtAuthorizationFilter;
 import com.project.likelion13thbe.global.security.handler.CustomLogoutHandler;
 import com.project.likelion13thbe.global.security.handler.CustomLogoutSuccessHandler;
@@ -70,6 +71,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, allowGetUrl).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthorizationFilter(jwtUtil, redisTemplate), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new ForcePasswordChangeFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)

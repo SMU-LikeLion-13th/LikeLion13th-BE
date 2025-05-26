@@ -3,6 +3,7 @@ package com.project.likelion13thbe.domain.member.service.command;
 import com.project.likelion13thbe.domain.member.converter.MemberConverter;
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
+import com.project.likelion13thbe.domain.member.entity.IsTempPassword;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
 import com.project.likelion13thbe.domain.member.exception.MemberException;
@@ -70,7 +71,7 @@ public class MemberCommandServiceImpl implements MemberCommandService{
         String encodedNewPassword = securityConfig.passwordEncoder().encode(resetPasswordReqDTO.newPassword());
         member.updatePassword(encodedNewPassword);
 
-        if (member.getIsTempPassword()) {
+        if (member.getIsTempPassword() == IsTempPassword.IS_TEMP_PASSWORD) {
             member.isNotTempPassword();
         }
 

@@ -1,10 +1,9 @@
 package com.project.likelion13thbe.global.security.filter;
 
+import com.project.likelion13thbe.domain.member.entity.IsTempPassword;
 import com.project.likelion13thbe.domain.member.entity.Role;
 import com.project.likelion13thbe.global.security.CustomUserDetails;
 import com.project.likelion13thbe.global.security.JwtUtil;
-import com.project.likelion13thbe.global.security.exception.AuthErrorCode;
-import com.project.likelion13thbe.global.security.exception.AuthException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -85,9 +84,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         // 2. Access Token에서 사용자 정보 추출 후 CustomUserDetails 생성
         String email = jwtUtil.getEmail(accessToken);
         Role role = jwtUtil.getRoles(accessToken);
+        IsTempPassword isTempPassword = jwtUtil.getIsTempPassword(accessToken);
 
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(email, null, role);
+        CustomUserDetails customUserDetails = new CustomUserDetails(email, null, role, isTempPassword);
 
         log.info("[ JwtAuthorizationFilter ] UserDetails 객체 생성 성공");
 

@@ -1,6 +1,7 @@
 package com.project.likelion13thbe.global.kakao;
 
 
+import com.project.likelion13thbe.domain.member.entity.IsTempPassword;
 import com.project.likelion13thbe.domain.member.entity.Role;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
@@ -95,7 +96,7 @@ public class KakaoService {
     }
 
     public String login(String kakaoEmail, String kakaoEncodedPassword){
-        CustomUserDetails customUserDetails = new CustomUserDetails(kakaoEmail, kakaoEncodedPassword, Role.ROLE_USER);
+        CustomUserDetails customUserDetails = new CustomUserDetails(kakaoEmail, kakaoEncodedPassword, Role.ROLE_USER, IsTempPassword.NORMAL);
         String accessToken = jwtUtil.createJwtAccessToken(customUserDetails);
         String refreshToken = jwtUtil.createJwtRefreshToken(customUserDetails);
 

@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.global.security;
 
+import com.project.likelion13thbe.domain.member.entity.IsTempPassword;
 import com.project.likelion13thbe.domain.member.entity.Role;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ public class CustomUserDetails implements UserDetails {
     private final String email;
     private final String password;
     private final Role roles;
+    private final IsTempPassword isTempPassword;
 
     // 해당 User 의 권한을 return
     @Override
@@ -30,7 +32,7 @@ public class CustomUserDetails implements UserDetails {
     public Role getRole() {
         return roles;
     }
-
+    
     @Override
     public String getUsername() {
         return email;

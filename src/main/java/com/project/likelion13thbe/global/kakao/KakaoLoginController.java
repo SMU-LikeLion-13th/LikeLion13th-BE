@@ -1,9 +1,9 @@
 package com.project.likelion13thbe.global.kakao;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.likelion13thbe.domain.member.controller.MemberController;
+
 import com.project.likelion13thbe.domain.member.converter.MemberConverter;
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
+import com.project.likelion13thbe.domain.member.entity.IsTempPassword;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.entity.Role;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
@@ -12,14 +12,9 @@ import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import com.project.likelion13thbe.global.security.CustomUserDetails;
 import com.project.likelion13thbe.global.security.JwtUtil;
 import com.project.likelion13thbe.global.security.dto.JwtDTO;
-import com.project.likelion13thbe.global.security.exception.AuthErrorCode;
-import com.project.likelion13thbe.global.security.exception.AuthException;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +30,6 @@ import java.util.Optional;
 public class KakaoLoginController {
 
     private final KakaoService kakaoService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MemberRepository memberRepository;
     private final MemberCommandService memberCommandService;
     private final JwtUtil jwtUtil;
@@ -59,7 +53,7 @@ public class KakaoLoginController {
         String kakaoEmail = String.valueOf(userInfo.getKakaoAccount().getEmail());
 
         if (member.isPresent()) {
-            CustomUserDetails customUserDetails = new CustomUserDetails(kakaoEmail, null, Role.ROLE_USER);
+            CustomUserDetails customUserDetails = new CustomUserDetails(kakaoEmail, null, Role.ROLE_USER, IsTempPassword.NORMAL);
             String Token = jwtUtil.createJwtAccessToken(customUserDetails);
             String refreshToken = jwtUtil.createJwtRefreshToken(customUserDetails);
 
