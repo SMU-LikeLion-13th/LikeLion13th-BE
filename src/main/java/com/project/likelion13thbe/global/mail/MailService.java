@@ -89,7 +89,7 @@ public class MailService {
                         <div align="center" style="border:1px solid black; padding:10px;">
                             <h2>%s</h2>
                         </div>
-                        <p>비밀번호는 1회만 사용가능합니다 (희망사항)</p>
+                        <p>비밀번호는 1회만 사용가능합니다</p>
                     </div>
                     </body>
                     </html>
