@@ -3,7 +3,10 @@ package com.project.likelion13thbe.domain.member.service;
 
 import com.project.likelion13thbe.domain.member.dto.response.KakaoTokenResponseDTO;
 import com.project.likelion13thbe.domain.member.dto.response.KakaoUserInfoResponseDTO;
+import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
+import com.project.likelion13thbe.global.Security.AuthService;
+import com.project.likelion13thbe.global.Security.DTO.JwtDto;
 import com.project.likelion13thbe.global.Security.JwtUtil;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.extern.slf4j.Slf4j;
@@ -26,18 +29,20 @@ public class KakaoService {
     private final String redirectURI;  // redirect URI
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
+    private final AuthService authService;
 
     @Autowired
     public KakaoService(@Value("${spring.security.oauth2.client.registration.kakao.client-id}") String clientId,
                         @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}") String redirectURI,
                         @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}") String userInfoURI,
-                        @Value("${spring.security.oauth2.client.provider.kakao.token-uri}") String tokenURI, MemberRepository memberRepository, JwtUtil jwtUtil) {
+                        @Value("${spring.security.oauth2.client.provider.kakao.token-uri}") String tokenURI, MemberRepository memberRepository, JwtUtil jwtUtil, AuthService authService) {
         this.clientId = clientId;
         this.tokenURI = tokenURI;
         this.userInfoURI = userInfoURI;
         this.redirectURI = redirectURI;
         this.memberRepository = memberRepository;
         this.jwtUtil = jwtUtil;
+        this.authService = authService;
     }
 
     public String getAccessTokenFromKakao(String code) {
@@ -90,5 +95,21 @@ public class KakaoService {
         log.info("[ Kakao Service ] ProfileImageUrl ---> {} ", userInfo.getKakaoAccount().getProfile().getProfileImageUrl());
 
         return userInfo;
+    }
+
+    public JwtDto handleKakaoLogin(String code) {
+        String accessToken = getAccessTokenFromKakao(code);
+
+        // 받은 토큰으로 카카오 리소스 서버에 사용자의 정보 요청.
+        KakaoUserInfoResponseDTO userInfo = getUserInfo(accessToken);
+        String email = userInfo.getKakaoAccount().getEmail();
+
+        // 있으면 로그인, 없으면 회원가입하도록 설정
+        Member member = memberRepository.findByEmail(email)
+                .orElseGet(() -> memberRepository.save(Member.builder()
+                        .email(email)
+                        .build()));
+
+        return authService.createJwt(member);
     }
 }
