@@ -6,4 +6,9 @@ public class MailDTO {
     ) {
     }
 
+    public record AuthCodeVerifyRequestDTO(
+            String to,
+            String code
+    ) {
+    }
 }

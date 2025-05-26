@@ -21,4 +21,15 @@ public class MailController {
         mailService.sendAuthCodeMail(authCodeRequestDTO.to());
         return CustomResponse.onSuccess(HttpStatus.OK, "인증 코드 전송 완료");
     }
+
+    @PostMapping("/auth-code/verify")
+    public CustomResponse<String> verifyAuthCode(@RequestBody MailDTO.AuthCodeVerifyRequestDTO authCodeVerifyRequestDTO) {
+        boolean isValid = mailService.verifyAuthCode(authCodeVerifyRequestDTO.code(), authCodeVerifyRequestDTO.to());
+        if (isValid) {
+            return CustomResponse.onSuccess(HttpStatus.OK, "인증 성공");
+        }
+        else {
+            return CustomResponse.onFailure(HttpStatus.BAD_REQUEST, "인증 실패");
+        }
+    }
 }

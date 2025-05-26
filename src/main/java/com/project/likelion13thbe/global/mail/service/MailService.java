@@ -72,4 +72,22 @@ public class MailService {
 
         return code.toString();
     }
+
+    public boolean verifyAuthCode(String inputCode, String to) {
+        String savedCode = redisTemplate.opsForValue().get("authcode:" + to);
+
+        if (savedCode == null) {
+            log.warn("인증 코드 없거나 만료됨");
+            return false;
+        }
+
+        // 인증 성공 시 바로 삭제
+        if (savedCode.equals(inputCode)) {
+            redisTemplate.delete(to);
+            return true;
+        }
+
+        return false;
+    }
+
 }
