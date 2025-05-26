@@ -23,10 +23,11 @@ public class Member extends BaseEntity {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "social_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
     @Column(name = "profile_image")

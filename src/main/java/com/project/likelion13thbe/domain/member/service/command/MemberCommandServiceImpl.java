@@ -29,9 +29,15 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Override
     public MemberResDTO.MemberCreateResDTO createMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
         // DTO -> Member
+
+        String encodedPassword = null;
+        // 카카오 로그인은 비밀번호가 없어서 createMember를 사용할 경우 encode에 null 들어감 이슈
+        if (memberCreateReqDTO.password() != null) {
+            encodedPassword = passwordEncoder.encode(memberCreateReqDTO.password());
+        }
         Member member = MemberConverter.toMember(
                 memberCreateReqDTO,
-                passwordEncoder.encode(memberCreateReqDTO.password())
+                encodedPassword
         ); // 암호화 방식?
 
         try {
