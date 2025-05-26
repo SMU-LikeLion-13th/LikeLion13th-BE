@@ -5,8 +5,6 @@ import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
 import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.global.security.entity.CustomUserDetails;
-import com.project.likelion13thbe.global.security.repository.TokenRepository;
-import com.project.likelion13thbe.global.security.entity.Token;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -15,6 +13,7 @@ import io.jsonwebtoken.security.SecurityException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +22,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,21 +32,21 @@ public class JwtUtil {
     private final SecretKey secretKey;
     private final Long accessExpMs;
     private final Long refreshExpMs;
-    private final TokenRepository tokenRepository;
+    private final RedisTemplate<String, String> redisTemplate;
     private final MemberRepository memberRepository;
 
     public JwtUtil(
             @Value("${spring.jwt.secret}") String secret,
             @Value("${spring.jwt.token.access-expiration-time}") Long access,
             @Value("${spring.jwt.token.refresh-expiration-time}") Long refresh,
-            TokenRepository tokenRepo,
+            RedisTemplate<String, String> redisTemplate,
             MemberRepository memberRepository) {
         this.secretKey = new SecretKeySpec(
                 secret.getBytes(StandardCharsets.UTF_8),
                 Jwts.SIG.HS256.key().build().getAlgorithm());
         this.accessExpMs = access;
         this.refreshExpMs = refresh;
-        this.tokenRepository = tokenRepo;
+        this.redisTemplate = redisTemplate;
         this.memberRepository = memberRepository;
     }
 
@@ -97,11 +97,13 @@ public class JwtUtil {
         Instant expiration = Instant.now().plusMillis(refreshExpMs);
         String refreshToken = tokenProvider(customUserDetails, expiration);
 
-        // save Refresh Token to DB
-        tokenRepository.save(Token.builder()
-                .email(customUserDetails.getUsername())
-                .token(refreshToken)
-                .build());
+        // save Refresh Token to Redis
+        redisTemplate.opsForValue().set(
+                "refreshToken:" + customUserDetails.getUsername(),
+                refreshToken,
+                refreshExpMs,
+                TimeUnit.MILLISECONDS
+        );
 
         return refreshToken;
     }
@@ -112,7 +114,7 @@ public class JwtUtil {
         String email = getEmail(refreshToken);
 
         // 기존 refresh token 삭제
-        tokenRepository.deleteByEmail(email);
+        redisTemplate.delete("refreshToken:" + email);
 
         // DB에서 해당 사용자 조회
         Member member = memberRepository.findByEmailAndNotDeleted(email)
