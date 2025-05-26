@@ -64,7 +64,8 @@ public class SecurityConfig {
             "/swagger-ui.html",
             "/swagger-resources/**",
             "/api/v1/members/login",
-            "/api/v1/members/signup"
+            "/api/v1/members/signup",
+            "/callback/**"
     };
 
     @Bean

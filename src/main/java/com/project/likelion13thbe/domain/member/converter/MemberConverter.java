@@ -4,6 +4,8 @@ import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.entity.Role;
+import com.project.likelion13thbe.domain.member.entity.SocialType;
+import com.project.likelion13thbe.global.security.dto.KakaoResponseDTO;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,6 +36,16 @@ public class MemberConverter {
         return MemberResponseDTO.MemberCreateResponseDTO.builder()
                 .id(member.getId())
                 .createdAt(member.getCreatedAt())
+                .build();
+    }
+
+    public static MemberRequestDTO.MemberCreateRequestDTO kakaoToMemberRequestDTO(KakaoResponseDTO.KakaoUserInfoResponseDTO userinfo) {
+        return MemberRequestDTO.MemberCreateRequestDTO.builder()
+                .name(userinfo.kakaoAccount().profile().nickName())
+                .email(userinfo.kakaoAccount().email())
+                .password("")
+                .socialType(SocialType.KAKAO)
+                .profileImage(userinfo.kakaoAccount().profile().profileImageUrl())
                 .build();
     }
 
