@@ -1,7 +1,7 @@
 package com.project.likelion13thbe.global.security.handler;
 
 import com.project.likelion13thbe.global.security.JwtUtil;
-import com.project.likelion13thbe.global.security.repository.TokenRepository;
+import com.project.likelion13thbe.global.security.service.RefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class CustomLogoutHandler implements LogoutHandler {
 
     private final JwtUtil jwtUtil;
     private final RedisTemplate<String, String> redisTemplate;
-    private final TokenRepository tokenRepository;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -38,9 +38,9 @@ public class CustomLogoutHandler implements LogoutHandler {
                 redisTemplate.opsForValue().set("blacklist:" + accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
                 log.info("[LogoutHandler] Access Token 블랙리스트 등록 완료");
 
-                //Refresh Token DB에서 삭제
-                tokenRepository.findByEmail(email).ifPresent(tokenRepository::delete);
-                log.info("[LogoutHandler] DB에서 Refresh Token 삭제 완료");
+                //Refresh Token Redis에서 삭제
+                refreshTokenService.deleteRefreshToken(email);
+                log.info("[LogoutHandler] Redis에서 Refresh Token 삭제 완료");
             }
 
         SecurityContextHolder.clearContext();

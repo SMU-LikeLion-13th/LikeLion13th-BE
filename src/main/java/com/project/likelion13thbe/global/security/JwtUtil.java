@@ -3,8 +3,7 @@ package com.project.likelion13thbe.global.security;
 import com.project.likelion13thbe.domain.member.entity.IsTempPassword;
 import com.project.likelion13thbe.domain.member.entity.Role;
 import com.project.likelion13thbe.global.security.dto.JwtDTO;
-import com.project.likelion13thbe.global.security.entity.Token;
-import com.project.likelion13thbe.global.security.repository.TokenRepository;
+import com.project.likelion13thbe.global.security.service.RefreshTokenService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -12,7 +11,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -21,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 import io.jsonwebtoken.security.SignatureException;
 import java.time.Instant;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -30,19 +27,19 @@ public class JwtUtil {
     private final SecretKey secretKey;
     private final Long accessExpMs;
     private final Long refreshExpMs;
-    private final TokenRepository tokenRepository;
+    private final RefreshTokenService refreshTokenService;
 
     public JwtUtil(
             @Value("${spring.jwt.secret}") String secret,
             @Value("${spring.jwt.token.access-expiration-time}") Long access,
             @Value("${spring.jwt.token.refresh-expiration-time}") Long refresh,
-            TokenRepository tokenRepo
+            RefreshTokenService refreshTokenService
     ) {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
                 Jwts.SIG.HS256.key().build().getAlgorithm());
         accessExpMs = access;
         refreshExpMs = refresh;
-        tokenRepository = tokenRepo;
+        this.refreshTokenService = refreshTokenService;
 
     }
 
@@ -81,11 +78,6 @@ public class JwtUtil {
         //현재 시간
         Instant issuedAt = Instant.now();
 
-        //토큰에 부여할 권한
-//        String authorities = customUserDetails.getAuthorities().stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .collect(Collectors.joining(","));
-
         return Jwts.builder()
                 .header() //헤더 부분
                 .add("typ", "JWT") // JWT type
@@ -110,14 +102,8 @@ public class JwtUtil {
         Instant expiration = Instant.now().plusMillis(refreshExpMs);
         String refreshToken = tokenProvider(customUserDetails, expiration);
 
-        // DB에 Refresh Token 저장
-        tokenRepository.save(Token.builder()
-                .email(customUserDetails.getUsername())
-                .token(refreshToken)
-                .build()
-        );
-
-
+        // Redis에 Refresh Token 저장
+        refreshTokenService.saveRefreshToken(customUserDetails.getUsername(), refreshToken);
         return refreshToken;
     }
 
