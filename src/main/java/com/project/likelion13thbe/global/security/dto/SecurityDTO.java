@@ -18,7 +18,7 @@ public class SecurityDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public class TokenDTO {
+    public static class TokenDTO {
         public String accessToken;
         public String refreshToken;
     }

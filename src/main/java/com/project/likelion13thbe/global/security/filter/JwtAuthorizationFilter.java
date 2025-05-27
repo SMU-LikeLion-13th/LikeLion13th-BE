@@ -20,6 +20,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     // JWT 관련 유틸리티 클래스 주입
 
+    private final JwtUtil jwtUtil;
+
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,

@@ -1,12 +1,15 @@
 package com.project.likelion13thbe.global.security.service;
 
 
+import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.global.security.entitiy.CustomUserDetails;
 import com.project.likelion13thbe.global.security.exception.AuthErrorCode;
 import com.project.likelion13thbe.global.security.entitiy.Token;
 import com.project.likelion13thbe.global.security.dto.JwtDTO;
+import com.project.likelion13thbe.global.security.exception.AuthException;
 import com.project.likelion13thbe.global.security.jwt.JwtUtil;
 import com.project.likelion13thbe.global.security.repository.TokenRepository;
-import jakarta.security.auth.message.AuthException;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,11 +24,24 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final TokenRepository tokenRepository;
 
-    public JwtDTO reissueToken(JwtDTO.JwtResDTO jwtDto) throws SignatureException {
+    public JwtDTO createJwt(Member member) {
+        CustomUserDetails customUserDetails = new CustomUserDetails(member.getEmail(), member.getPassword(), member.getRole());
+
+        String accessToken = jwtUtil.createJwtAccessToken(customUserDetails);
+        String refreshToken = jwtUtil.createJwtRefreshToken(customUserDetails);
+
+        // RefreshToken 저장 (DB에 갱신)
+        tokenRepository.save(new Token(member.getEmail(), refreshToken));
+
+        return new JwtDTO(accessToken, refreshToken);
+    }
+
+    public JwtDTO reissueToken(JwtDTO jwtDto) throws SignatureException {
+
 
         log.info("[ Auth Service ] 토큰 재발급을 시작합니다.");
-        String accessToken = jwtDto.accessToken();
-        String refreshToken = jwtDto.refreshToken();
+        String accessToken = jwtDto.getAccessToken();
+        String refreshToken = jwtDto.getRefreshToken();
 
         //Access Token 으로부터 사용자 Email 추출
         String email = jwtUtil.getEmail(refreshToken); // **수정부분**
