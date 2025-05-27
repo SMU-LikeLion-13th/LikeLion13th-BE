@@ -33,8 +33,6 @@ public class MemberController {
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
 
-
-
     @GetMapping
     public ResponseEntity<MemberResDTO.MemberPreviewResDTO> getMember(
             @AuthenticationPrincipal UserDetails userDetails

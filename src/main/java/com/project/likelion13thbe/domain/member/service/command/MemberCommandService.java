@@ -30,8 +30,6 @@ public class MemberCommandService {
 
     private final UserDetailsService userDetailsService;
 
-    //private final BCryptPasswordEncoder passwordEncoder;
-
     public MemberResDTO.MemberCreateResDTO createMember (MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
 
         Member member = MemberConverter.toMember(memberCreateReqDTO);

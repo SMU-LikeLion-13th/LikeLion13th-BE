@@ -21,8 +21,8 @@ public class MailController {
     @Operation(summary = "이메일 인증 체크 api", description = "이메일 인증 체크 API입니다.")
     @ResponseBody
     @PostMapping("/api/v1/emails")
-    public String emailCheck(@RequestBody ProductReqDTO.MailDTO mailDTO)
-        throws MessagingException {
+    public String emailCheck(
+            @RequestBody ProductReqDTO.MailDTO mailDTO) throws MessagingException {
 
         return mailService.sendSimpleMessage(mailDTO.email());
     }
