@@ -57,5 +57,5 @@ spring:
     redis:
       password: ${REDIS_PW}
       timeout: 2000
-      port: 8090
+      port: 6379
       host: 127.0.0.1
