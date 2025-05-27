@@ -11,14 +11,14 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @EnableRedisRepositories
-//redis 설정 클래스(인듯...?)
+//redis 설정 클래스
 public class RedisConfig {
-    //host 설정
-    @Value("${spring.redis.host}")
+    //host 선언
+    @Value("localhost")
     private String host;
 
-    //port 설정
-    @Value("${spring.redis.port}")
+    //port 선언
+    @Value("6379")
     private int port;
 
     @Bean
@@ -28,10 +28,12 @@ public class RedisConfig {
         return new LettuceConnectionFactory(host, port);
     }
 
+    //redisTemplate 만들어서 Bean으로 주입
     @Bean
-    //
     public RedisTemplate<String, String> redisTemplate() {
+        //새 redisTemplate 생성
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+        //빈 redisTemplate 생성
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(redisConnectionFactory());
