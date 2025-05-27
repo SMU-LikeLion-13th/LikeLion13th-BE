@@ -1,5 +1,6 @@
-package com.project.likelion13thbe.global.Security;
+package com.project.likelion13thbe.global.config;
 
+import com.project.likelion13thbe.global.Security.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
