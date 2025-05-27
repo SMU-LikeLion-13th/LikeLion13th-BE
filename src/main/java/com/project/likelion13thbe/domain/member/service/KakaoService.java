@@ -5,6 +5,7 @@ import com.project.likelion13thbe.domain.member.dto.response.KakaoTokenResponseD
 import com.project.likelion13thbe.domain.member.dto.response.KakaoUserInfoResponseDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
+import com.project.likelion13thbe.global.RedisService;
 import com.project.likelion13thbe.global.Security.AuthService;
 import com.project.likelion13thbe.global.Security.DTO.JwtDto;
 import com.project.likelion13thbe.global.Security.JwtUtil;
@@ -30,12 +31,13 @@ public class KakaoService {
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
     private final AuthService authService;
+    private final RedisService redisService;
 
     @Autowired
     public KakaoService(@Value("${spring.security.oauth2.client.registration.kakao.client-id}") String clientId,
                         @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}") String redirectURI,
                         @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}") String userInfoURI,
-                        @Value("${spring.security.oauth2.client.provider.kakao.token-uri}") String tokenURI, MemberRepository memberRepository, JwtUtil jwtUtil, AuthService authService) {
+                        @Value("${spring.security.oauth2.client.provider.kakao.token-uri}") String tokenURI, MemberRepository memberRepository, JwtUtil jwtUtil, AuthService authService, RedisService redisService) {
         this.clientId = clientId;
         this.tokenURI = tokenURI;
         this.userInfoURI = userInfoURI;
@@ -43,6 +45,7 @@ public class KakaoService {
         this.memberRepository = memberRepository;
         this.jwtUtil = jwtUtil;
         this.authService = authService;
+        this.redisService = redisService;
     }
 
     public String getAccessTokenFromKakao(String code) {
@@ -110,6 +113,11 @@ public class KakaoService {
                         .email(email)
                         .build()));
 
-        return authService.createJwt(member);
+        // jwt 발급
+        JwtDto jwtDto = authService.createJwt(member);
+
+        redisService.setRefreshToken(email, jwtDto.getRefreshToken(), 1000L * 60 * 60 * 24 * 7); // 7일 설정하기
+
+        return jwtDto;
     }
 }

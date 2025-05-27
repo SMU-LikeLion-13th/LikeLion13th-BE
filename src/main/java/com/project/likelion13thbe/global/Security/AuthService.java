@@ -1,6 +1,8 @@
 package com.project.likelion13thbe.global.Security;
 
+import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.global.RedisService;
 import com.project.likelion13thbe.global.Security.CustomUserDetail.CustomUserDetails;
 import com.project.likelion13thbe.global.Security.DTO.JwtDto;
 import com.project.likelion13thbe.global.Security.Entity.Token;
@@ -16,6 +18,7 @@ public class AuthService {
 
     private final JwtUtil jwtUtil;
     private final TokenRepository tokenRepository;
+    private final RedisService redisService;
 
     public JwtDto createJwt(Member member) {
         CustomUserDetails customUserDetails = new CustomUserDetails(member.getEmail(), member.getPassword(), member.getRole().toString());
@@ -56,5 +59,24 @@ public class AuthService {
         } else {
             throw new AuthException(AuthErrorCode.INVALID_TOKEN);
         }
+    }
+
+    // Redis 활용하기
+    public JwtDto login(MemberRequestDTO.LoginRequestDTO loginRequestDTO) {
+        // 이메일을 통한 회원 조회
+        Member member = Member.builder().email(loginRequestDTO.getEmail()).build();
+
+        // 비밀번호 일치 확인
+        if (!member.getPassword().equals(loginRequestDTO.getPassword())) {
+            throw new AuthException(AuthErrorCode._NOT_FOUND);
+        }
+
+        // 토큰 생성
+        JwtDto jwtDto = createJwt(member);
+
+        // Redis에 저장하기
+        redisService.setRefreshToken("RT:" + member.getEmail(), jwtDto.getRefreshToken(), 1000 * 60 * 60 * 24 * 7);
+
+        return jwtDto;
     }
 }

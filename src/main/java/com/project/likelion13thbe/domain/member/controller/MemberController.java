@@ -69,8 +69,10 @@ public class MemberController {
                             schema = @Schema(implementation = JwtDto.class)))    })
     @PostMapping("/login")
     public ResponseEntity<JwtDto> localLogin(@RequestBody MemberRequestDTO.LoginRequestDTO loginRequestDTO) {
-        return null;
+        JwtDto jwtDto = authService.login(loginRequestDTO);
+        return ResponseEntity.ok(jwtDto);
     }
+
 
     @Operation(summary = "비밀번호 수정", description = "비밀번호를 수정")
     @ApiResponses({
