@@ -1,5 +1,10 @@
 package com.project.likelion13thbe.global.security.util;
 
+import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
+import com.project.likelion13thbe.domain.member.repository.MemberRepository;
+import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
+import com.project.likelion13thbe.global.apiPayload.exception.CustomResponse;
 import com.project.likelion13thbe.global.security.CustomUserDetails;
 import com.project.likelion13thbe.global.security.dto.JwtDTO;
 import com.project.likelion13thbe.global.security.entity.Token;
@@ -11,6 +16,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -30,19 +36,21 @@ public class JwtUtil {
     private final Long accessExpMs;
     private final Long refreshExpMs;
     private final TokenRepository tokenRepository;
+    private final MemberRepository memberRepository;
 
     public JwtUtil(
             @Value("${spring.jwt.secret}") String secret,
             @Value("${spring.jwt.token.access-expiration-time}") Long access,
             @Value("${spring.jwt.token.refresh-expiration-time}") Long refresh,
-            TokenRepository tokenRepo
-    ) {
+            TokenRepository tokenRepo,
+            MemberRepository memberRepository) {
 
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
                 Jwts.SIG.HS256.key().build().getAlgorithm());
         accessExpMs = access;
         refreshExpMs = refresh;
         tokenRepository = tokenRepo;
+        this.memberRepository = memberRepository;
     }
 
     // JWT 토큰을 입력으로 받아 토큰의 subject 로부터 사용자 Email 추출하는 메서드
@@ -116,12 +124,14 @@ public class JwtUtil {
     // 제공된 리프레시 토큰을 기반으로 JwtDto 쌍을 다시 발급
     public JwtDTO reissueToken(String refreshToken) throws SignatureException {
 
+        String email = getEmail(refreshToken);
+        //member받아서 userdetails로 형변환
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
         // refreshToken 에서 user 정보를 가져와서 새로운 토큰을 발급 (발급 시간, 유효 시간(reset)만 새로 적용)
-        CustomUserDetails userDetails = new CustomUserDetails(
-                getEmail(refreshToken),
-                null,
-                getRoles(refreshToken)
-        );
+
+        CustomUserDetails userDetails = new CustomUserDetails(member);
+
         log.info("[ JwtUtil ] 새로운 토큰을 재발급 합니다.");
 
         // 재발급

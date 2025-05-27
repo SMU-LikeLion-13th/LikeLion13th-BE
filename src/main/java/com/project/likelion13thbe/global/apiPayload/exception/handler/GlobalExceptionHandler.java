@@ -74,6 +74,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<CustomResponse<String>> handleAllException(Exception ex) {
         log.error("[WARNING] Internal Server Error : {} ", ex.getMessage());
         BaseErrorCode errorCode = GeneralErrorCode.INTERNAL_SERVER_ERROR_500;
+        ex.printStackTrace();
         CustomResponse<String> errorResponse = CustomResponse.onFailure(
                 errorCode.getCode(),
                 errorCode.getMessage(),
