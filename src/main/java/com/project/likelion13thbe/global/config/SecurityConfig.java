@@ -46,7 +46,8 @@ public class SecurityConfig {
             "api/usage",
             "/swagger-ui/**",   // swagger 관련 URL
             "/v3/api-docs/**",
-            "/callback/kakao"
+            "/callback/kakao",
+            "/api/v1/emails"
     };
 
     @Bean
