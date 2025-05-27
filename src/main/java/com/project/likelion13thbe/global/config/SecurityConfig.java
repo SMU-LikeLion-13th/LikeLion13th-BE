@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.global.config;
 
+import com.project.likelion13thbe.global.RedisDao;
 import com.project.likelion13thbe.global.security.filter.CustomLoginFilter;
 import com.project.likelion13thbe.global.security.filter.JwtAuthorizationFilter;
 import com.project.likelion13thbe.global.security.handler.JwtAccessDeniedHandler;
@@ -34,6 +35,8 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     //인증 실패 핸들러
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    //redis 처리 관련 클래스
+    private final RedisDao redisDao;
 
 
     //인증이 필요하지 않은 url
@@ -53,7 +56,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         //로그인 필터 생성: 사용자 인증 성공 시 jwt 발급
-        CustomLoginFilter loginFilter = new CustomLoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
+        CustomLoginFilter loginFilter = new CustomLoginFilter(
+                authenticationManager(authenticationConfiguration),
+                jwtUtil,
+                redisDao
+        );
         //요청 url이 해당 url 일 때, 이 filter가 처리
         loginFilter.setFilterProcessesUrl("/api/v1/login");
 
