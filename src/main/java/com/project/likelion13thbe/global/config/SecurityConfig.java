@@ -37,7 +37,8 @@ public class SecurityConfig {
             "api/usage",
             "/swagger-ui/**",   // swagger 관련 URL
             "/v3/api-docs/**",
-            "api/v1/callback/kakao" // kakao login
+            "api/v1/callback/kakao", // kakao login
+            "/api/v1/email/**" // SMTP 설정
     };
 
     @Bean

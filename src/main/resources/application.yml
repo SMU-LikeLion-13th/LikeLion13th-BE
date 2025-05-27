@@ -48,6 +48,23 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${email}
+    password: ${pw}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+            localhost: localhost
+
+
+
   redis:
     lettuce:
       pool:
