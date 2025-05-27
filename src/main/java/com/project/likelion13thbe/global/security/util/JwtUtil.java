@@ -4,11 +4,10 @@ import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
-import com.project.likelion13thbe.global.apiPayload.exception.CustomResponse;
+import com.project.likelion13thbe.global.redis.util.RedisUtil;
 import com.project.likelion13thbe.global.security.CustomUserDetails;
 import com.project.likelion13thbe.global.security.dto.JwtDTO;
 import com.project.likelion13thbe.global.security.entity.Token;
-import com.project.likelion13thbe.global.security.repository.TokenRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -16,7 +15,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -35,22 +33,23 @@ public class JwtUtil {
     private final SecretKey secretKey;
     private final Long accessExpMs;
     private final Long refreshExpMs;
-    private final TokenRepository tokenRepository;
     private final MemberRepository memberRepository;
+    private final RedisUtil redisUtil;
 
     public JwtUtil(
             @Value("${spring.jwt.secret}") String secret,
             @Value("${spring.jwt.token.access-expiration-time}") Long access,
             @Value("${spring.jwt.token.refresh-expiration-time}") Long refresh,
-            TokenRepository tokenRepo,
+            RedisUtil redisUtil,
             MemberRepository memberRepository) {
 
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
                 Jwts.SIG.HS256.key().build().getAlgorithm());
         accessExpMs = access;
         refreshExpMs = refresh;
-        tokenRepository = tokenRepo;
+        this.redisUtil = redisUtil;
         this.memberRepository = memberRepository;
+
     }
 
     // JWT 토큰을 입력으로 받아 토큰의 subject 로부터 사용자 Email 추출하는 메서드
@@ -110,12 +109,8 @@ public class JwtUtil {
         Instant expiration = Instant.now().plusMillis(refreshExpMs);
         String refreshToken = tokenProvider(customUserDetails, expiration);
 
-        // DB에 Refresh Token 저장
-        tokenRepository.save(Token.builder()
-                .email(customUserDetails.getUsername())
-                .token(refreshToken)
-                .build()
-        );
+        // redis에 Refresh Token 저장
+        redisUtil.saveRefreshToken(customUserDetails.getUsername(), refreshToken);
 
 
         return refreshToken;
