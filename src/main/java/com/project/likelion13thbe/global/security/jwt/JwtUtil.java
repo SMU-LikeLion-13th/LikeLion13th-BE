@@ -4,6 +4,7 @@ import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.global.security.entitiy.CustomUserDetails;
 import com.project.likelion13thbe.global.security.dto.JwtDTO;
 import com.project.likelion13thbe.global.security.entitiy.Token;
+import com.project.likelion13thbe.global.security.repository.RefreshTokenRedisRepository;
 import com.project.likelion13thbe.global.security.repository.TokenRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -32,12 +33,15 @@ public class JwtUtil {
     private final Long accessExpMs;
     private final Long refreshExpMs;
     private final TokenRepository tokenRepository;
+    private final RefreshTokenRedisRepository refreshTokenRedisRepository; // 주입
+
 
     public JwtUtil(
             @Value("${spring.jwt.secret}") String secret,
             @Value("${spring.jwt.token.access-expiration-time}") Long access,
             @Value("${spring.jwt.token.refresh-expiration-time}") Long refresh,
-            TokenRepository tokenRepo
+            TokenRepository tokenRepo,
+            RefreshTokenRedisRepository refreshTokenRedisRepository
     ) {
 
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
@@ -45,6 +49,8 @@ public class JwtUtil {
         accessExpMs = access;
         refreshExpMs = refresh;
         tokenRepository = tokenRepo;
+        this.refreshTokenRedisRepository = refreshTokenRedisRepository;
+
     }
 
     // JWT 토큰을 입력으로 받아 토큰의 subject 로부터 사용자 Email 추출하는 메서드
@@ -106,18 +112,25 @@ public class JwtUtil {
         String refreshToken = tokenProvider(customUserDetails, expiration);
 
         // DB에 Refresh Token 저장
-        tokenRepository.save(Token.builder()
-                .email(customUserDetails.getUsername())
-                .token(refreshToken)
-                .build()
-        );
-
+        //tokenRepository.save(Token.builder()
+        //        .email(customUserDetails.getUsername())
+        //        .token(refreshToken)
+        //        .build() );
+        // Redis에 저장
+        refreshTokenRedisRepository.save(customUserDetails.getUsername(), refreshToken, refreshExpMs);
 
         return refreshToken;
     }
 
     // 제공된 리프레시 토큰을 기반으로 JwtDto 쌍을 다시 발급
     public JwtDTO reissueToken(String refreshToken) throws SignatureException {
+
+        String email = getEmail(refreshToken);
+        String storedToken = refreshTokenRedisRepository.get(email); // Redis에서 꺼냄
+
+        if (!refreshToken.equals(storedToken)) {
+            throw new IllegalArgumentException("리프레시 토큰이 일치하지 않습니다.");
+        }
 
         // refreshToken 에서 user 정보를 가져와서 새로운 토큰을 발급 (발급 시간, 유효 시간(reset)만 새로 적용)
         CustomUserDetails userDetails = new CustomUserDetails(
