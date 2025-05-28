@@ -56,7 +56,7 @@ public class KakaoLoginController {
             member = Member.builder()
                     .email(userInfo.getKakaoAccount().getEmail())
                     .image(userInfo.getKakaoAccount().getProfile().getProfileImageUrl())
-                    .name("좀 되라")
+                    .name(userInfo.getKakaoAccount().getName())
                     .role(Role.USER)
                     .build();
             memberRepository.save(member);
