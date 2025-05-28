@@ -69,8 +69,8 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     }
 
     @Transactional
-    public void updateReviewByUsernameAndId(String username, Long id, ReviewReqDTO.ReviewUpdateReqDTO dto) {
-        Review review = reviewRepository.findByIdAndUsername(id, username)
+    public void updateReviewByMemberIdAndId(Long memberId, Long id, ReviewReqDTO.ReviewUpdateReqDTO dto) {
+        Review review = reviewRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(() -> new EntityNotFoundException("Review not found"));
 
         if (dto.getTitle() != null) {
@@ -94,8 +94,8 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
         reviewRepository.save(review);
     }
 
-    public void deleteReviewByUsername(String username) {
-        Review review = reviewRepository.findByUsername(username)
+    public void deleteReviewByMemberId(Long memberId) {
+        Review review = reviewRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("Review not found"));
         reviewRepository.delete(review);
     }

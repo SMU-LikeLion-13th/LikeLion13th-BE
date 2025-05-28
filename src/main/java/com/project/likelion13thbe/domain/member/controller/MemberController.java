@@ -59,8 +59,8 @@ public class MemberController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody MemberReqDTO.MemberUpdateReqDTO dto
     ) {
-        String username = userDetails.getUsername();
-        memberCommandService.updateMemberByUsername(username, dto);
+        String email = userDetails.getUsername();
+        memberCommandService.updateMemberByEmail(email, dto);
         return ResponseEntity.ok("Member Updated Successfully.");
     }
 
@@ -69,8 +69,8 @@ public class MemberController {
     public ResponseEntity<String> deleteMyAccount(
             @AuthenticationPrincipal UserDetails userDetails
             ) {
-        String username = userDetails.getUsername();
-        memberCommandService.deleteMemberByUsername(username);
+        String email = userDetails.getUsername();
+        memberCommandService.deleteMemberByEmail(email);
         return ResponseEntity.ok("Member Deleted Successfully.");
     }
 }

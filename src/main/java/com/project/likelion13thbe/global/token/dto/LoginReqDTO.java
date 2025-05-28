@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class TokenReqDTO {
-
-
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class LoginReqDTO {
+    private String email;
+    private String password;
 }

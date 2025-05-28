@@ -3,14 +3,16 @@ package com.project.likelion13thbe.domain.member.converter;
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class MemberConverter {
 
-    public static Member toMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
+    public static Member toMember(MemberReqDTO.MemberCreateReqDTO dto, PasswordEncoder passwordEncoder) {
         return Member.builder()
-                .email(memberCreateReqDTO.getEmail())
-                .password(memberCreateReqDTO.getPassword())
-                .nickname(memberCreateReqDTO.getNickname())
+                .email(dto.getEmail())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .nickname(dto.getNickname())
+                .role(dto.getRole())
                 .build();
     }
 

@@ -1,9 +1,13 @@
 package com.project.likelion13thbe.domain.order.controller;
 
+import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.order.dto.request.OrderReqDTO;
 import com.project.likelion13thbe.domain.order.dto.response.OrderResDTO;
 import com.project.likelion13thbe.domain.order.service.command.OrderCommandService;
+import com.project.likelion13thbe.global.apiPayload.code.GeneralErrorCode;
+import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     private final OrderCommandService orderCommandService;
     private final MemberCommandService memberCommandService;
+    private final MemberRepository memberRepository;
 
     @PostMapping
     public ResponseEntity<OrderResDTO.OrderCreateResDTO> createOrder(
@@ -51,7 +56,12 @@ public class OrderController {
             @RequestBody OrderReqDTO.OrderUpdateReqDTO dto
     ) {
         String username = userDetails.getUsername();
-        orderCommandService.updateOrderByUsernameAndId(username, id, dto);
+        Member member = memberRepository.findByEmail(username)
+                        .orElseThrow(() -> new CustomException(GeneralErrorCode.UNAUTHORIZED_401));
+        Long memberId = member.getId();
+
+
+        orderCommandService.updateOrderByMemberIdAndId(memberId, id, dto);
         return ResponseEntity.ok("Order Updated Successfully.");
     }
 
@@ -61,7 +71,12 @@ public class OrderController {
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         String username = userDetails.getUsername();
-        orderCommandService.deleteOrderByUsername(username);
+
+        Member member = memberRepository.findByEmail(username)
+                .orElseThrow(() -> new CustomException(GeneralErrorCode.UNAUTHORIZED_401));
+        Long memberId = member.getId();
+
+        orderCommandService.deleteOrderByMemberId(memberId);
         return ResponseEntity.ok("Member Deleted Successfully.");
     }
 }

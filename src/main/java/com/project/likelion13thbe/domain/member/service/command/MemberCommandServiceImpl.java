@@ -8,30 +8,32 @@ import com.project.likelion13thbe.domain.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public MemberResDTO.MemberCreateResDTO createMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
-        Member member = MemberConverter.toMember(memberCreateReqDTO);
+        Member member = MemberConverter.toMember(memberCreateReqDTO, passwordEncoder);
 
         memberRepository.save(member);
 
         return MemberConverter.toMemberResDTO(member);
     }
 
-    public void deleteMemberByUsername(String username) {
-        Member member = memberRepository.findByUsername(username)
+    public void deleteMemberByEmail(String email) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Member Not Found"));
         memberRepository.delete(member);
     }
 
     @Transactional
-    public void updateMemberByUsername(String username, MemberReqDTO.MemberUpdateReqDTO dto) {
-        Member member = memberRepository.findByUsername(username)
+    public void updateMemberByEmail(String email, MemberReqDTO.MemberUpdateReqDTO dto) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Member Not Found"));
 
         if (dto.getEmail() != null) {
