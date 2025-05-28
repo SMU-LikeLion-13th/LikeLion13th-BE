@@ -14,7 +14,7 @@ import java.util.Random;
 public class MailService {
 
     private final JavaMailSender javaMailSender;
-    private static final String senderEmail = "choihw1230@naver.com";
+    private static final String senderEmail = "choihw031230@gmail.com";
 
     // 랜덤으로 숫자 생성
     public String createNumber() {
