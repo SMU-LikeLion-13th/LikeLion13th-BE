@@ -19,8 +19,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType("application/json; charset=UTF-8");
         response.setStatus(401);
         CustomResponse<Object> errorResponse = CustomResponse.onFailure(
-                AuthErrorCode._UNAUTHORIZED.getCode(),
-                AuthErrorCode._UNAUTHORIZED.getMessage(),
+                AuthErrorCode.UNAUTHORIZED.getCode(),
+                AuthErrorCode.UNAUTHORIZED.getMessage(),
                 null
         );
         ObjectMapper mapper = new ObjectMapper();

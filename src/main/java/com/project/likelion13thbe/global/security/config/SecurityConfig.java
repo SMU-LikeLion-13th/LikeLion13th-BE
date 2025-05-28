@@ -2,6 +2,7 @@ package com.project.likelion13thbe.global.security.config;
 
 
 import com.project.likelion13thbe.global.security.filter.CustomLoginFilter;
+import com.project.likelion13thbe.global.security.filter.JwtAuthorizationFilter;
 import com.project.likelion13thbe.global.security.jwt.JwtAccessDeniedHandler;
 import com.project.likelion13thbe.global.security.jwt.JwtAuthenticationEntryPoint;
 import com.project.likelion13thbe.global.security.jwt.JwtUtil;
@@ -70,5 +71,4 @@ public class SecurityConfig {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){return new BCryptPasswordEncoder();}
-}
 }

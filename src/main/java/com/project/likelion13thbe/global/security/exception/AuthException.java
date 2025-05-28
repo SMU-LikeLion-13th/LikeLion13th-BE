@@ -8,4 +8,5 @@ public class AuthException extends CustomException {
     public AuthException(AuthErrorCode errorCode) {
         super(errorCode);
     }
+
 }
