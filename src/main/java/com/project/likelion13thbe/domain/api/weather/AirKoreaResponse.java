@@ -1,24 +1,35 @@
 package com.project.likelion13thbe.domain.api.weather;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class AirKoreaResponse {
     private Response response;
 
-    @Data
+    @Getter
+    @Setter
+    @NoArgsConstructor
     public static class Response {
         private Body body;
     }
 
-    @Data
+    @Getter
+    @Setter
+    @NoArgsConstructor
     public static class Body {
         private List<Item> items;
     }
 
-    @Data
+    @Getter
+    @Setter
+    @NoArgsConstructor
     public static class Item {
         private String stationName;
         private String pm10Value;
