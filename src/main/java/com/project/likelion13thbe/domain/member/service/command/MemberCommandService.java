@@ -54,9 +54,9 @@ public class MemberCommandService {
             //그냥 Optional 객체를 만들어서 람다식으로 처리했습니다...
             Optional<Member> optionalMember = memberRepository.findByEmail(kakaoUserInfoResDTO.getKakaoAccount().email);
             member = Member.builder()
-                    .email(optionalMember.map(Member::getEmail).orElse("이메일 없음"))
-                    .password(optionalMember.map(Member::getPassword).orElse("비밀번호 없음"))
-                    .role(optionalMember.map(Member::getRole).orElse("Role 없음"))
+                    .email(optionalMember.get().getEmail())
+                    .password(optionalMember.get().getPassword())
+                    .role(optionalMember.get().getRole())
                     .build();
         }
         //인수에서 바로 가져오지 말고, 멤버를 만들어서 파라미터로 전달

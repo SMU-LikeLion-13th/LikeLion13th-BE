@@ -98,13 +98,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
 
         //redis에 유저 이메일, refreshToken, TTL저장
-        redisDao.setValues(
-                //유저 이메일(구분되는 값이므로 이메일을 넣었습니다.)
-                customUserDetails.getUsername(),
-                jwtDto.jwtRefreshToken(),
-                //TTL -> 7일로 설정
-                Duration.ofDays(7)
-        );
+
 
         // CustomResponse 사용하여 응답 통일
         CustomResponse<JwtDTO> responseBody = CustomResponse.onSuccess(jwtDto);
