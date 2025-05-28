@@ -61,7 +61,6 @@ spring:
           starttls:
             enable: true
             required: true
-            localhost: localhost
 
 
 
