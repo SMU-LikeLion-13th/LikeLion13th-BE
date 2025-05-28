@@ -16,6 +16,8 @@ public class MemberResDTO {
     @Builder
     public record MemberCreateResDTO(
                     Long id,
+                    String email,
+                    String name,
                     LocalDateTime createdAt
             ){
 

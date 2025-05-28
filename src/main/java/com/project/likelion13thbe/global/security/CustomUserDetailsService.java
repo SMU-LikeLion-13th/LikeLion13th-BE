@@ -24,12 +24,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        log.info("[ CustomUserDetailsService ] Email 을 이용하여 User 를 검색합니다.");
+        log.info("[ CustomUsereDetailsService ] Email 을 이용하여 User 를 검색합니다.");
         Optional<Member> memberEntity = memberRepository.findByEmail(email);
 
         if (memberEntity.isPresent()) {
             Member member = memberEntity.get();
-            return new CustomUserDetails(member.getEmail(),member.getPassword(), member.getRole().name());
+            return new CustomUserDetails(member);
         }
         throw new MemberException(MemberErrorCode.MEMBER_NOT_FOUND);
     }

@@ -1,6 +1,7 @@
 package com.project.likelion13thbe.global.security;
 
 
+import com.project.likelion13thbe.domain.member.entity.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,10 +16,10 @@ public class CustomUserDetails implements UserDetails {
     private final String password;
     private final String roles;
 
-    public CustomUserDetails(String email, String password, String roles) {
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
+    public CustomUserDetails(Member member) {
+        this.email = member.getEmail();
+        this.password = member.getPassword();
+        this.roles = String.valueOf(member.getRole());
     }
 
     // 해당 User 의 권한을 return
