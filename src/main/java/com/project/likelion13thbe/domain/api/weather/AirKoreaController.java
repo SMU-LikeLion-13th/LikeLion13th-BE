@@ -12,8 +12,9 @@ public class AirKoreaController {
     private final AirKoreaService airKoreaService;
 
     @GetMapping("/air/seoul")
-    public ResponseEntity<AirKoreaResponse> getSeoulAir() {
+    public ResponseEntity<ApiResponse<AirKoreaResponse>> getSeoulAir() {
         AirKoreaResponse result = airKoreaService.getAirQuality("서울");
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(ApiResponse.success(result));
     }
+
 }
