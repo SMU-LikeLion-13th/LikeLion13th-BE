@@ -41,15 +41,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        CustomLoginFilter loginFilter = new CustomLoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
-        loginFilter.setFilterProcessesUrl("/api/v1/login");
 
         http
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(allowUrl).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthorizationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
