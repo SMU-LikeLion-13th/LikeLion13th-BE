@@ -1,15 +1,14 @@
 package com.project.likelion13thbe.global.security.service;
 
-import com.project.likelion13thbe.global.security.entity.Token;
 import com.project.likelion13thbe.global.security.exception.AuthErrorCode;
 import com.project.likelion13thbe.global.security.exception.AuthException;
 import com.project.likelion13thbe.global.security.jwt.JwtDTO;
 import com.project.likelion13thbe.global.security.jwt.JwtUtil;
-import com.project.likelion13thbe.global.security.repository.TokenRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final JwtUtil jwtUtil;
-    private final TokenRepository tokenRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     public JwtDTO reissueToken(String refreshToken, HttpServletResponse response) {
         log.info("[ Auth Service ] 토큰 재발급을 시작합니다");
@@ -33,12 +32,10 @@ public class AuthService {
         log.info("[ Auth Service ] Email ---> {}", email);
 
         // DB에 저장된 refresh token 가져오기
-        Token savedRefreshToken = tokenRepository.findByEmail(email).orElseThrow(
-                () -> new AuthException(AuthErrorCode.INVALID_TOKEN)
-        );
+        String savedRefreshToken = redisTemplate.opsForValue().get("refreshToken:" + email);
 
         // DB에서 찾은 refresh token과 요청으로 온 refresh token이 일치하는지 검사
-        if (!savedRefreshToken.getToken().equals(refreshToken)) {
+        if (savedRefreshToken == null || !savedRefreshToken.equals(refreshToken)) {
             throw new AuthException(AuthErrorCode.INVALID_TOKEN);
         }
 

@@ -45,4 +45,10 @@ public class CustomResponse<T> {
     public static <T> CustomResponse<T> onFailure(HttpStatus httpStatus, String code, String message) {
         return new CustomResponse<>(false, code, message, null);
     }
+
+    //상태 코드를 받아서 사용하는 실패 응답 생성 메서드
+    public static <T> CustomResponse<T> onFailure(HttpStatus status, T result) {
+        return new CustomResponse<>(false, String.valueOf(status.value()), status.getReasonPhrase(), result);
+    }
+
 }

@@ -132,4 +132,9 @@ public class MemberController {
         memberCommandService.deleteMember(memberId);
         return CustomResponse.onSuccess("회원 탈퇴 성공");
     }
+
+    @Operation(summary = "로그아웃")
+    @PostMapping("/logout")
+    public void logout() {
+    }
 }

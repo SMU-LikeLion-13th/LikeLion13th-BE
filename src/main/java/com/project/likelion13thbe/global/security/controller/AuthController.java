@@ -2,6 +2,7 @@ package com.project.likelion13thbe.global.security.controller;
 
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import com.project.likelion13thbe.global.security.exception.AuthErrorCode;
+import com.project.likelion13thbe.global.security.jwt.JwtUtil;
 import com.project.likelion13thbe.global.security.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.Cookie;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtUtil jwtUtil;
 
     // 토큰 재발급 API
     @Operation(method = "POST", summary = "토큰 재발급")
