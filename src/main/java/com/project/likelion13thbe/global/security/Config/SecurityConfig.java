@@ -3,6 +3,7 @@ package com.project.likelion13thbe.global.security.Config;
 
 import com.project.likelion13thbe.global.security.JwtUtil;
 import com.project.likelion13thbe.global.security.filter.CustomLoginFilter;
+import com.project.likelion13thbe.global.security.filter.ForcePasswordChangeFilter;
 import com.project.likelion13thbe.global.security.filter.JwtAuthorizationFilter;
 import com.project.likelion13thbe.global.security.handler.CustomLogoutHandler;
 import com.project.likelion13thbe.global.security.handler.CustomLogoutSuccessHandler;
@@ -42,11 +43,12 @@ public class SecurityConfig {
             "/members/login", //로그인 은 인증이 필요하지 않음
             "/members/auth", // 회원가입은 인증이 필요하지 않음
             "/members/login/kakao",
+            "/members/send-temp-password",
             "/auth/reissue", // 토큰 재발급은 인증이 필요하지 않음
             "/auth/**",
             "api/usage",
             "/swagger-ui/**",   // swagger 관련 URL
-            "/v3/api-docs/**",
+            "/v3/api-docs/**"
     };
 
     public final String[] allowGetUrl = {
@@ -54,7 +56,8 @@ public class SecurityConfig {
             "/products/{productId}",
             "/api/v1/reviews/{reviewId}",
             "/api/v1/products/{productId}/reviews",
-            "/api/v1/products/{productId}/reviews/{reviewId}/comments"
+            "/api/v1/products/{productId}/reviews/{reviewId}/comments",
+            "/callback/kakao"
     };
 
     @Bean
@@ -68,6 +71,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, allowGetUrl).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthorizationFilter(jwtUtil, redisTemplate), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new ForcePasswordChangeFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)

@@ -2,6 +2,7 @@ package com.project.likelion13thbe.domain.member.converter;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
+import com.project.likelion13thbe.domain.member.entity.IsTempPassword;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.entity.Role;
 import lombok.AccessLevel;
@@ -15,6 +16,7 @@ public class MemberConverter {
                 .email(memberCreateReqDTO.email())
                 .password(encodedPassword)
                 .role(Role.ROLE_USER)
+                .isTempPassword(IsTempPassword.NORMAL)
                 .build();
     }
 
@@ -33,10 +35,17 @@ public class MemberConverter {
                 .build();
     }
 
-    public static MemberResDTO.ResetPasswordResDTO toMemberResetPasswordResponseDTO(Member member, String currentPassword) {
+    public static MemberResDTO.ResetPasswordResDTO toMemberResetPasswordResponseDTO(String newPassword, String currentPassword) {
         return MemberResDTO.ResetPasswordResDTO.builder()
                 .currentPassword(currentPassword)
-                .newPassword(member.getPassword())
+                .newPassword(newPassword)
+                .build();
+    }
+
+    public static MemberReqDTO.MemberCreateReqDTO toMemberKakaoRequestDTO(String kakaoName, String kakaoEmail) {
+        return MemberReqDTO.MemberCreateReqDTO.builder()
+                .name(kakaoName)
+                .email(kakaoEmail)
                 .build();
     }
 }

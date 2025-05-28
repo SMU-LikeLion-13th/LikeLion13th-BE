@@ -12,4 +12,6 @@ public interface MemberCommandService {
     void deleteMember(String email);
 
     void cleanupDeletedMembers();
+
+    void sendTempEmail(String email);
 }

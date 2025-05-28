@@ -14,9 +14,6 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("SELECT m FROM Member m WHERE m.email = :email AND m.deletedAt IS NULL")
-    boolean existsByEmail(@Param("email") String email);
-
-    @Query("SELECT m FROM Member m WHERE m.email = :email AND m.deletedAt IS NULL")
     Optional<Member> findByEmail(@Param("email") String email);
 
     @Query("SELECT m FROM Member m WHERE m.deletedAt is not null AND m.deletedAt < :oneMonthAgo")
