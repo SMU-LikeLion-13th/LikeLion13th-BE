@@ -1,12 +1,17 @@
 package com.project.likelion13thbe.domain.member.controller;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
+import com.project.likelion13thbe.domain.member.dto.response.KakaoUserInfoResponseDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
+import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.repository.MemberRepository;
+import com.project.likelion13thbe.domain.member.service.KakaoService;
 import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.domain.member.service.query.MemberQueryService;
 import com.project.likelion13thbe.global.Security.AuthErrorCode;
 import com.project.likelion13thbe.global.Security.AuthException;
-import com.project.likelion13thbe.global.Security.DTO.JwtDTO;
+import com.project.likelion13thbe.global.Security.AuthService;
+import com.project.likelion13thbe.global.Security.DTO.JwtDto;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +25,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,26 +36,43 @@ public class MemberController {
 
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
+    private final KakaoService kakaoService;
+    private final AuthService authService;
+    private final MemberRepository memberRepository;
 
-    @Operation(summary = "카카오 로그인", description = "카카오 로그인을 수행합니다.")
+    @Operation(summary = "카카오 로그인", description = "카카오 로그인을 수행")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "카카오 로그인 성공")
     })
-    @PostMapping("/login/kakao")
-    public ResponseEntity<Void> kakaoLogin() {
-        // 로그인 로직
-        return ResponseEntity.ok().build();
+    @GetMapping("/callback/kakao")
+    public CustomResponse<JwtDto> callbackKakaoLogin(@RequestParam("code") String code){
+        // 1. 카카오 인증서버에서 토큰을 발급받는다.
+        // 인가code와 Redirect URL을 파라미터로 전달하여 카카오 인증서버에 요청.
+        // String accessToken = kakaoService.getAccessTokenFromKakao(code);
+
+        // 2. 1번에서 받은 토큰으로 카카오 리소스 서버에 사용자의 정보 요청.
+        // KakaoUserInfoResponseDTO userInfo = kakaoService.getUserInfo(accessToken);
+
+        // 3. 회원가입 & 로그인 처리
+        // 여기에 서버 사용자 로그인(인증) 또는 회원가입 로직 추가
+        // 이메일이 있으면 로그인 없으면 회원가입 시키기
+
+        // 서비스로 넘겨서 처리하기
+        JwtDto jwtDto = kakaoService.handleKakaoLogin(code);
+        return CustomResponse.onSuccess(jwtDto);
     }
 
     @Operation(summary = "일반 로그인")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = JwtDTO.class)))    })
+                            schema = @Schema(implementation = JwtDto.class)))    })
     @PostMapping("/login")
-    public ResponseEntity<JwtDTO> localLogin(@RequestBody MemberRequestDTO.LoginRequestDTO loginRequestDTO) {
-        return null;
+    public ResponseEntity<JwtDto> localLogin(@RequestBody MemberRequestDTO.LoginRequestDTO loginRequestDTO) {
+        JwtDto jwtDto = authService.login(loginRequestDTO);
+        return ResponseEntity.ok(jwtDto);
     }
+
 
     @Operation(summary = "비밀번호 수정", description = "비밀번호를 수정")
     @ApiResponses({

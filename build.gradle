@@ -55,6 +55,15 @@ dependencies {
 
     // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    //Webflux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // SMTP
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {

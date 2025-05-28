@@ -5,7 +5,6 @@ import com.project.likelion13thbe.domain.member.dto.response.MemberResponseDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
-import com.project.likelion13thbe.domain.member.service.command.MemberCommandService;
 import com.project.likelion13thbe.global.apiPayload.exception.CustomException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +52,10 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         Slice<Member> members = memberRepository.findAllByIdLessThanOrderByIdDesc(cursor,pageable);
 
         return MemberConverter.toMemberCursorResDTO(members);
+    }
+
+    @Override
+    public Optional<Member> findByEmail(String emailInfo){
+        return memberRepository.findByEmail(emailInfo);
     }
 }

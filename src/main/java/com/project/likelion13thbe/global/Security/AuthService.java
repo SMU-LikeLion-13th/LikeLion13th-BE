@@ -1,8 +1,10 @@
 package com.project.likelion13thbe.global.Security;
 
-import com.project.likelion13thbe.global.Security.AuthErrorCode;
-import com.project.likelion13thbe.global.Security.AuthException;
-import com.project.likelion13thbe.global.Security.DTO.JwtDTO;
+import com.project.likelion13thbe.domain.member.dto.request.MemberRequestDTO;
+import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.global.RedisService;
+import com.project.likelion13thbe.global.Security.CustomUserDetail.CustomUserDetails;
+import com.project.likelion13thbe.global.Security.DTO.JwtDto;
 import com.project.likelion13thbe.global.Security.Entity.Token;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +18,21 @@ public class AuthService {
 
     private final JwtUtil jwtUtil;
     private final TokenRepository tokenRepository;
+    private final RedisService redisService;
 
-    public JwtDTO reissueToken(JwtDTO jwtDto) throws SignatureException {
+    public JwtDto createJwt(Member member) {
+        CustomUserDetails customUserDetails = new CustomUserDetails(member.getEmail(), member.getPassword(), member.getRole().toString());
+
+        String accessToken = jwtUtil.createJwtAccessToken(customUserDetails);
+        String refreshToken = jwtUtil.createJwtRefreshToken(customUserDetails);
+
+        // RefreshToken 저장 (DB에 갱신)
+        tokenRepository.save(new Token(member.getEmail(), refreshToken));
+
+        return new JwtDto(accessToken, refreshToken);
+    }
+
+    public JwtDto reissueToken(JwtDto jwtDto) throws SignatureException {
 
         log.info("[ Auth Service ] 토큰 재발급을 시작합니다.");
         String accessToken = jwtDto.getAccessToken();
@@ -44,5 +59,24 @@ public class AuthService {
         } else {
             throw new AuthException(AuthErrorCode.INVALID_TOKEN);
         }
+    }
+
+    // Redis 활용하기
+    public JwtDto login(MemberRequestDTO.LoginRequestDTO loginRequestDTO) {
+        // 이메일을 통한 회원 조회
+        Member member = Member.builder().email(loginRequestDTO.getEmail()).build();
+
+        // 비밀번호 일치 확인
+        if (!member.getPassword().equals(loginRequestDTO.getPassword())) {
+            throw new AuthException(AuthErrorCode._NOT_FOUND);
+        }
+
+        // 토큰 생성
+        JwtDto jwtDto = createJwt(member);
+
+        // Redis에 저장하기
+        redisService.setRefreshToken("RT:" + member.getEmail(), jwtDto.getRefreshToken(), 1000 * 60 * 60 * 24 * 7);
+
+        return jwtDto;
     }
 }

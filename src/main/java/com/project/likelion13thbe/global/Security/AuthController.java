@@ -1,6 +1,6 @@
 package com.project.likelion13thbe.global.Security;
 
-import com.project.likelion13thbe.global.Security.DTO.JwtDTO;
+import com.project.likelion13thbe.global.Security.DTO.JwtDto;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +24,7 @@ public class AuthController {
     //토큰 재발급 API
     @Operation(method = "POST", summary = "토큰 재발급", description = "토큰 재발급. accessToken과 refreshToken을 body에 담아서 전송합니다.")
     @PostMapping("/reissue")
-    public CustomResponse<?> reissue(@RequestBody JwtDTO jwtDto) throws SignatureException {
+    public CustomResponse<?> reissue(@RequestBody JwtDto jwtDto) throws SignatureException {
 
         log.info("[ Auth Controller ] 토큰을 재발급합니다. ");
 

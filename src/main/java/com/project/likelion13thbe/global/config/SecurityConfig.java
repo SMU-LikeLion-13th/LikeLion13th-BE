@@ -1,5 +1,6 @@
-package com.project.likelion13thbe.global.Security;
+package com.project.likelion13thbe.global.config;
 
+import com.project.likelion13thbe.global.Security.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +37,8 @@ public class SecurityConfig {
             "api/usage",
             "/swagger-ui/**",   // swagger 관련 URL
             "/v3/api-docs/**",
+            "api/v1/callback/kakao", // kakao login
+            "/api/v1/email/**" // SMTP 설정
     };
 
     @Bean

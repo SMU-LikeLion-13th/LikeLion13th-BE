@@ -1,7 +1,7 @@
 package com.project.likelion13thbe.global.Security;
 
 import com.project.likelion13thbe.global.Security.CustomUserDetail.CustomUserDetails;
-import com.project.likelion13thbe.global.Security.DTO.JwtDTO;
+import com.project.likelion13thbe.global.Security.DTO.JwtDto;
 import com.project.likelion13thbe.global.Security.Entity.Token;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -112,7 +112,7 @@ public class JwtUtil {
     }
 
     // 제공된 리프레시 토큰을 기반으로 JwtDto 쌍을 다시 발급
-    public JwtDTO reissueToken(String refreshToken) throws SignatureException {
+    public JwtDto reissueToken(String refreshToken) throws SignatureException {
         // 강의에서 학습한 것 처럼 기존 토큰 만료 시 재발급의 경우에 사용
         // refreshToken 에서 user 정보를 가져와서 새로운 토큰을 발급 (발급 시간, 유효 시간(reset)만 새로 적용)
         CustomUserDetails userDetails = new CustomUserDetails(
@@ -123,7 +123,7 @@ public class JwtUtil {
         log.info("[ JwtUtil ] 새로운 토큰을 재발급 합니다.");
 
         // 재발급
-        return new JwtDTO(
+        return new JwtDto(
                 createJwtAccessToken(userDetails),
                 createJwtRefreshToken(userDetails)
         );
