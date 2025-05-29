@@ -28,8 +28,9 @@ public class MailController {
 
     @Operation(summary = "이메일 인증 링크 보내기")
     @GetMapping("/request-tokenURL")
-    public CustomResponse<String> sendVerificationTokenURL() {
-        String email = "dlrbdjs7@naver.com";
+    public CustomResponse<String> sendVerificationTokenURL(
+            @RequestParam String email
+    ) {
         mailService.sendVerificationTokenURL(email);
         return CustomResponse.onSuccess("인증 링크가 전송되었습니다.");
     }

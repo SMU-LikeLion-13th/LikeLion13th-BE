@@ -1,5 +1,8 @@
 package com.project.likelion13thbe.global.mail;
 
+import com.project.likelion13thbe.global.mail.exception.MailErrorCode;
+import com.project.likelion13thbe.global.mail.exception.MailException;
+import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +58,8 @@ public class MailService {
 
             log.info("메일 발송 성공! 대상: {}, 코드: {}", toEmail, code);
 
+        } catch (AddressException ae) {
+            throw new MailException(MailErrorCode.WRONG_EMAIL_FORMAT);
         } catch (Exception e) {
             log.error("메일 발송 실패!", e);
             throw new RuntimeException("메일 발송 중 오류 발생", e);
@@ -99,6 +104,8 @@ public class MailService {
             javaMailSender.send(mimeMessage);
 
             log.info("메일 발송 성공! 대상: {}, 비밀번호: {}", email, tempPassword);
+        } catch (AddressException ae) {
+            throw new MailException(MailErrorCode.WRONG_EMAIL_FORMAT);
         } catch (Exception e) {
             log.error("메일 발송 실패!", e);
             throw new RuntimeException("메일 발송 중 오류 발생", e);
@@ -111,8 +118,8 @@ public class MailService {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
 
-            helper.setFrom("dlrbdjs7@naver.com");
-            helper.setTo("dlrbdjs7@naver.com"); // <-- 전달받은 수신자 이메일
+            helper.setFrom(email);
+            helper.setTo(email); // <-- 전달받은 수신자 이메일
             helper.setSubject("이메일 인증용 링크");
 
             String randomToken = UUID.randomUUID().toString();
@@ -145,6 +152,8 @@ public class MailService {
             javaMailSender.send(mimeMessage);
 
             log.info("메일 발송 성공! 대상: {}, URL: {}", email, tokenURL);
+        } catch (AddressException ae) {
+            throw new MailException(MailErrorCode.WRONG_EMAIL_FORMAT);
         } catch (Exception e) {
             log.error("메일 발송 실패!", e);
             throw new RuntimeException("메일 발송 중 오류 발생", e);
