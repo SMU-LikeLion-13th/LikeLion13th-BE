@@ -44,7 +44,7 @@ public class SecurityConfig {
             "/temp-password", // 임시 비밀번호 발급
             "/mail-verifications/*", // 메일 인증 일단 빼기
             "/api/v1/login/kakao",
-            "/s3/*", //s3 관련
+            "/s3/public-download-url", //s3 공개 파일 다운로드
             "/auth/reissue", // 토큰 재발급은 인증이 필요하지 않음
             "/auth/**",
             "api/usage",
