@@ -1,6 +1,7 @@
 package com.project.likelion13thbe.domain.member.converter;
 
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
+import com.project.likelion13thbe.domain.member.dto.response.KakaoUserInfoResDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.global.security.AuthType;
@@ -12,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
+import static com.project.likelion13thbe.global.security.AuthType.KAKAO;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberConverter {
 
@@ -20,6 +23,15 @@ public class MemberConverter {
                 .email(memberCreateReqDTO.email())
                 .password(memberCreateReqDTO.password())
                 .name(memberCreateReqDTO.name())
+                .build();
+    }
+
+    public static Member toKakaoMember(KakaoUserInfoResDTO kakaoUserInfoResDTO) {
+        return Member.builder()
+                .email(kakaoUserInfoResDTO.getKakaoAccount().email)
+                .name(kakaoUserInfoResDTO.getKakaoAccount().name)
+                .active(true)
+                .authType(KAKAO)
                 .build();
     }
 

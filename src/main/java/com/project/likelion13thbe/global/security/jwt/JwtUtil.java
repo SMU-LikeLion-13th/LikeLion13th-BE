@@ -2,6 +2,7 @@ package com.project.likelion13thbe.global.security.jwt;
 
 import com.project.likelion13thbe.domain.member.entity.Token;
 import com.project.likelion13thbe.domain.member.repository.TokenRepository;
+import com.project.likelion13thbe.global.RedisDao;
 import com.project.likelion13thbe.global.security.auth.CustomUserDetails;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -18,6 +19,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.SignatureException;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -29,13 +31,15 @@ public class JwtUtil {
     private final SecretKey secretKey;
     private final Long accessExpMs;
     private final Long refreshExpMs;
+    private final RedisDao redisDao;
     private final TokenRepository tokenRepository;
+
 
 
     public JwtUtil(
             @Value("${spring.jwt.secret}") String secret,
             @Value("${spring.jwt.token.access-expiration-time}") Long access,
-            @Value("${spring.jwt.token.refresh-expiration-time}") Long refresh,
+            @Value("${spring.jwt.token.refresh-expiration-time}") Long refresh, RedisDao redisDao,
             TokenRepository tokenRepo
     ) {
         //시크릿 키 생성 + 각종 필드 초기화
@@ -43,6 +47,7 @@ public class JwtUtil {
                 Jwts.SIG.HS256.key().build().getAlgorithm());
         accessExpMs = access;
         refreshExpMs = refresh;
+        this.redisDao = redisDao;
         tokenRepository = tokenRepo;
     }
 
@@ -101,10 +106,19 @@ public class JwtUtil {
         Instant expiration = Instant.now().plusMillis(refreshExpMs);
         String refreshToken = tokenProvider(customUserDetails, expiration);
 
+        /*
         tokenRepository.save(Token.builder()
                 .email(customUserDetails.getUsername())
                 .token(refreshToken)
                 .build()
+        );
+        */
+        redisDao.setValues(
+                //유저 이메일(구분되는 값이므로 이메일을 넣었습니다.)
+                customUserDetails.getUsername(),
+                refreshToken,
+                //TTL -> 7일로 설정
+                Duration.ofDays(7)
         );
 
         return refreshToken;

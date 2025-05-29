@@ -2,6 +2,7 @@ package com.project.likelion13thbe.global.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.likelion13thbe.domain.member.dto.request.LoginReqDTO;
+import com.project.likelion13thbe.global.RedisDao;
 import com.project.likelion13thbe.global.apiPayload.CustomResponse;
 import com.project.likelion13thbe.global.security.auth.CustomUserDetails;
 import com.project.likelion13thbe.global.security.jwt.JwtDTO;
@@ -23,8 +24,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.time.Duration;
 
 @Slf4j
+//redisDao를 멤버로 선언하면 생성자 인자 문제가 발생하여, 생성자를 직접 만들었습니다.
 @RequiredArgsConstructor
 public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -32,6 +35,8 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     //jwt 유틸 발급 클래스
     private final JwtUtil jwtUtil;
+    //redis 작업 관련 클래스
+    private final RedisDao redisDao;
 
     //로그인 시도 메서드
     @Override
@@ -90,6 +95,10 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
                 jwtUtil.createJwtAccessToken(customUserDetails),
                 jwtUtil.createJwtRefreshToken(customUserDetails)
         );
+
+
+        //redis에 유저 이메일, refreshToken, TTL저장
+
 
         // CustomResponse 사용하여 응답 통일
         CustomResponse<JwtDTO> responseBody = CustomResponse.onSuccess(jwtDto);

@@ -1,5 +1,7 @@
 package com.project.likelion13thbe.domain.product.dto.request;
 
+import lombok.Data;
+
 public class ProductReqDTO {
 
     public record ProductCreateReqDTO(
@@ -10,6 +12,10 @@ public class ProductReqDTO {
 
     public record ProductDeleteDTO(
             Long productId
+    ) {}
+
+    public record MailDTO (
+            String email
     ) {}
 
 

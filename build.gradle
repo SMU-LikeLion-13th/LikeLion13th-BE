@@ -55,6 +55,15 @@ dependencies {
     // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    //Webflux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    //mail
+    implementation("org.springframework.boot:spring-boot-starter-mail:3.5.0")
+
+    //redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 }
 
 
