@@ -1,10 +1,10 @@
 package com.project.likelion13thbe.domain.member.dto.request;
 
-import com.project.likelion13thbe.domain.member.entity.Role;
 import com.project.likelion13thbe.domain.member.entity.SocialType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
 public class MemberReqDTO {
 
@@ -33,14 +33,14 @@ public class MemberReqDTO {
     ) {
     }
 
+    @Builder
     public record MemberCreateReqDTO(
             @NotBlank(message = "이름은 필수 입력값입니다.")
             String nickname,
             @NotBlank(message = "이메일은 필수 입력값입니다.")
             String email,
-            @NotBlank(message = "비밀번호는 필수 입력값입니다.")
+//            @NotBlank(message = "비밀번호는 필수 입력값입니다.")
             String password,
-            Role role,
             SocialType socialType,
             String profileImage,
             Integer age
@@ -58,6 +58,12 @@ public class MemberReqDTO {
     public record LoginReqDTO (
             String email,
             String password
+    ) {
+    }
+
+    public record TempPasswordReqDTO(
+            String email,
+            String nickname
     ) {
     }
 }

@@ -7,6 +7,7 @@ import com.project.likelion13thbe.domain.member.entity.Member;
 import com.project.likelion13thbe.domain.member.exception.MemberErrorCode;
 import com.project.likelion13thbe.domain.member.exception.MemberException;
 import com.project.likelion13thbe.domain.member.repository.MemberRepository;
+import com.project.likelion13thbe.global.mail.MailService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +25,21 @@ import java.util.List;
 @Transactional
 public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberRepository memberRepository;
+    private final MailService mailService;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public MemberResDTO.MemberCreateResDTO createMember(MemberReqDTO.MemberCreateReqDTO memberCreateReqDTO) {
         // DTO -> Member
+
+        String encodedPassword = null;
+        // 카카오 로그인은 비밀번호가 없어서 createMember를 사용할 경우 encode에 null 들어감 이슈
+        if (memberCreateReqDTO.password() != null) {
+            encodedPassword = passwordEncoder.encode(memberCreateReqDTO.password());
+        }
         Member member = MemberConverter.toMember(
                 memberCreateReqDTO,
-                passwordEncoder.encode(memberCreateReqDTO.password())
+                encodedPassword
         ); // 암호화 방식?
 
         try {
@@ -61,6 +69,19 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         // soft delete 처리
         member.delete();
+    }
+
+    @Override
+    public void sendTempPassword(MemberReqDTO.TempPasswordReqDTO tempPasswordReqDTO) {
+        Member member = memberRepository.findByEmailAndNicknameAndNotDeleted(tempPasswordReqDTO.email(), tempPasswordReqDTO.nickname())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        String tempPassword = "password"; // 나중에 만들어주는 메서드 필요
+        member.updatePassword(passwordEncoder.encode(tempPassword));
+        member.updateMemberStatusMustChangePassword(); // 비밀번호를 임시로 받았으니 직접 재설정 해야함
+
+        // 메일 전송 호출
+        mailService.sendTempPassword(tempPasswordReqDTO.email(), tempPassword);
     }
 
     @Scheduled(cron = "0 0 3 * * *")

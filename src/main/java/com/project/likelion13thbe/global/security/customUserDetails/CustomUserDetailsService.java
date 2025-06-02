@@ -28,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Optional<Member> memberEntity = memberRepository.findByEmailAndNotDeleted(email);
         if (memberEntity.isPresent()) {
             Member member = memberEntity.get();
-            return new CustomUserDetails(member.getEmail(),member.getPassword(), member.getRole());
+            return new CustomUserDetails(member.getEmail(),member.getPassword(), member.getRole(), member.getMemberStatus());
         }
         throw new MemberException(MemberErrorCode.MEMBER_NOT_FOUND);
     }

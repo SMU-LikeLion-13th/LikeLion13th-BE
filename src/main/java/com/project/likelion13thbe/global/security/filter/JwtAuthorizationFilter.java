@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.global.security.filter;
 
+import com.project.likelion13thbe.domain.member.entity.MemberStatus;
 import com.project.likelion13thbe.domain.member.entity.Role;
 import com.project.likelion13thbe.global.security.customUserDetails.CustomUserDetails;
 import com.project.likelion13thbe.global.security.exception.AuthErrorCode;
@@ -94,9 +95,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         // 2. Access Token에서 사용자 정보 추출 후 CustomUserDetails 생성
         String email = jwtUtil.getEmail(accessToken);
         Role role = jwtUtil.getRoles(accessToken);
-        log.info("[ JwtAuthorizationFilter ] email = {}, role = {}", email, role);
+        MemberStatus memberStatus= jwtUtil.getMemberStatus(accessToken);
+        log.info("[ JwtAuthorizationFilter ] email = {}, role = {}, memberStatus = {}", email, role, memberStatus);
 
-        CustomUserDetails userDetails = new CustomUserDetails(email, "", role);
+        CustomUserDetails userDetails = new CustomUserDetails(email, "", role, memberStatus);
 
         log.info("[ JwtAuthorizationFilter ] UserDetails 객체 생성 성공");
 

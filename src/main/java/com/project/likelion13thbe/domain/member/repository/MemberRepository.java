@@ -17,12 +17,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Slice<Member> findAllByMemberIdLessThanOrderByMemberIdDesc(Long memberId, Pageable pageable);
 
-    // 삭제되지 않은 회원 중 이메일로 조회
-    @Query("SELECT m " +
-            "FROM Member m " +
-            "WHERE m.memberId = :memberId AND m.deletedAt IS NULL")
-    Optional<Member> findByMemberIdAndNotDeleted(@Param("memberId") Long memberId);
-
     // 소프트 딜리트된 지 30일 지난 멤버 조회
     @Query("SELECT m " +
             "FROM Member m " +
@@ -34,4 +28,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "FROM Member m " +
             "WHERE m.email = :email AND m.deletedAt IS NULL")
     Optional<Member> findByEmailAndNotDeleted(@Param("email") String email);
+
+    // 임시 비밀번호 발급 시 이메일과 유저 이름으로 동시에 조회
+    @Query("SELECT m " +
+            "FROM Member m " +
+            "WHERE m.email = :email AND m.nickname = :nickname AND m.deletedAt IS NULL")
+    Optional<Member> findByEmailAndNicknameAndNotDeleted(@Param("email") String email, @Param("nickname") String nickname);
+
 }

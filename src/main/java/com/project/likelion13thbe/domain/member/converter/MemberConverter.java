@@ -3,6 +3,10 @@ package com.project.likelion13thbe.domain.member.converter;
 import com.project.likelion13thbe.domain.member.dto.request.MemberReqDTO;
 import com.project.likelion13thbe.domain.member.dto.response.MemberResDTO;
 import com.project.likelion13thbe.domain.member.entity.Member;
+import com.project.likelion13thbe.domain.member.entity.MemberStatus;
+import com.project.likelion13thbe.domain.member.entity.Role;
+import com.project.likelion13thbe.domain.member.entity.SocialType;
+import com.project.likelion13thbe.global.kakao.KakaoUserInfoResDTO;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,12 +22,26 @@ public class MemberConverter {
                 .nickname(memberCreateReqDTO.nickname())
                 .email(memberCreateReqDTO.email())
                 .password(password)
-                .role(memberCreateReqDTO.role())
+                .role(Role.USER)
                 .socialType(memberCreateReqDTO.socialType())
+                .memberStatus(MemberStatus.NORMAL)
                 .profileImage(memberCreateReqDTO.profileImage())
                 .age(memberCreateReqDTO.age())
                 .build();
     }
+
+
+    // 일단 카카오 전용
+    public static MemberReqDTO.MemberCreateReqDTO toMemberKakaoCreateReqDTO(KakaoUserInfoResDTO userInfo) {
+        return MemberReqDTO.MemberCreateReqDTO.builder()
+                .nickname(userInfo.kakaoAccount().profile().nickName())
+                .email(userInfo.kakaoAccount().email())
+//                .password(null)
+//                .role(Role.USER)
+                .socialType(SocialType.KAKAO)
+                .build();
+    }
+
 
     public static MemberResDTO.MemberCreateResDTO toMemberResponseDTO(Member member) {
         return MemberResDTO.MemberCreateResDTO.builder()

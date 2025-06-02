@@ -1,5 +1,6 @@
 package com.project.likelion13thbe.global.security.jwt;
 
+import com.project.likelion13thbe.domain.member.entity.MemberStatus;
 import com.project.likelion13thbe.domain.member.entity.Role;
 import com.project.likelion13thbe.global.security.customUserDetails.CustomUserDetails;
 import com.project.likelion13thbe.global.security.dto.JwtDTO;
@@ -69,6 +70,18 @@ public class JwtUtil {
         return Role.valueOf(roleStr);
     }
 
+    // JWT 토큰을 입력받아 토큰의 MemberStatus를 추출하는 메서드
+    public MemberStatus getMemberStatus(String token) throws SignatureException {
+        log.info("[ JwtUtil ] 토큰에서 유저 상태를 추출합니다.");
+        String memberStatusStr = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("memberStatus", String.class);
+        return MemberStatus.valueOf(memberStatusStr);
+    }
+
     // Token 발급하는 메서드
     public String tokenProvider(CustomUserDetails customUserDetails, Instant expiration) {
 
@@ -87,6 +100,7 @@ public class JwtUtil {
                 .and()
                 .subject(customUserDetails.getUsername()) //Subject 에 username (email) 추가
                 .claim("role", authorities) //권한 추가
+                .claim("memberStatus", customUserDetails.getMemberStatus())
                 .issuedAt(Date.from(issuedAt)) // 현재 시간 추가
                 .expiration(Date.from(expiration)) //만료 시간 추가
                 .signWith(secretKey) //signature 추가
@@ -122,7 +136,8 @@ public class JwtUtil {
         CustomUserDetails userDetails = new CustomUserDetails(
                 getEmail(refreshToken),
                 null,
-                getRoles(refreshToken)
+                getRoles(refreshToken),
+                getMemberStatus(refreshToken)
         );
         log.info("[ JwtUtil ] 새로운 토큰을 재발급 합니다.");
 

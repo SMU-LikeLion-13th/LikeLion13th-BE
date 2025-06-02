@@ -4,6 +4,7 @@ import com.project.likelion13thbe.global.security.exception.handler.CustomLogout
 import com.project.likelion13thbe.global.security.exception.handler.CustomLogoutSuccessHandler;
 import com.project.likelion13thbe.global.security.filter.CustomLoginFilter;
 import com.project.likelion13thbe.global.security.exception.handler.JwtAuthenticationEntryPoint;
+import com.project.likelion13thbe.global.security.filter.ForcePasswordChangeFilter;
 import com.project.likelion13thbe.global.security.filter.JwtAuthorizationFilter;
 import com.project.likelion13thbe.global.security.exception.handler.JwtAccessDeniedHandler;
 import com.project.likelion13thbe.global.security.jwt.JwtUtil;
@@ -40,7 +41,10 @@ public class SecurityConfig {
     private final String[] allowUrl = {
             "/login", //로그인 은 인증이 필요하지 않음
             "/auth", // 회원가입은 인증이 필요하지 않음
+            "/temp-password", // 임시 비밀번호 발급
+            "/mail-verifications/*", // 메일 인증 일단 빼기
             "/api/v1/login/kakao",
+            "/s3/public-download-url", //s3 공개 파일 다운로드
             "/auth/reissue", // 토큰 재발급은 인증이 필요하지 않음
             "/auth/**",
             "api/usage",
@@ -59,7 +63,13 @@ public class SecurityConfig {
             "/reviews/*",   // 리뷰 목록 조회 (내 리뷰도 포함되나 선처리로 해결)
 
             // comment
-            "/reviews/**"    // 댓글 목록 조회, cursor
+            "/reviews/**",    // 댓글 목록 조회, cursor
+
+            // kakao
+            "/callback/kakao",
+
+            // mail
+            "/mail-verifications/request",
     };
 
     // 인증이 필요한 GET url
@@ -80,6 +90,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, allowGetUrl).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthorizationFilter(jwtUtil, redisTemplate), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new ForcePasswordChangeFilter(), JwtAuthorizationFilter.class)
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
